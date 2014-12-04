@@ -1,15 +1,14 @@
 <div class="well">
     <form name="form" novalidate crud-edit="user">
         <legend>User</legend>
-        <gravatar email="user.email" size="200" class="img-polaroid pull-right"></gravatar>
+        <input type="file" style="display:none"
+               id="file" name='file' onchange="angular.element(this).scope().fileChanged(this)" />
+        <img  width="200" height="200" ng-src="{{user.base64Image}}" onclick="$('#file').click();" class="img-polaroid pull-right"></gravatar>
         <label for="email">E-mail</label>
         <input class="span6" type="email" id="email" name="email" ng-model="user.email" disabled>
-        <label for="lastName">Last name</label>
-        <input class="span6" type="text" id="lastName" name="lastName" ng-model="user.lastName" required>
-        <span ng-show="showError('lastName', 'required')" class="help-inline">This field is required.</span>
-        <label for="firstName">First name</label>
-        <input class="span6" type="text" id="firstName" name="firstName" ng-model="user.firstName" required>
-        <span ng-show="showError('firstName', 'required')" class="help-inline">This field is required.</span>
+        <label for="name">Name</label>
+        <input class="span6" type="text" id="name" name="name" ng-model="user.name" required>
+        <span ng-show="showError('name', 'required')" class="help-inline">This field is required.</span>
         <label for="password">Password</label>
         <input class="span6" type="password" id="password" name="password" ng-model="user.password" required>
         <span ng-show="showError('password', 'required')" class="help-inline">This field is required.</span>
@@ -20,6 +19,40 @@
         <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
         <label>Admin</label>
         <input type="checkbox" ng-model="user.admin">
+        <div ng-if="!user.admin">
+            <label for="street">Street</label>
+            <input class="span6" type="text" id="street" name="street" ng-model="user.street" required>
+            <span ng-show="showError('street', 'required')" class="help-inline">This field is required.</span>
+            <label for="address">Address</label>
+            <input class="span6" type="text" id="address" name="address" ng-model="user.address">
+            <label for="plz">PLZ</label>
+            <input class="span6" type="text" id="plz" name="plz" ng-model="user.plz" required>
+            <span ng-show="showError('plz', 'required')" class="help-inline">This field is required.</span>
+            <label for="city">City</label>
+            <input class="span6" type="text" id="city" name="city" ng-model="user.city" required>
+            <span ng-show="showError('city', 'required')" class="help-inline">This field is required.</span>
+            <label for="telephoneNumber">Telephone number</label>
+            <input class="span6" type="text" id="telephoneNumber" name="telephoneNumber" ng-model="user.telephoneNumber" required>
+            <span ng-show="showError('telephoneNumber', 'required')" class="help-inline">This field is required.</span>
+            <label>Transport type</label>
+            <label><input name="transportType" type="radio" ng-model="user.transportType" value="bicycle" ng-required="!user.transportType">Bicycle</label>
+            <label><input name="transportType" type="radio" ng-model="user.transportType" value="auto" ng-required="!user.transportType">Auto</label>
+            <span ng-show="showError('transportType', 'required')" class="help-inline">This field is required.</span>
+            <label>Telephone type</label>
+            <label><input name="telephoneType" type="radio" ng-model="user.telephoneType" value="ios" ng-required="!user.telephoneType">IOS</label>
+            <label><input name="telephoneType" type="radio" ng-model="user.telephoneType" value="android" ng-required="!user.telephoneType">Android</label>
+            <span ng-show="showError('telephoneType', 'required')" class="help-inline">This field is required.</span>
+            <label for="iban">IBAN</label>
+            <input class="span6" type="text" id="iban" name="iban" ng-model="user.iban" required>
+            <span ng-show="showError('iban', 'required')" class="help-inline">This field is required.</span>
+            <label for="bic">BIC</label>
+            <input class="span6" type="text" id="bic" name="bic" ng-model="user.bic" required>
+            <span ng-show="showError('bic', 'required')" class="help-inline">This field is required.</span>
+            <label>Contract type</label>
+            <label><input name="contractType" type="radio" ng-model="user.contractType" value="minijob" ng-required="!user.contractType">Minijob</label>
+            <label><input name="contractType" type="radio" ng-model="user.contractType" value="flexible" ng-required="!user.contractType">Flexible</label>
+            <span ng-show="showError('contractType', 'required')" class="help-inline">This field is required.</span>
+        </div>
         <hr>
         <crud-buttons></crud-buttons>
     </form>

@@ -1,4 +1,4 @@
-angular.module('security.login.toolbar', [], ['$routeProvider', function($routeProvider){
+angular.module('security.login.toolbar', ['services.utilMethods'], ['$routeProvider', function($routeProvider){
 
   $routeProvider.when('/profile', {
     templateUrl:'security/login/profile-edit.tpl.html',
@@ -9,10 +9,12 @@ angular.module('security.login.toolbar', [], ['$routeProvider', function($routeP
 		}]
 	}
   });}])
-.controller('EditProfileCtrl', ['$scope', '$location', 'i18nNotifications', 'user', 'security', function ($scope, $location, i18nNotifications, user, security) {
+.controller('EditProfileCtrl', ['$scope', '$location', 'i18nNotifications', 'user', 'security', 'utilMethods', function ($scope, $location, i18nNotifications, user, security, utilMethods) {
 
   $scope.user = user;
   $scope.password = user.password;
+
+  $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
 
   $scope.onSave = function (user) {
     i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id : user.$id()});

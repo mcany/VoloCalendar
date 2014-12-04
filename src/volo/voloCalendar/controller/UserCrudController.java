@@ -1,7 +1,7 @@
 package volo.voloCalendar.controller;
 
 import org.springframework.web.bind.annotation.*;
-import volo.voloCalendar.model.Backend;
+import volo.voloCalendar.service.Backend;
 import volo.voloCalendar.model.User;
 import volo.voloCalendar.util.UtilMethods;
 

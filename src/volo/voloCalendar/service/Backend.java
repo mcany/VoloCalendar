@@ -1,4 +1,9 @@
-package volo.voloCalendar.model;
+package volo.voloCalendar.service;
+
+import volo.voloCalendar.model.ContractType;
+import volo.voloCalendar.model.TelephoneType;
+import volo.voloCalendar.model.TransportType;
+import volo.voloCalendar.model.User;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,8 +15,10 @@ public class Backend {
     private static HashMap<String, User> usersByEmail = new HashMap<String, User>();
     private static HashMap<String, User> usersById = new HashMap<String, User>();
     static {
-        User emin = new User("123", "eminguliyev1987@gmail.com", "sindibad1987", "Emin", "Guliyev", true);
-        User mertcan = new User("456", "mcanyigin@gmail.com", "sindibad1987", "Mertcan", "Yigin", true);
+        User emin = new User("123", "eminguliyev1987@gmail.com", "sindibad1987", "Emin Guliyev");
+        User mertcan = new User("456", "mcanyigin@gmail.com", "sindibad1987", "Mertcan Yigin"
+                , "Christ-Probst.", "10/142", "80805", "Munich", "017678947235", TransportType.bicycle, TelephoneType.ios
+                , "DE64IRCE92222212345678", "BINFFDDDXXX", ContractType.minijob);
         usersByEmail.put(emin.getEmail(), emin);
         usersByEmail.put(mertcan.getEmail(), mertcan);
         usersById.put(emin.getId(), emin);

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
 <head>
+    <base href="/">
     <link rel="stylesheet" type="text/css" href="/static/angular-app.css"/>
     <script type="text/javascript" src="/static/jquery.js"></script>
     <script type="text/javascript" src="/static/angular.js"></script>

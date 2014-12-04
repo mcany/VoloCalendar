@@ -1,4 +1,4 @@
-/*! angular-app - v0.0.1-SNAPSHOT - 2014-11-30
+/*! angular-app - v0.0.1-SNAPSHOT - 2014-12-04
  * https://github.com/angular-app/angular-app
  * Copyright (c) 2014 Pawel Kozlowski & Peter Bacon Darwin;
  * Licensed MIT
@@ -9,13 +9,16 @@ angular.module('admin-users-edit',[
   'services.crud',
   'services.i18nNotifications',
   'admin-users-edit-uniqueEmail',
-  'admin-users-edit-validateEquals'
+  'admin-users-edit-validateEquals',
+  'services.utilMethods'
 ])
 
-.controller('UsersEditCtrl', ['$scope', '$location', 'i18nNotifications', 'user', function ($scope, $location, i18nNotifications, user) {
+.controller('UsersEditCtrl', ['$scope', '$location', 'i18nNotifications', 'user', 'utilMethods', function ($scope, $location, i18nNotifications, user, utilMethods) {
 
   $scope.user = user;
   $scope.password = user.password;
+
+  $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
 
   $scope.onSave = function (user) {
     i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id : user.$id()});
@@ -74,7 +77,7 @@ angular.module('admin-users', [
       currentUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenNew({
-      user: ['Users', function(Users) { return new Users(); }],
+      user: ['Users', function(Users) { return new Users({admin:false, base64Image:'data:image/jpg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCABBADIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDAqVIi3ODTreLdgmrm1YwMcmvLZ9FYrLb57UjW+Oxq1vOaN57ikOxnuhU9DTK0ZIw6kiqEibXxTE0Noo/Gj8adhGpCoVc8Uh55IqUD92PrQg3OqkcEipcrK5pG7dhixO4ykbH3AppQg4IIPvXQ2sSCEAD1qpq0SrhhjOelcscS3KzR0yopRvcykGDjPFV7qMcmrWOabcLletdaZytoy9oo2ipSnPWk2e9VcRrJzH16UnIP9aow6pGc7VJGP1qWa6G0Yj4YZ4ah03szP6zDdGzb3rJHhkc47gVWu53nYFgQOwxWWdROwkJkA4xupo1JhwyEA8cNURw0Iu4Sx0mrF8KG5UAj60k6seAhP0FUm1FUUkrj05/+tWfd6uWLbUIxzu3dPwxWqppmLxVtzR8p/wDnm/8A3yaPJf8A55v/AN8msv8AtvHBYEjqcn/Cj+3B6j8z/hVeyI+ueRnQ3ahh82BV5L5AuGkXAPUHNc+j+S+0AkZGSR0Hr/h600vJLclYlPGcsBnHH1GK2U4Nao8iGIkdOk8UjBVZQTyAeKSW5SOPKgNnpjqaxo5JcL8wEgHqWHp+fSo5ZGEi7yxIHIH8PQ5+tZykuhq8S0i7cXyshZWP54OKzXlZyclsenWnFAH42cjDM54YdsH1yfSmSQIHcIxJ25yO3HTHet6M6W0zP29wO0nJ6/SjC/5FOXT3ZQRLJyM/cH+NL/Z0n/PWT/vgf/FV1Ww/84e1G3H/AC3/ANxP61Xtf+Pl/wAf5GrFx/y3/wBxP61Xtf8Aj5f8f5GvNOaO5Ncf8hUf7x/9mpT9yT60lx/yFR/vH/2alP3JPrUz2JqCT/dX6L/6EKbbf8hGH/eH/oNOn+6v0X/0IU22/wCQjD/vD/0GiGw0S0UUVJR//9k='}); }],
       currentUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenEdit({
@@ -691,7 +694,6 @@ angular.module('resources.users').factory('Users', ['mongolabResource', function
   userResource.prototype.getFullName = function () {
     return this.lastName + " " + this.firstName + " (" + this.email + ")";
   };
-
   return userResource;
 }]);
 
@@ -751,9 +753,8 @@ angular.module('security.interceptor', ['security.retryQueue'])
 
 // This http interceptor listens for authentication failures
 .factory('securityInterceptor', ['$injector', 'securityRetryQueue', function($injector, queue) {
-  return function(promise) {
-    // Intercept failed requests
-    return promise.then(null, function(originalResponse) {
+  return {
+	'responseError': function(originalResponse) {
       if(originalResponse.status === 401) {
         // The request bounced because it was not authorized - add a new request to the retry queue
         promise = queue.pushRetryFn('unauthorized-server', function retryRequest() {
@@ -762,13 +763,13 @@ angular.module('security.interceptor', ['security.retryQueue'])
         });
       }
       return promise;
-    });
+    }
   };
 }])
 
 // We have to add the interceptor to the queue as a string because the interceptor depends upon service instances that are not available in the config block.
 .config(['$httpProvider', function($httpProvider) {
-  $httpProvider.responseInterceptors.push('securityInterceptor');
+  $httpProvider.interceptors.push('securityInterceptor');
 }]);
 angular.module('security.login.form', ['services.localizedMessages'])
 
@@ -817,7 +818,7 @@ angular.module('security.login.form', ['services.localizedMessages'])
 }]);
 
 angular.module('security.login', ['security.login.form', 'security.login.toolbar']);
-angular.module('security.login.toolbar', [], ['$routeProvider', function($routeProvider){
+angular.module('security.login.toolbar', ['services.utilMethods'], ['$routeProvider', function($routeProvider){
 
   $routeProvider.when('/profile', {
     templateUrl:'security/login/profile-edit.tpl.html',
@@ -828,10 +829,12 @@ angular.module('security.login.toolbar', [], ['$routeProvider', function($routeP
 		}]
 	}
   });}])
-.controller('EditProfileCtrl', ['$scope', '$location', 'i18nNotifications', 'user', 'security', function ($scope, $location, i18nNotifications, user, security) {
+.controller('EditProfileCtrl', ['$scope', '$location', 'i18nNotifications', 'user', 'security', 'utilMethods', function ($scope, $location, i18nNotifications, user, security, utilMethods) {
 
   $scope.user = user;
   $scope.password = user.password;
+
+  $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
 
   $scope.onSave = function (user) {
     i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id : user.$id()});
@@ -1424,6 +1427,25 @@ angular.module('services.notifications', []).factory('notifications', ['$rootSco
 
   return notificationsService;
 }]);
+angular.module('services.utilMethods', []);
+angular.module('services.utilMethods').factory('utilMethods', [function(){
+
+  var utilMethodsService = {};
+
+    utilMethodsService.fileInputOfUserViewChanged = function (scope) {
+        return function (fileInput) {
+            var file = fileInput.files[0];
+            var FR= new FileReader();
+            FR.onload = function(e) {
+                scope.user.base64Image = e.target.result;
+                scope.$digest();
+            };
+            FR.readAsDataURL( file );
+        }
+    };
+
+  return utilMethodsService;
+}]);
 angular.module('templates.app', ['admin/users/users-create.tpl.html', 'admin/users/users-edit.tpl.html', 'admin/users/users-list.tpl.html', 'calendar/list.tpl.html', 'header.tpl.html', 'notifications.tpl.html']);
 
 angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -1431,18 +1453,17 @@ angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", f
     "<div class=\"well\">\n" +
     "    <form name=\"form\" novalidate crud-edit=\"user\">\n" +
     "        <legend>User</legend>\n" +
-    "        <gravatar email=\"user.email\" size=\"200\" class=\"img-polaroid pull-right\"></gravatar>\n" +
+    "        <input type=\"file\" style=\"display:none\"\n" +
+    "               id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\" />\n" +
+    "        <img  width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\" class=\"img-polaroid pull-right\"></gravatar>\n" +
     "        <label for=\"email\">E-mail</label>\n" +
     "        <input class=\"span6\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" required unique-email>\n" +
     "        <span ng-show=\"showError('email', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <span ng-show=\"showError('email', 'email')\" class=\"help-inline\">Please enter a valid email address.</span>\n" +
     "        <span ng-show=\"showError('email', 'uniqueEmail')\" class=\"help-inline\">This email address is not available - please enter another.</span>\n" +
-    "        <label for=\"lastName\">Last name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"lastName\" name=\"lastName\" ng-model=\"user.lastName\" required>\n" +
-    "        <span ng-show=\"showError('lastName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <label for=\"firstName\">First name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"firstName\" name=\"firstName\" ng-model=\"user.firstName\" required>\n" +
-    "        <span ng-show=\"showError('firstName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        <label for=\"name\">Name</label>\n" +
+    "        <input class=\"span6\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
+    "        <span ng-show=\"showError('name', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <label for=\"password\">Password</label>\n" +
     "        <input class=\"span6\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\" required>\n" +
     "        <span ng-show=\"showError('password', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
@@ -1453,6 +1474,40 @@ angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", f
     "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
     "        <label>Admin</label>\n" +
     "        <input type=\"checkbox\" ng-model=\"user.admin\">\n" +
+    "        <div ng-if=\"!user.admin\">\n" +
+    "            <label for=\"street\">Street</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\" required>\n" +
+    "            <span ng-show=\"showError('street', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"address\">Address</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
+    "            <label for=\"plz\">PLZ</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
+    "            <span ng-show=\"showError('plz', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"city\">City</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
+    "            <span ng-show=\"showError('city', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"telephoneNumber\">Telephone number</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\" ng-model=\"user.telephoneNumber\" required>\n" +
+    "            <span ng-show=\"showError('telephoneNumber', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Transport type</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\" ng-required=\"!user.transportType\">Bicycle</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\" ng-required=\"!user.transportType\">Auto</label>\n" +
+    "            <span ng-show=\"showError('transportType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Telephone type</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\" ng-required=\"!user.telephoneType\">IOS</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\" ng-required=\"!user.telephoneType\">Android</label>\n" +
+    "            <span ng-show=\"showError('telephoneType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"iban\">IBAN</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
+    "            <span ng-show=\"showError('iban', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"bic\">BIC</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
+    "            <span ng-show=\"showError('bic', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Contract type</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" ng-required=\"!user.contractType\">Minijob</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" ng-required=\"!user.contractType\">Flexible</label>\n" +
+    "            <span ng-show=\"showError('contractType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        </div>\n" +
     "        <hr>\n" +
     "        <crud-buttons></crud-buttons>\n" +
     "    </form>\n" +
@@ -1464,15 +1519,14 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
     "<div class=\"well\">\n" +
     "    <form name=\"form\" novalidate crud-edit=\"user\">\n" +
     "        <legend>User</legend>\n" +
-    "        <gravatar email=\"user.email\" size=\"200\" class=\"img-polaroid pull-right\"></gravatar>\n" +
+    "        <input type=\"file\" style=\"display:none\"\n" +
+    "               id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\" />\n" +
+    "        <img  width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\" class=\"img-polaroid pull-right\"></gravatar>\n" +
     "        <label for=\"email\">E-mail</label>\n" +
     "        <input class=\"span6\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" disabled>\n" +
-    "        <label for=\"lastName\">Last name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"lastName\" name=\"lastName\" ng-model=\"user.lastName\" required>\n" +
-    "        <span ng-show=\"showError('lastName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <label for=\"firstName\">First name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"firstName\" name=\"firstName\" ng-model=\"user.firstName\" required>\n" +
-    "        <span ng-show=\"showError('firstName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        <label for=\"name\">Name</label>\n" +
+    "        <input class=\"span6\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
+    "        <span ng-show=\"showError('name', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <label for=\"password\">Password</label>\n" +
     "        <input class=\"span6\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\" required>\n" +
     "        <span ng-show=\"showError('password', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
@@ -1483,6 +1537,40 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
     "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
     "        <label>Admin</label>\n" +
     "        <input type=\"checkbox\" ng-model=\"user.admin\">\n" +
+    "        <div ng-if=\"!user.admin\">\n" +
+    "            <label for=\"street\">Street</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\" required>\n" +
+    "            <span ng-show=\"showError('street', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"address\">Address</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
+    "            <label for=\"plz\">PLZ</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
+    "            <span ng-show=\"showError('plz', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"city\">City</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
+    "            <span ng-show=\"showError('city', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"telephoneNumber\">Telephone number</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\" ng-model=\"user.telephoneNumber\" required>\n" +
+    "            <span ng-show=\"showError('telephoneNumber', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Transport type</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\" ng-required=\"!user.transportType\">Bicycle</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\" ng-required=\"!user.transportType\">Auto</label>\n" +
+    "            <span ng-show=\"showError('transportType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Telephone type</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\" ng-required=\"!user.telephoneType\">IOS</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\" ng-required=\"!user.telephoneType\">Android</label>\n" +
+    "            <span ng-show=\"showError('telephoneType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"iban\">IBAN</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
+    "            <span ng-show=\"showError('iban', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"bic\">BIC</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
+    "            <span ng-show=\"showError('bic', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Contract type</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" ng-required=\"!user.contractType\">Minijob</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" ng-required=\"!user.contractType\">Flexible</label>\n" +
+    "            <span ng-show=\"showError('contractType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        </div>\n" +
     "        <hr>\n" +
     "        <crud-buttons></crud-buttons>\n" +
     "    </form>\n" +
@@ -1491,12 +1579,14 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
 
 angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/users/users-list.tpl.html",
+    "<div class=\"well\">\n" +
+    "    <button class=\"btn\" ng-click=\"new()\">New User</button>\n" +
+    "</div>\n" +
     "<table class=\"table table-bordered table-condensed table-striped table-hover\">\n" +
     "    <thead>\n" +
     "    <tr>\n" +
     "        <th></th>\n" +
     "        <th>E-mail</th>\n" +
-    "        <th>Last name</th>\n" +
     "        <th>First name</th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +
@@ -1504,15 +1594,11 @@ angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", fun
     "    <tr ng-repeat=\"user in users\" ng-click=\"edit(user.$id())\">\n" +
     "        <td><gravatar email=\"user.email\" size=\"50\" default-image=\"'monsterid'\"></gravatar></td>\n" +
     "        <td>{{user.email}}</td>\n" +
-    "        <td>{{user.lastName}}</td>\n" +
-    "        <td>{{user.firstName}}</td>\n" +
+    "        <td>{{user.name}}</td>\n" +
     "        <td><button class=\"btn btn-danger remove\" ng-click=\"remove(user, $index, $event)\">Remove</button></td>\n" +
     "    </tr>\n" +
     "    </tbody>\n" +
     "</table>\n" +
-    "<div class=\"well\">\n" +
-    "    <button class=\"btn\" ng-click=\"new()\">New User</button>\n" +
-    "</div>\n" +
     "");
 }]);
 
@@ -1602,15 +1688,14 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "<div class=\"well\">\n" +
     "    <form name=\"form\" novalidate crud-edit=\"user\">\n" +
     "        <legend>User</legend>\n" +
-    "        <gravatar email=\"user.email\" size=\"200\" class=\"img-polaroid pull-right\"></gravatar>\n" +
+    "        <input type=\"file\" style=\"display:none\"\n" +
+    "               id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\" />\n" +
+    "        <img  width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\" class=\"img-polaroid pull-right\"></gravatar>\n" +
     "        <label for=\"email\">E-mail</label>\n" +
     "        <input class=\"span6\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" disabled>\n" +
-    "        <label for=\"lastName\">Last name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"lastName\" name=\"lastName\" ng-model=\"user.lastName\" required>\n" +
-    "        <span ng-show=\"showError('lastName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <label for=\"firstName\">First name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"firstName\" name=\"firstName\" ng-model=\"user.firstName\" required>\n" +
-    "        <span ng-show=\"showError('firstName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        <label for=\"name\">Name</label>\n" +
+    "        <input class=\"span6\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
+    "        <span ng-show=\"showError('name', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <label for=\"password\">Password</label>\n" +
     "        <input class=\"span6\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\" required>\n" +
     "        <span ng-show=\"showError('password', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
@@ -1621,6 +1706,39 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
     "        <label>Admin</label>\n" +
     "        <input type=\"checkbox\" ng-model=\"user.admin\" disabled>\n" +
+    "        <div ng-if=\"!user.admin\">\n" +
+    "            <label for=\"street\">Street</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\" required>\n" +
+    "            <span ng-show=\"showError('street', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"address\">Address</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
+    "            <label for=\"plz\">PLZ</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
+    "            <span ng-show=\"showError('plz', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"city\">City</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
+    "            <span ng-show=\"showError('city', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"telephoneNumber\">Telephone number</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\" ng-model=\"user.telephoneNumber\" required>\n" +
+    "            <span ng-show=\"showError('telephoneNumber', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Transport type</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\" ng-required=\"!user.transportType\">Bicycle</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\" ng-required=\"!user.transportType\">Auto</label>\n" +
+    "            <span ng-show=\"showError('transportType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Telephone type</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\" ng-required=\"!user.telephoneType\">IOS</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\" ng-required=\"!user.telephoneType\">Android</label>\n" +
+    "            <span ng-show=\"showError('telephoneType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"iban\">IBAN</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
+    "            <span ng-show=\"showError('iban', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"bic\">BIC</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
+    "            <span ng-show=\"showError('bic', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Contract type</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" disabled>Minijob</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" disabled>Flexible</label>\n" +
+    "        </div>\n" +
     "        <hr>\n" +
     "        <div>\n" +
     "			<button type=\"button\" class=\"btn btn-primary save\" ng-disabled=\"!canSave()\" ng-click=\"save()\">Save</button>\n" +
@@ -1635,7 +1753,7 @@ angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", fun
     "<ul class=\"nav pull-right\">\n" +
     "  <li class=\"divider-vertical\"></li>\n" +
     "  <li class=\"dropdown\" ng-class=\"{open:isProfileOpen}\" ng-show=\"isAuthenticated()\">\n" +
-    "		<a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.firstName}} {{currentUser.lastName}}<b class=\"caret\"></b></a>\n" +
+    "		<a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b class=\"caret\"></b></a>\n" +
     "		<ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
     "			<li><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
     "			<li><a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">Logout</a></li>\n" +

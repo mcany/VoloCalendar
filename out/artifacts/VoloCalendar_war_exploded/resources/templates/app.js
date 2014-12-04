@@ -5,18 +5,17 @@ angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", f
     "<div class=\"well\">\n" +
     "    <form name=\"form\" novalidate crud-edit=\"user\">\n" +
     "        <legend>User</legend>\n" +
-    "        <gravatar email=\"user.email\" size=\"200\" class=\"img-polaroid pull-right\"></gravatar>\n" +
+    "        <input type=\"file\" style=\"display:none\"\n" +
+    "               id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\" />\n" +
+    "        <img  width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\" class=\"img-polaroid pull-right\"></gravatar>\n" +
     "        <label for=\"email\">E-mail</label>\n" +
     "        <input class=\"span6\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" required unique-email>\n" +
     "        <span ng-show=\"showError('email', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <span ng-show=\"showError('email', 'email')\" class=\"help-inline\">Please enter a valid email address.</span>\n" +
     "        <span ng-show=\"showError('email', 'uniqueEmail')\" class=\"help-inline\">This email address is not available - please enter another.</span>\n" +
-    "        <label for=\"lastName\">Last name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"lastName\" name=\"lastName\" ng-model=\"user.lastName\" required>\n" +
-    "        <span ng-show=\"showError('lastName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <label for=\"firstName\">First name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"firstName\" name=\"firstName\" ng-model=\"user.firstName\" required>\n" +
-    "        <span ng-show=\"showError('firstName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        <label for=\"name\">Name</label>\n" +
+    "        <input class=\"span6\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
+    "        <span ng-show=\"showError('name', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <label for=\"password\">Password</label>\n" +
     "        <input class=\"span6\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\" required>\n" +
     "        <span ng-show=\"showError('password', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
@@ -27,6 +26,40 @@ angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", f
     "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
     "        <label>Admin</label>\n" +
     "        <input type=\"checkbox\" ng-model=\"user.admin\">\n" +
+    "        <div ng-if=\"!user.admin\">\n" +
+    "            <label for=\"street\">Street</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\" required>\n" +
+    "            <span ng-show=\"showError('street', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"address\">Address</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
+    "            <label for=\"plz\">PLZ</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
+    "            <span ng-show=\"showError('plz', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"city\">City</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
+    "            <span ng-show=\"showError('city', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"telephoneNumber\">Telephone number</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\" ng-model=\"user.telephoneNumber\" required>\n" +
+    "            <span ng-show=\"showError('telephoneNumber', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Transport type</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\" ng-required=\"!user.transportType\">Bicycle</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\" ng-required=\"!user.transportType\">Auto</label>\n" +
+    "            <span ng-show=\"showError('transportType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Telephone type</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\" ng-required=\"!user.telephoneType\">IOS</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\" ng-required=\"!user.telephoneType\">Android</label>\n" +
+    "            <span ng-show=\"showError('telephoneType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"iban\">IBAN</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
+    "            <span ng-show=\"showError('iban', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"bic\">BIC</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
+    "            <span ng-show=\"showError('bic', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Contract type</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" ng-required=\"!user.contractType\">Minijob</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" ng-required=\"!user.contractType\">Flexible</label>\n" +
+    "            <span ng-show=\"showError('contractType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        </div>\n" +
     "        <hr>\n" +
     "        <crud-buttons></crud-buttons>\n" +
     "    </form>\n" +
@@ -38,15 +71,14 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
     "<div class=\"well\">\n" +
     "    <form name=\"form\" novalidate crud-edit=\"user\">\n" +
     "        <legend>User</legend>\n" +
-    "        <gravatar email=\"user.email\" size=\"200\" class=\"img-polaroid pull-right\"></gravatar>\n" +
+    "        <input type=\"file\" style=\"display:none\"\n" +
+    "               id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\" />\n" +
+    "        <img  width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\" class=\"img-polaroid pull-right\"></gravatar>\n" +
     "        <label for=\"email\">E-mail</label>\n" +
     "        <input class=\"span6\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" disabled>\n" +
-    "        <label for=\"lastName\">Last name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"lastName\" name=\"lastName\" ng-model=\"user.lastName\" required>\n" +
-    "        <span ng-show=\"showError('lastName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <label for=\"firstName\">First name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"firstName\" name=\"firstName\" ng-model=\"user.firstName\" required>\n" +
-    "        <span ng-show=\"showError('firstName', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        <label for=\"name\">Name</label>\n" +
+    "        <input class=\"span6\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
+    "        <span ng-show=\"showError('name', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
     "        <label for=\"password\">Password</label>\n" +
     "        <input class=\"span6\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\" required>\n" +
     "        <span ng-show=\"showError('password', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
@@ -57,6 +89,40 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
     "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
     "        <label>Admin</label>\n" +
     "        <input type=\"checkbox\" ng-model=\"user.admin\">\n" +
+    "        <div ng-if=\"!user.admin\">\n" +
+    "            <label for=\"street\">Street</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\" required>\n" +
+    "            <span ng-show=\"showError('street', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"address\">Address</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
+    "            <label for=\"plz\">PLZ</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
+    "            <span ng-show=\"showError('plz', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"city\">City</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
+    "            <span ng-show=\"showError('city', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"telephoneNumber\">Telephone number</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\" ng-model=\"user.telephoneNumber\" required>\n" +
+    "            <span ng-show=\"showError('telephoneNumber', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Transport type</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\" ng-required=\"!user.transportType\">Bicycle</label>\n" +
+    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\" ng-required=\"!user.transportType\">Auto</label>\n" +
+    "            <span ng-show=\"showError('transportType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Telephone type</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\" ng-required=\"!user.telephoneType\">IOS</label>\n" +
+    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\" ng-required=\"!user.telephoneType\">Android</label>\n" +
+    "            <span ng-show=\"showError('telephoneType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"iban\">IBAN</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
+    "            <span ng-show=\"showError('iban', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label for=\"bic\">BIC</label>\n" +
+    "            <input class=\"span6\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
+    "            <span ng-show=\"showError('bic', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "            <label>Contract type</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" ng-required=\"!user.contractType\">Minijob</label>\n" +
+    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" ng-required=\"!user.contractType\">Flexible</label>\n" +
+    "            <span ng-show=\"showError('contractType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
+    "        </div>\n" +
     "        <hr>\n" +
     "        <crud-buttons></crud-buttons>\n" +
     "    </form>\n" +
@@ -65,12 +131,14 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
 
 angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/users/users-list.tpl.html",
+    "<div class=\"well\">\n" +
+    "    <button class=\"btn\" ng-click=\"new()\">New User</button>\n" +
+    "</div>\n" +
     "<table class=\"table table-bordered table-condensed table-striped table-hover\">\n" +
     "    <thead>\n" +
     "    <tr>\n" +
     "        <th></th>\n" +
     "        <th>E-mail</th>\n" +
-    "        <th>Last name</th>\n" +
     "        <th>First name</th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +
@@ -78,15 +146,11 @@ angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", fun
     "    <tr ng-repeat=\"user in users\" ng-click=\"edit(user.$id())\">\n" +
     "        <td><gravatar email=\"user.email\" size=\"50\" default-image=\"'monsterid'\"></gravatar></td>\n" +
     "        <td>{{user.email}}</td>\n" +
-    "        <td>{{user.lastName}}</td>\n" +
-    "        <td>{{user.firstName}}</td>\n" +
+    "        <td>{{user.name}}</td>\n" +
     "        <td><button class=\"btn btn-danger remove\" ng-click=\"remove(user, $index, $event)\">Remove</button></td>\n" +
     "    </tr>\n" +
     "    </tbody>\n" +
     "</table>\n" +
-    "<div class=\"well\">\n" +
-    "    <button class=\"btn\" ng-click=\"new()\">New User</button>\n" +
-    "</div>\n" +
     "");
 }]);
 
