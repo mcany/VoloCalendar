@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*! angular-app - v0.0.1-SNAPSHOT - 2014-12-04
+=======
+/*! angular-app - v0.0.1-SNAPSHOT - 2014-12-03
+>>>>>>> c729da6411b585583514bf3e3217224685a86e02
  * https://github.com/angular-app/angular-app
  * Copyright (c) 2014 Pawel Kozlowski & Peter Bacon Darwin;
  * Licensed MIT
@@ -1604,7 +1608,7 @@ angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", fun
 
 angular.module("calendar/list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("calendar/list.tpl.html",
-    "<h3>My calendar</h3>");
+    "<h3>My calendars</h3>");
 }]);
 
 angular.module("header.tpl.html", []).run(["$templateCache", function($templateCache) {
