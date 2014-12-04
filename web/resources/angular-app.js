@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /*! angular-app - v0.0.1-SNAPSHOT - 2014-12-04
-=======
-/*! angular-app - v0.0.1-SNAPSHOT - 2014-12-03
->>>>>>> c729da6411b585583514bf3e3217224685a86e02
  * https://github.com/angular-app/angular-app
  * Copyright (c) 2014 Pawel Kozlowski & Peter Bacon Darwin;
  * Licensed MIT
