@@ -156,7 +156,7 @@ angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", fun
 
 angular.module("calendar/list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("calendar/list.tpl.html",
-    "<h3>My calendar</h3>");
+    "<h3>My calendars</h3>");
 }]);
 
 angular.module("header.tpl.html", []).run(["$templateCache", function($templateCache) {
