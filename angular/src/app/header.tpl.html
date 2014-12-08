@@ -1,24 +1,30 @@
 <div class="navbar" ng-controller="HeaderCtrl">
     <div class="navbar-inner">
-        <a class="brand" ng-click="home()">VoloCalendar</a>
-        <ul class="nav">
-            <li ng-class="{active:isNavbarActive('calendar')}"><a href="/calendar">My calendar</a></li>
-        </ul>
-
-        <ul class="nav" ng-show="isAuthenticated()">            
-            <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}" ng-show="isAdmin()">
-                <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
-                    <li><a tabindex="-1" href="/admin/users" ng-click="isAdminOpen=false">Manage Users</a></li>
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" ng-click="home()">VoloCalendar</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li ng-class="{active:isNavbarActive('calendar')}"><a href="/calendar">My calendar</a></li>
+                    <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}" ng-show="isAdmin()">
+                        <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
+                            <li><a tabindex="-1" href="/admin/users" ng-click="isAdminOpen=false">Manage Users</a></li>
+                        </ul>
+                    </li>
                 </ul>
-            </li>
-        </ul>
-        <ul class="nav pull-right" ng-show="hasPendingRequests()">
-            <li class="divider-vertical"></li>
-            <li><a href="#"><img src="/static/img/spinner.gif"></a></li>
-        </ul>
-        <login-toolbar></login-toolbar>
-    </div>
+                <login-toolbar></login-toolbar>
+                <ul class="nav pull-right" ng-show="hasPendingRequests()">
+                    <li class="divider-vertical"></li>
+                    <li><a href="#"><img src="/static/img/spinner.gif"></a></li>
+                </ul>
+            </div><!-- /.nav-collapse -->
+        </div>
+    </div><!-- /navbar-inner -->
     <div>
         <ul class="breadcrumb">
             <li ng-repeat="breadcrumb in breadcrumbs.getAll()">

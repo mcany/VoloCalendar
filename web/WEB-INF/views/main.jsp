@@ -2,7 +2,7 @@
 <html lang="en" ng-app="app">
 <head>
     <base href="/">
-    <link rel="stylesheet" type="text/css" href="/static/angular-app.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap.css"/>
     <script type="text/javascript" src="/static/jquery.js"></script>
     <script type="text/javascript" src="/static/angular.js"></script>
     <script type="text/javascript" src="/static/mongolab.js"></script>

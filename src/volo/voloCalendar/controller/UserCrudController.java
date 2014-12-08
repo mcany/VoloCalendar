@@ -1,10 +1,12 @@
 package volo.voloCalendar.controller;
 
 import org.springframework.web.bind.annotation.*;
+import volo.voloCalendar.model.UserTableLogic;
 import volo.voloCalendar.service.Backend;
 import volo.voloCalendar.model.User;
 import volo.voloCalendar.util.UtilMethods;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -19,6 +21,17 @@ public class UserCrudController {
         Collection<User> users = Backend.getAllUsers();
         User[] userArray = new User[users.size()];
         return users.toArray(userArray);
+    }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET, produces = "application/json")
+    public int getAllUsersCount(){
+        return Backend.getAllUsersCount();
+    }
+
+    @RequestMapping(value = "/pagination", method = RequestMethod.POST, produces = "application/json")
+    public User[] getUsers(@RequestBody UserTableLogic userTableLogic){
+        User[] users = Backend.getUsers(userTableLogic);
+        return users;
     }
 
     @RequestMapping(value = "/email/{email}_", method = RequestMethod.GET, produces = "application/json")

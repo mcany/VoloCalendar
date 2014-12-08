@@ -12,8 +12,8 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint','build','karma:unit']);
-  grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy:assets']);
-  grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','recess:min','copy:assets']);
+  grunt.registerTask('build', ['clean','html2js','concat','copy:assets']);
+  grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','copy:assets']);
   grunt.registerTask('test-watch', ['karma:watch']);
 
   // Print a timestamp (useful for when watching)
@@ -44,9 +44,7 @@ module.exports = function (grunt) {
       tpl: {
         app: ['src/app/**/*.tpl.html'],
         common: ['src/common/**/*.tpl.html']
-      },
-      less: ['src/less/stylesheet.less'], // recess:build doesn't accept ** in its file patterns
-      lessWatch: ['src/less/**/*.less']
+      }
     },
     clean: ['<%= distdir %>/*'],
     copy: {
@@ -126,31 +124,13 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/jquery.js'
       }
     },
-    recess: {
-      build: {
-        files: {
-          '<%= distdir %>/<%= pkg.name %>.css':
-          ['<%= src.less %>'] },
-        options: {
-          compile: true
-        }
-      },
-      min: {
-        files: {
-          '<%= distdir %>/<%= pkg.name %>.css': ['<%= src.less %>']
-        },
-        options: {
-          compress: true
-        }
-      }
-    },
     watch:{
       all: {
-        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>'],
+        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>'],
         tasks:['default','timestamp']
       },
       build: {
-        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>'],
+        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>'],
         tasks:['build','timestamp']
       }
     },

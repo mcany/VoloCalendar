@@ -2,8 +2,8 @@ angular.module('services.utilMethods', []);
 angular.module('services.utilMethods').factory('utilMethods', [function(){
 
   var utilMethodsService = {};
-
-    utilMethodsService.fileInputOfUserViewChanged = function (scope) {
+  var container = {};
+  utilMethodsService.fileInputOfUserViewChanged = function (scope) {
         return function (fileInput) {
             var file = fileInput.files[0];
             var FR= new FileReader();
@@ -13,7 +13,15 @@ angular.module('services.utilMethods').factory('utilMethods', [function(){
             };
             FR.readAsDataURL( file );
         }
-    };
+  };
+
+    utilMethodsService.save = function(key, value){
+        container[key] = value;
+    }
+
+    utilMethodsService.get = function(key){
+        return container[key];
+    }
 
   return utilMethodsService;
 }]);

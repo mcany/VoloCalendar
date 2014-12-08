@@ -8,7 +8,8 @@ angular.module('app', [
   'security',
   'directives.crud',
   'templates.app',
-  'templates.common']);
+  'templates.common',
+  'ui.bootstrap']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
   baseUrl: '/databases/',

@@ -1,4 +1,4 @@
-/*! angular-app - v0.0.1-SNAPSHOT - 2014-12-04
+/*! angular-app - v0.0.1-SNAPSHOT - 2014-12-07
  * https://github.com/angular-app/angular-app
  * Copyright (c) 2014 Pawel Kozlowski & Peter Bacon Darwin;
  * Licensed MIT
@@ -36,30 +36,111 @@ angular.module('admin-users-edit',[
 
 }]);
 angular.module('admin-users-list', [
-  'services.crud',
-  'services.i18nNotifications'
+    'services.crud',
+    'services.i18nNotifications',
+    'services.utilMethods'
 ])
 
-.controller('UsersListCtrl', ['$scope', 'crudListMethods', 'users', 'i18nNotifications', function ($scope, crudListMethods, users, i18nNotifications) {
-  $scope.users = users;
+    .controller('UsersListCtrl', ['$scope', 'crudListMethods', 'i18nNotifications', '$http', 'mongolabResource', 'utilMethods'
+        , function ($scope, crudListMethods, i18nNotifications, $http, mongolabResource, utilMethods) {
+            angular.extend($scope, crudListMethods('/admin/users'));
 
-  angular.extend($scope, crudListMethods('/admin/users'));
+            $scope.changePageVolume = function(){
+                $scope.itemsPerPage = parseInt($scope.itemsPerPageStr, 10);
+                $scope.pageChanged();
+            }
 
-  $scope.remove = function(user, $index, $event) {
-    // Don't let the click bubble up to the ng-click on the enclosing div, which will try to trigger
-    // an edit of this item.
-    $event.stopPropagation();
+            $scope.remove = function (user, $index, $event) {
+                // Don't let the click bubble up to the ng-click on the enclosing div, which will try to trigger
+                // an edit of this item.
+                $event.stopPropagation();
 
-    // Remove this user
-    user.$remove(function() {
-      // It is gone from the DB so we can remove it from the local list too
-      $scope.users.splice($index,1);
-      i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id : user.$id()});
-    }, function() {
-      i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id : user.$id()});
+                // Remove this user
+                user.$remove(function () {
+                    // It is gone from the DB so we can remove it from the local list too
+                    $scope.users.splice($index, 1);
+                    $scope.totalItems = $scope.totalItems - 1;
+                    i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id: user.$id()});
+                }, function () {
+                    i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id: user.$id()});
+                });
+            };
+
+            $scope.editUser = function (id) {
+                utilMethods.save('pagingData', $scope);
+                $scope.edit(id);
+            };
+
+            $scope.pageChanged = function () {
+                $http.post('/databases/scrumdb/collections/users/pagination'
+                    , {sortingField: $scope.sortingField, reverse: $scope.reverse, beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1), maxNumber: $scope.itemsPerPage}).
+                    success(function (data, status, headers, config) {
+                        result = [];
+                        for (var i = 0; i < data.length; i++) {
+                            var myResource = mongolabResource('users');
+                            result.push(new myResource(data[i]));
+                        }
+                        $scope.users = result;
+                    }).
+                    error(function (data, status, headers, config) {
+                        $scope.users = null;
+                    });
+            };
+            $scope.sort = function (sortingField) {
+                if ($scope.sortingField != sortingField) {
+                    $scope.sortingField = sortingField;
+                    $scope.reverse = false;
+                } else {
+                    $scope.reverse = !$scope.reverse;
+                }
+                $scope.currentPage = 1;
+                $scope.pageChanged();
+            };
+            var cache = utilMethods.get('pagingData');
+
+            $scope.maxSize = 5;
+            if (cache == null) {
+                $http.get('/databases/scrumdb/collections/users/count').
+                    success(function (data, status, headers, config) {
+                        $scope.totalItems = data;
+                    }).
+                    error(function (data, status, headers, config) {
+                        $scope.totalItems = 0;
+                    });
+                $scope.currentPage = 1;
+                $scope.sortingField = null;
+                $scope.reverse = false;
+                $scope.itemsPerPage = 5;
+                $scope.users = null;
+                $scope.pageChanged();
+            } else {
+                $scope.totalItems = cache.totalItems;
+                $scope.currentPage = cache.currentPage;
+                $scope.sortingField = cache.sortingField;
+                $scope.reverse = cache.reverse;
+                $scope.itemsPerPage = cache.itemsPerPage;
+                $scope.users = cache.users;
+            }
+
+        }])
+    .directive('columnHeader', function () {
+        return {
+            restrict: 'A',
+            templateUrl: 'admin/users/column-header.tpl.html',
+            scope: {
+                sortingField: '@',
+                reverse: '@',
+                sort: '&'
+            },
+            link: function (scope, elm, attrs) {
+                scope.columnField = attrs.columnField;
+                scope.columnHeader = attrs.columnHeader;
+                scope.headerClick = function () {
+                    scope.sort({field: scope.columnField});
+                };
+            }
+        };
     });
-  };
-}]);
 
 angular.module('admin-users', [
   'admin-users-list',
@@ -73,7 +154,6 @@ angular.module('admin-users', [
 
   crudRouteProvider.routesFor('Users', 'admin')
     .whenList({
-      users: ['Users', function(Users) { return Users.all(); }],
       currentUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenNew({
@@ -163,7 +243,8 @@ angular.module('app', [
   'security',
   'directives.crud',
   'templates.app',
-  'templates.common']);
+  'templates.common',
+  'ui.bootstrap']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
   baseUrl: '/databases/',
@@ -943,11 +1024,10 @@ angular.module('security.retryQueue', [])
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
 angular.module('security.service', [
   'security.retryQueue',    // Keeps track of failed requests that need to be retried once the user logs in
-  'security.login',         // Contains the login form template and controller
-  'ui.bootstrap.dialog'     // Used to display the login form as a modal dialog.
+  'security.login'         // Contains the login form template and controller
 ])
 
-.factory('security', ['$http', '$q', '$location', 'securityRetryQueue', '$dialog', function($http, $q, $location, queue, $dialog) {
+.factory('security', ['$http', '$q', '$location', 'securityRetryQueue', '$modal', function($http, $q, $location, queue, $modal) {
 
   // Redirect to the given url (defaults to '/')
   function redirect(url) {
@@ -961,8 +1041,8 @@ angular.module('security.service', [
     if ( loginDialog ) {
       throw new Error('Trying to open a dialog that is already open!');
     }
-    loginDialog = $dialog.dialog();
-    loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
+    loginDialog = $modal.open({templateUrl:'security/login/form.tpl.html', controller:'LoginFormController'});
+    loginDialog.result.then(onLoginDialogClose);
   }
   function closeLoginDialog(success) {
     if (loginDialog) {
@@ -1431,8 +1511,8 @@ angular.module('services.utilMethods', []);
 angular.module('services.utilMethods').factory('utilMethods', [function(){
 
   var utilMethodsService = {};
-
-    utilMethodsService.fileInputOfUserViewChanged = function (scope) {
+  var container = {};
+  utilMethodsService.fileInputOfUserViewChanged = function (scope) {
         return function (fileInput) {
             var file = fileInput.files[0];
             var FR= new FileReader();
@@ -1442,11 +1522,34 @@ angular.module('services.utilMethods').factory('utilMethods', [function(){
             };
             FR.readAsDataURL( file );
         }
-    };
+  };
+
+    utilMethodsService.save = function(key, value){
+        container[key] = value;
+    }
+
+    utilMethodsService.get = function(key){
+        return container[key];
+    }
 
   return utilMethodsService;
 }]);
-angular.module('templates.app', ['admin/users/users-create.tpl.html', 'admin/users/users-edit.tpl.html', 'admin/users/users-list.tpl.html', 'calendar/list.tpl.html', 'header.tpl.html', 'notifications.tpl.html']);
+angular.module('templates.app', ['admin/users/column-header.tpl.html', 'admin/users/users-create.tpl.html', 'admin/users/users-edit.tpl.html', 'admin/users/users-list.tpl.html', 'calendar/list.tpl.html', 'header.tpl.html', 'notifications.tpl.html']);
+
+angular.module("admin/users/column-header.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("admin/users/column-header.tpl.html",
+    "<a href=\"#\" ng-click=\"headerClick()\">\n" +
+    "    {{columnHeader}}\n" +
+    "    <span ng-show=\"sortingField == columnField\">\n" +
+    "        <span ng-show=\"reverse == 'false'\">\n" +
+    "            <i class=\"icon-chevron-down\"></i>\n" +
+    "        </span>\n" +
+    "        <span ng-show=\"reverse == 'true'\">\n" +
+    "            <i class=\"icon-chevron-up\"></i>\n" +
+    "        </span>\n" +
+    "    </span>\n" +
+    "</a>");
+}]);
 
 angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/users/users-create.tpl.html",
@@ -1580,18 +1683,27 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
 angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/users/users-list.tpl.html",
     "<div class=\"well\">\n" +
+    "    <span>{{totalItems}} users in database. </span><br/>\n" +
+    "    <span>Users per page: </span>\n" +
+    "    <select ng-model=\"itemsPerPageStr\" ng-change=\"changePageVolume()\">\n" +
+    "        <option value=\"5\" ng-selected=\"itemsPerPage==5\">5</option>\n" +
+    "        <option value=\"10\" ng-selected=\"itemsPerPage==10\">10</option>\n" +
+    "        <option value=\"20\" ng-selected=\"itemsPerPage==20\">20</option>\n" +
+    "        <option value=\"50\" ng-selected=\"itemsPerPage==50\">50</option>\n" +
+    "    </select><br/>\n" +
     "    <button class=\"btn\" ng-click=\"new()\">New User</button>\n" +
     "</div>\n" +
+    "<pagination ng-change=\"pageChanged()\" items-per-page=\"itemsPerPage\" total-items=\"totalItems\" ng-model=\"currentPage\" max-size=\"maxSize\" class=\"pagination-sm\" boundary-links=\"true\"></pagination>\n" +
     "<table class=\"table table-bordered table-condensed table-striped table-hover\">\n" +
     "    <thead>\n" +
     "    <tr>\n" +
     "        <th></th>\n" +
-    "        <th>E-mail</th>\n" +
-    "        <th>First name</th>\n" +
+    "        <th column-header=\"E-mail\" column-field=\"email\" sorting-field=\"{{sortingField}}\" reverse=\"{{reverse}}\" sort=\"sort(field)\"></th>\n" +
+    "        <th column-header=\"Name\" column-field=\"name\" sorting-field=\"{{sortingField}}\"  reverse=\"{{reverse}}\"sort=\"sort(field)\"></th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +
     "    <tbody>\n" +
-    "    <tr ng-repeat=\"user in users\" ng-click=\"edit(user.$id())\">\n" +
+    "    <tr ng-repeat=\"user in users\" ng-click=\"editUser(user.$id())\">\n" +
     "        <td><gravatar email=\"user.email\" size=\"50\" default-image=\"'monsterid'\"></gravatar></td>\n" +
     "        <td>{{user.email}}</td>\n" +
     "        <td>{{user.name}}</td>\n" +
@@ -1599,37 +1711,44 @@ angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", fun
     "    </tr>\n" +
     "    </tbody>\n" +
     "</table>\n" +
+    "<pagination ng-change=\"pageChanged()\" items-per-page=\"itemsPerPage\" total-items=\"totalItems\" ng-model=\"currentPage\" max-size=\"maxSize\" class=\"pagination-sm\" boundary-links=\"true\"></pagination>\n" +
     "");
 }]);
 
 angular.module("calendar/list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("calendar/list.tpl.html",
-    "<h3>My calendars</h3>");
+    "<h3>My calendars <i class=\"icon-upload\"></i></h3>");
 }]);
 
 angular.module("header.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("header.tpl.html",
     "<div class=\"navbar\" ng-controller=\"HeaderCtrl\">\n" +
     "    <div class=\"navbar-inner\">\n" +
-    "        <a class=\"brand\" ng-click=\"home()\">VoloCalendar</a>\n" +
-    "        <ul class=\"nav\">\n" +
-    "            <li ng-class=\"{active:isNavbarActive('calendar')}\"><a href=\"/calendar\">My calendar</a></li>\n" +
-    "        </ul>\n" +
-    "\n" +
-    "        <ul class=\"nav\" ng-show=\"isAuthenticated()\">            \n" +
-    "            <li class=\"dropdown\" ng-class=\"{active:isNavbarActive('admin'), open:isAdminOpen}\" ng-show=\"isAdmin()\">\n" +
-    "                <a id=\"adminmenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isAdminOpen=!isAdminOpen\">Admin<b class=\"caret\"></b></a>\n" +
-    "                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"adminmenu\">\n" +
-    "                    <li><a tabindex=\"-1\" href=\"/admin/users\" ng-click=\"isAdminOpen=false\">Manage Users</a></li>\n" +
+    "        <div class=\"container\">\n" +
+    "            <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-collapse\">\n" +
+    "                <span class=\"icon-bar\"></span>\n" +
+    "                <span class=\"icon-bar\"></span>\n" +
+    "                <span class=\"icon-bar\"></span>\n" +
+    "            </a>\n" +
+    "            <a class=\"brand\" ng-click=\"home()\">VoloCalendar</a>\n" +
+    "            <div class=\"nav-collapse\">\n" +
+    "                <ul class=\"nav\">\n" +
+    "                    <li ng-class=\"{active:isNavbarActive('calendar')}\"><a href=\"/calendar\">My calendar</a></li>\n" +
+    "                    <li class=\"dropdown\" ng-class=\"{active:isNavbarActive('admin'), open:isAdminOpen}\" ng-show=\"isAdmin()\">\n" +
+    "                        <a id=\"adminmenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isAdminOpen=!isAdminOpen\">Admin<b class=\"caret\"></b></a>\n" +
+    "                        <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"adminmenu\">\n" +
+    "                            <li><a tabindex=\"-1\" href=\"/admin/users\" ng-click=\"isAdminOpen=false\">Manage Users</a></li>\n" +
+    "                        </ul>\n" +
+    "                    </li>\n" +
     "                </ul>\n" +
-    "            </li>\n" +
-    "        </ul>\n" +
-    "        <ul class=\"nav pull-right\" ng-show=\"hasPendingRequests()\">\n" +
-    "            <li class=\"divider-vertical\"></li>\n" +
-    "            <li><a href=\"#\"><img src=\"/static/img/spinner.gif\"></a></li>\n" +
-    "        </ul>\n" +
-    "        <login-toolbar></login-toolbar>\n" +
-    "    </div>\n" +
+    "                <login-toolbar></login-toolbar>\n" +
+    "                <ul class=\"nav pull-right\" ng-show=\"hasPendingRequests()\">\n" +
+    "                    <li class=\"divider-vertical\"></li>\n" +
+    "                    <li><a href=\"#\"><img src=\"/static/img/spinner.gif\"></a></li>\n" +
+    "                </ul>\n" +
+    "            </div><!-- /.nav-collapse -->\n" +
+    "        </div>\n" +
+    "    </div><!-- /navbar-inner -->\n" +
     "    <div>\n" +
     "        <ul class=\"breadcrumb\">\n" +
     "            <li ng-repeat=\"breadcrumb in breadcrumbs.getAll()\">\n" +

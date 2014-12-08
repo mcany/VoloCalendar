@@ -1,4 +1,19 @@
-angular.module('templates.app', ['admin/users/users-create.tpl.html', 'admin/users/users-edit.tpl.html', 'admin/users/users-list.tpl.html', 'calendar/list.tpl.html', 'header.tpl.html', 'notifications.tpl.html']);
+angular.module('templates.app', ['admin/users/column-header.tpl.html', 'admin/users/users-create.tpl.html', 'admin/users/users-edit.tpl.html', 'admin/users/users-list.tpl.html', 'calendar/list.tpl.html', 'header.tpl.html', 'notifications.tpl.html']);
+
+angular.module("admin/users/column-header.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("admin/users/column-header.tpl.html",
+    "<a href=\"#\" ng-click=\"headerClick()\">\n" +
+    "    {{columnHeader}}\n" +
+    "    <span ng-show=\"sortingField == columnField\">\n" +
+    "        <span ng-show=\"reverse == 'false'\">\n" +
+    "            <i class=\"icon-chevron-down\"></i>\n" +
+    "        </span>\n" +
+    "        <span ng-show=\"reverse == 'true'\">\n" +
+    "            <i class=\"icon-chevron-up\"></i>\n" +
+    "        </span>\n" +
+    "    </span>\n" +
+    "</a>");
+}]);
 
 angular.module("admin/users/users-create.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/users/users-create.tpl.html",
@@ -132,18 +147,27 @@ angular.module("admin/users/users-edit.tpl.html", []).run(["$templateCache", fun
 angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/users/users-list.tpl.html",
     "<div class=\"well\">\n" +
+    "    <span>{{totalItems}} users in database. </span><br/>\n" +
+    "    <span>Users per page: </span>\n" +
+    "    <select ng-model=\"itemsPerPageStr\" ng-change=\"changePageVolume()\">\n" +
+    "        <option value=\"5\" ng-selected=\"itemsPerPage==5\">5</option>\n" +
+    "        <option value=\"10\" ng-selected=\"itemsPerPage==10\">10</option>\n" +
+    "        <option value=\"20\" ng-selected=\"itemsPerPage==20\">20</option>\n" +
+    "        <option value=\"50\" ng-selected=\"itemsPerPage==50\">50</option>\n" +
+    "    </select><br/>\n" +
     "    <button class=\"btn\" ng-click=\"new()\">New User</button>\n" +
     "</div>\n" +
+    "<pagination ng-change=\"pageChanged()\" items-per-page=\"itemsPerPage\" total-items=\"totalItems\" ng-model=\"currentPage\" max-size=\"maxSize\" class=\"pagination-sm\" boundary-links=\"true\"></pagination>\n" +
     "<table class=\"table table-bordered table-condensed table-striped table-hover\">\n" +
     "    <thead>\n" +
     "    <tr>\n" +
     "        <th></th>\n" +
-    "        <th>E-mail</th>\n" +
-    "        <th>First name</th>\n" +
+    "        <th column-header=\"E-mail\" column-field=\"email\" sorting-field=\"{{sortingField}}\" reverse=\"{{reverse}}\" sort=\"sort(field)\"></th>\n" +
+    "        <th column-header=\"Name\" column-field=\"name\" sorting-field=\"{{sortingField}}\"  reverse=\"{{reverse}}\"sort=\"sort(field)\"></th>\n" +
     "    </tr>\n" +
     "    </thead>\n" +
     "    <tbody>\n" +
-    "    <tr ng-repeat=\"user in users\" ng-click=\"edit(user.$id())\">\n" +
+    "    <tr ng-repeat=\"user in users\" ng-click=\"editUser(user.$id())\">\n" +
     "        <td><gravatar email=\"user.email\" size=\"50\" default-image=\"'monsterid'\"></gravatar></td>\n" +
     "        <td>{{user.email}}</td>\n" +
     "        <td>{{user.name}}</td>\n" +
@@ -151,37 +175,44 @@ angular.module("admin/users/users-list.tpl.html", []).run(["$templateCache", fun
     "    </tr>\n" +
     "    </tbody>\n" +
     "</table>\n" +
+    "<pagination ng-change=\"pageChanged()\" items-per-page=\"itemsPerPage\" total-items=\"totalItems\" ng-model=\"currentPage\" max-size=\"maxSize\" class=\"pagination-sm\" boundary-links=\"true\"></pagination>\n" +
     "");
 }]);
 
 angular.module("calendar/list.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("calendar/list.tpl.html",
-    "<h3>My calendars</h3>");
+    "<h3>My calendars <i class=\"icon-upload\"></i></h3>");
 }]);
 
 angular.module("header.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("header.tpl.html",
     "<div class=\"navbar\" ng-controller=\"HeaderCtrl\">\n" +
     "    <div class=\"navbar-inner\">\n" +
-    "        <a class=\"brand\" ng-click=\"home()\">VoloCalendar</a>\n" +
-    "        <ul class=\"nav\">\n" +
-    "            <li ng-class=\"{active:isNavbarActive('calendar')}\"><a href=\"/calendar\">My calendar</a></li>\n" +
-    "        </ul>\n" +
-    "\n" +
-    "        <ul class=\"nav\" ng-show=\"isAuthenticated()\">            \n" +
-    "            <li class=\"dropdown\" ng-class=\"{active:isNavbarActive('admin'), open:isAdminOpen}\" ng-show=\"isAdmin()\">\n" +
-    "                <a id=\"adminmenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isAdminOpen=!isAdminOpen\">Admin<b class=\"caret\"></b></a>\n" +
-    "                <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"adminmenu\">\n" +
-    "                    <li><a tabindex=\"-1\" href=\"/admin/users\" ng-click=\"isAdminOpen=false\">Manage Users</a></li>\n" +
+    "        <div class=\"container\">\n" +
+    "            <a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".nav-collapse\">\n" +
+    "                <span class=\"icon-bar\"></span>\n" +
+    "                <span class=\"icon-bar\"></span>\n" +
+    "                <span class=\"icon-bar\"></span>\n" +
+    "            </a>\n" +
+    "            <a class=\"brand\" ng-click=\"home()\">VoloCalendar</a>\n" +
+    "            <div class=\"nav-collapse\">\n" +
+    "                <ul class=\"nav\">\n" +
+    "                    <li ng-class=\"{active:isNavbarActive('calendar')}\"><a href=\"/calendar\">My calendar</a></li>\n" +
+    "                    <li class=\"dropdown\" ng-class=\"{active:isNavbarActive('admin'), open:isAdminOpen}\" ng-show=\"isAdmin()\">\n" +
+    "                        <a id=\"adminmenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isAdminOpen=!isAdminOpen\">Admin<b class=\"caret\"></b></a>\n" +
+    "                        <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"adminmenu\">\n" +
+    "                            <li><a tabindex=\"-1\" href=\"/admin/users\" ng-click=\"isAdminOpen=false\">Manage Users</a></li>\n" +
+    "                        </ul>\n" +
+    "                    </li>\n" +
     "                </ul>\n" +
-    "            </li>\n" +
-    "        </ul>\n" +
-    "        <ul class=\"nav pull-right\" ng-show=\"hasPendingRequests()\">\n" +
-    "            <li class=\"divider-vertical\"></li>\n" +
-    "            <li><a href=\"#\"><img src=\"/static/img/spinner.gif\"></a></li>\n" +
-    "        </ul>\n" +
-    "        <login-toolbar></login-toolbar>\n" +
-    "    </div>\n" +
+    "                <login-toolbar></login-toolbar>\n" +
+    "                <ul class=\"nav pull-right\" ng-show=\"hasPendingRequests()\">\n" +
+    "                    <li class=\"divider-vertical\"></li>\n" +
+    "                    <li><a href=\"#\"><img src=\"/static/img/spinner.gif\"></a></li>\n" +
+    "                </ul>\n" +
+    "            </div><!-- /.nav-collapse -->\n" +
+    "        </div>\n" +
+    "    </div><!-- /navbar-inner -->\n" +
     "    <div>\n" +
     "        <ul class=\"breadcrumb\">\n" +
     "            <li ng-repeat=\"breadcrumb in breadcrumbs.getAll()\">\n" +

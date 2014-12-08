@@ -1,16 +1,25 @@
 <div class="well">
+    <span>{{totalItems}} users in database. </span><br/>
+    <span>Users per page: </span>
+    <select ng-model="itemsPerPageStr" ng-change="changePageVolume()">
+        <option value="5" ng-selected="itemsPerPage==5">5</option>
+        <option value="10" ng-selected="itemsPerPage==10">10</option>
+        <option value="20" ng-selected="itemsPerPage==20">20</option>
+        <option value="50" ng-selected="itemsPerPage==50">50</option>
+    </select><br/>
     <button class="btn" ng-click="new()">New User</button>
 </div>
+<pagination ng-change="pageChanged()" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
         <th></th>
-        <th>E-mail</th>
-        <th>First name</th>
+        <th column-header="E-mail" column-field="email" sorting-field="{{sortingField}}" reverse="{{reverse}}" sort="sort(field)"></th>
+        <th column-header="Name" column-field="name" sorting-field="{{sortingField}}"  reverse="{{reverse}}"sort="sort(field)"></th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users" ng-click="edit(user.$id())">
+    <tr ng-repeat="user in users" ng-click="editUser(user.$id())">
         <td><gravatar email="user.email" size="50" default-image="'monsterid'"></gravatar></td>
         <td>{{user.email}}</td>
         <td>{{user.name}}</td>
@@ -18,3 +27,4 @@
     </tr>
     </tbody>
 </table>
+<pagination ng-change="pageChanged()" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>

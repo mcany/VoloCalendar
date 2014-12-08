@@ -1,0 +1,11 @@
+<a href="#" ng-click="headerClick()">
+    {{columnHeader}}
+    <span ng-show="sortingField == columnField">
+        <span ng-show="reverse == 'false'">
+            <i class="icon-chevron-down"></i>
+        </span>
+        <span ng-show="reverse == 'true'">
+            <i class="icon-chevron-up"></i>
+        </span>
+    </span>
+</a>

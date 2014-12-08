@@ -57,6 +57,24 @@ public class User implements Serializable{
         this.contractType = contractType;
     }
 
+    public User(User user){
+        this.id = user.id;
+        this.email = user.email;
+        this.password = user.password;
+        this.name = user.name;
+        setBase64Image(defaultBase64Image);
+        setAdmin(false);
+        this.street = user.street;
+        this.address = user.address;
+        this.plz = user.plz;
+        this.city = user.city;
+        this.telephoneNumber = user.telephoneNumber;
+        this.transportType = user.transportType;
+        this.telephoneType = user.telephoneType;
+        this.iban = user.iban;
+        this.bic = user.bic;
+        this.contractType = user.contractType;
+    }
     public String getPassword() {
         return password;
     }
