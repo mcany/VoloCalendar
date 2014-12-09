@@ -17,15 +17,23 @@ angular.module('admin-users-list', [
                 // Don't let the click bubble up to the ng-click on the enclosing div, which will try to trigger
                 // an edit of this item.
                 $event.stopPropagation();
-
-                // Remove this user
-                user.$remove(function () {
-                    // It is gone from the DB so we can remove it from the local list too
-                    $scope.users.splice($index, 1);
-                    $scope.totalItems = $scope.totalItems - 1;
+                user.deleted = true;
+                user.$saveOrUpdate(null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id: user.$id()});
-                }, function () {
+                },null ,function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id: user.$id()});
+                });
+            };
+
+            $scope.restore = function (user, $index, $event) {
+                // Don't let the click bubble up to the ng-click on the enclosing div, which will try to trigger
+                // an edit of this item.
+                $event.stopPropagation();
+                user.deleted = false;
+                user.$saveOrUpdate(null, function () {
+                    i18nNotifications.pushForCurrentRoute('crud.user.restore.success', 'success', {id: user.$id()});
+                },null ,function () {
+                    i18nNotifications.pushForCurrentRoute('crud.user.restore.error', 'error', {id: user.$id()});
                 });
             };
 
@@ -67,17 +75,19 @@ angular.module('admin-users-list', [
             };
 
             $scope.search = function () {
-                $scope.currentPage = 1;
-                $scope.pageChanged();
+                if ($scope.canSearch()) {
+                    $scope.currentPage = 1;
+                    $scope.pageChanged();
+                }
             };
 
             $scope.canSearch = function () {
-                return $scope.keyword != null;
+                return $scope.keyword;
             };
 
+            $scope.maxSize = 5;
             var cache = utilMethods.get('pagingData');
 
-            $scope.maxSize = 5;
             if (cache == null) {
                 $http.get('/databases/scrumdb/collections/users/count').
                     success(function (data, status, headers, config) {
@@ -87,7 +97,7 @@ angular.module('admin-users-list', [
                         $scope.totalItems = 0;
                     });
                 $scope.currentPage = 1;
-                $scope.sortingField = null;
+                $scope.sortingField = 'deleted';
                 $scope.reverse = false;
                 $scope.itemsPerPage = 5;
                 $scope.users = null;

@@ -16,6 +16,7 @@ public class User implements Serializable{
     private String password;
     private String name;
     private boolean admin;
+    private boolean deleted;
     private String street;
     private String address;
     private String plz;
@@ -31,6 +32,7 @@ public class User implements Serializable{
     public User(){}
 
     public User(String id, String email, String password, String name){
+        this.deleted = false;
         this.id = id;
         this.email = email;
         this.password = password;
@@ -38,7 +40,10 @@ public class User implements Serializable{
         setBase64Image(defaultBase64Image);
         setAdmin(true);
     }
-    public User(String id, String email, String password, String name, String street, String address, String plz, String city, String telephoneNumber, TransportType transportType, TelephoneType telephoneType, String iban, String bic, ContractType contractType) {
+    public User(String id, String email, String password, String name, String street, String address, String plz, String city
+            , String telephoneNumber, TransportType transportType, TelephoneType telephoneType, String iban, String bic
+            , ContractType contractType) {
+        this.deleted = false;
         this.id = id;
         this.email = email;
         this.password = password;
@@ -58,6 +63,7 @@ public class User implements Serializable{
     }
 
     public User(User user){
+        this.deleted = user.deleted;
         this.id = user.id;
         this.email = user.email;
         this.password = user.password;
@@ -124,6 +130,14 @@ public class User implements Serializable{
         if (admin){
             setNullNonAdminProperties();
         }
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     private void setNullNonAdminProperties() {

@@ -6,9 +6,15 @@
             </dl>
         </div>
         <div class="col-md-3">
-            <form class="form-search">
-                <input type="text" ng-model="keyword" class="input-medium search-query">
-                <button type="button" class="btn btn-primary" ng-click="search()" ng-disabled="!canSearch()">Search</button>
+            <form class="form-search"  ng-submit="search()">
+                <div class="input-group">
+                      <input type="text" class="form-control" ng-model="keyword">
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" ng-click="search()" ng-disabled="!canSearch()">
+                            <span class="glyphicon glyphicon-search"></span> Search
+                        </button>
+                      </span>
+                </div>
             </form>
         </div>
         <div class="col-md-3">
@@ -37,6 +43,7 @@
         <th column-header="Telephone" column-field="telephoneNumber" sorting-field="{{sortingField}}" reverse="{{reverse}}" sort="sort(field)"></th>
         <th column-header="E-mail" column-field="email" sorting-field="{{sortingField}}" reverse="{{reverse}}" sort="sort(field)"></th>
         <th column-header="Contract" column-field="contractType" sorting-field="{{sortingField}}" reverse="{{reverse}}" sort="sort(field)"></th>
+        <th column-header="Status" column-field="deleted" sorting-field="{{sortingField}}" reverse="{{reverse}}" sort="sort(field)"></th>
         <th>Planned</th>
         <th>Done</th>
         <th>Diff.</th>
@@ -51,11 +58,30 @@
         <td>{{user.telephoneNumber}}</td>
         <td>{{user.email}}</td>
         <td>{{user.contractType}}</td>
+        <td>
+            <div ng-switch on="user.deleted">
+                <div ng-switch-when="true">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </div>
+                <div ng-switch-default>
+                    <span class="glyphicon glyphicon-remove"></span>
+                </div>
+            </div>
+        </td>
         <td>{{user.plannedHours}}</td>
         <td>{{user.doneHours}}</td>
         <td>{{user.diffHours}}</td>
         <td>{{user.diffPrevHours}}</td>
-        <td><button class="btn btn-danger remove" ng-click="remove(user, $index, $event)">Remove</button></td>
+        <td>
+            <div ng-switch on="user.deleted">
+                <div ng-switch-when="true">
+                    <button class="btn btn-success" ng-click="restore(user, $index, $event)">Restore</button>
+                </div>
+                <div ng-switch-default>
+                    <button class="btn btn-danger" ng-click="remove(user, $index, $event)">Remove</button>
+                </div>
+            </div>
+        </td>
     </tr>
     </tbody>
 </table>

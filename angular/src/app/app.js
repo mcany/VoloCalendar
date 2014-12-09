@@ -22,6 +22,8 @@ angular.module('app').constant('I18N.MESSAGES', {
   'crud.user.save.success':"A user with id '{{id}}' was saved successfully.",
   'crud.user.remove.success':"A user with id '{{id}}' was removed successfully.",
   'crud.user.remove.error':"Something went wrong when removing user with id '{{id}}'.",
+  'crud.user.restore.success':"A user with id '{{id}}' was restored successfully.",
+  'crud.user.restore.error':"Something went wrong when restoring user with id '{{id}}'.",
   'crud.user.save.error':"Something went wrong when saving a user...",
   'crud.project.save.success':"A project with id '{{id}}' was saved successfully.",
   'crud.project.remove.success':"A project with id '{{id}}' was removed successfully.",

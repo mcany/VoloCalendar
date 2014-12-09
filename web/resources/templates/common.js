@@ -212,12 +212,18 @@ angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", fun
     "		<a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b class=\"caret\"></b></a>\n" +
     "		<ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
     "			<li><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
-    "			<li><a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">Logout</a></li>\n" +
+    "			<li>\n" +
+    "                <a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">\n" +
+    "                    <span class=\"glyphicon glyphicon-log-out\"></span> Logout\n" +
+    "                </a>\n" +
+    "            </li>\n" +
     "		</ul>\n" +
     "  </li>\n" +
     "  <li ng-hide=\"isAuthenticated()\">\n" +
     "      <form class=\"navbar-form\">\n" +
-    "          <button class=\"btn login\" ng-click=\"login()\">Log in</button>\n" +
+    "          <button class=\"btn login\" ng-click=\"login()\">\n" +
+    "              <span class=\"glyphicon glyphicon-log-in\"></span> Log in\n" +
+    "          </button>\n" +
     "      </form>\n" +
     "  </li>\n" +
     "</ul>");
