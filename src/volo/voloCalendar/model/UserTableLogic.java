@@ -13,6 +13,7 @@ public class UserTableLogic implements Serializable{
     private boolean reverse;
     private int beginIndex;
     private int maxNumber;
+    private String keyword;
 
     public UserTableLogic() {
     }
@@ -47,5 +48,13 @@ public class UserTableLogic implements Serializable{
 
     public void setMaxNumber(int maxNumber) {
         this.maxNumber = maxNumber;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

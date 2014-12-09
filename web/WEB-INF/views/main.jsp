@@ -11,8 +11,10 @@
 </head>
 
 <body ng-controller="AppCtrl">
-<div ng-include="'header.tpl.html'"></div>
-<div ng-include="'notifications.tpl.html'" class="container-fluid" ng-show="notifications.getCurrent().length"></div>
-<div ng-view class="container-fluid"></div>
+    <div ng-include="'header.tpl.html'"></div>
+    <div class="container">
+        <div ng-include="'notifications.tpl.html'" class="container-fluid" ng-show="notifications.getCurrent().length"></div>
+        <div ng-view></div>
+    </div>
 </body>
 </html>

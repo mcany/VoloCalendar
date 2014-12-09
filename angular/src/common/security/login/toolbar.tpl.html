@@ -1,5 +1,4 @@
-<ul class="nav pull-right">
-  <li class="divider-vertical"></li>
+<ul class="nav navbar-nav pull-right">
   <li class="dropdown" ng-class="{open:isProfileOpen}" ng-show="isAuthenticated()">
 		<a id="profilemenu" role="button" class="dropdown-toggle" ng-click="isProfileOpen=!isProfileOpen">{{currentUser.name}}<b class="caret"></b></a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="profilemenu">
@@ -7,7 +6,7 @@
 			<li><a href="#" tabindex="-1" ng-click="logout();isProfileOpen=false;">Logout</a></li>
 		</ul>
   </li>
-  <li ng-hide="isAuthenticated()" class="login">
+  <li ng-hide="isAuthenticated()">
       <form class="navbar-form">
           <button class="btn login" ng-click="login()">Log in</button>
       </form>

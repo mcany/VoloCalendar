@@ -63,7 +63,7 @@ public class User implements Serializable{
         this.password = user.password;
         this.name = user.name;
         setBase64Image(defaultBase64Image);
-        setAdmin(false);
+        this.admin = user.admin;
         this.street = user.street;
         this.address = user.address;
         this.plz = user.plz;
@@ -257,5 +257,21 @@ public class User implements Serializable{
             return;
         }
         this.contractType = contractType;
+    }
+
+    public int getPlannedHours() {
+        return 0;
+    }
+
+    public int getDoneHours() {
+        return 0;
+    }
+
+    public int getDiffHours() {
+        return 0;
+    }
+
+    public int getDiffPrevHours() {
+        return 0;
     }
 }

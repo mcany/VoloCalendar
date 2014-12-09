@@ -36,7 +36,12 @@ angular.module('admin-users-list', [
 
             $scope.pageChanged = function () {
                 $http.post('/databases/scrumdb/collections/users/pagination'
-                    , {sortingField: $scope.sortingField, reverse: $scope.reverse, beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1), maxNumber: $scope.itemsPerPage}).
+                    , {sortingField: $scope.sortingField
+                        , reverse: $scope.reverse
+                        , beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1)
+                        , maxNumber: $scope.itemsPerPage
+                        , keyword: $scope.keyword
+                    }).
                     success(function (data, status, headers, config) {
                         result = [];
                         for (var i = 0; i < data.length; i++) {
@@ -49,6 +54,7 @@ angular.module('admin-users-list', [
                         $scope.users = null;
                     });
             };
+
             $scope.sort = function (sortingField) {
                 if ($scope.sortingField != sortingField) {
                     $scope.sortingField = sortingField;
@@ -59,6 +65,16 @@ angular.module('admin-users-list', [
                 $scope.currentPage = 1;
                 $scope.pageChanged();
             };
+
+            $scope.search = function () {
+                $scope.currentPage = 1;
+                $scope.pageChanged();
+            };
+
+            $scope.canSearch = function () {
+                return $scope.keyword != null;
+            };
+
             var cache = utilMethods.get('pagingData');
 
             $scope.maxSize = 5;
@@ -75,16 +91,16 @@ angular.module('admin-users-list', [
                 $scope.reverse = false;
                 $scope.itemsPerPage = 5;
                 $scope.users = null;
-                $scope.pageChanged();
+                $scope.keyword = null;
             } else {
                 $scope.totalItems = cache.totalItems;
                 $scope.currentPage = cache.currentPage;
                 $scope.sortingField = cache.sortingField;
                 $scope.reverse = cache.reverse;
                 $scope.itemsPerPage = cache.itemsPerPage;
-                $scope.users = cache.users;
+                $scope.keyword = cache.keyword;
             }
-
+            $scope.pageChanged();
         }])
     .directive('columnHeader', function () {
         return {

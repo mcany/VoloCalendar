@@ -2,7 +2,7 @@ angular.module('templates.common', ['security/login/form.tpl.html', 'security/lo
 
 angular.module("security/login/form.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("security/login/form.tpl.html",
-    "<form name=\"form\" novalidate class=\"login-form\">\n" +
+    "<form name=\"form\" novalidate  class=\"form-horizontal\" role=\"form\">\n" +
     "    <div class=\"modal-header\">\n" +
     "        <h4>Sign in</h4>\n" +
     "    </div>\n" +
@@ -10,14 +10,22 @@ angular.module("security/login/form.tpl.html", []).run(["$templateCache", functi
     "        <div class=\"alert alert-warning\" ng-show=\"authReason\">\n" +
     "            {{authReason}}\n" +
     "        </div>\n" +
-    "        <div class=\"alert alert-error\" ng-show=\"authError\">\n" +
+    "        <div class=\"alert alert-danger\" ng-show=\"authError\">\n" +
     "            {{authError}}\n" +
     "        </div>\n" +
     "        <div class=\"alert alert-info\">Please enter your login details</div>\n" +
-    "        <label>E-mail</label>\n" +
-    "        <input name=\"login\" type=\"email\" ng-model=\"user.email\" required autofocus>\n" +
-    "        <label>Password</label>\n" +
-    "        <input name=\"pass\" type=\"password\" ng-model=\"user.password\" required>\n" +
+    "        <div class=\"form-group form-group-sm\">\n" +
+    "            <label class=\"col-sm-2 control-label\" for=\"email\">E-mail</label>\n" +
+    "            <div class=\"col-sm-8\">\n" +
+    "                <input id=\"email\" class=\"form-control\" name=\"email\" type=\"email\" ng-model=\"user.email\" required autofocus>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <div class=\"form-group form-group-sm\">\n" +
+    "            <label class=\"col-sm-2 control-label\" for=\"password\">Password</label>\n" +
+    "            <div class=\"col-sm-8\">\n" +
+    "                <input id=\"password\" class=\"form-control\" name=\"password\" type=\"password\" ng-model=\"user.password\" required>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
     "    </div>\n" +
     "    <div class=\"modal-footer\">\n" +
     "        <button class=\"btn btn-primary login\" ng-click=\"login()\" ng-disabled='form.$invalid'>Sign in</button>\n" +
@@ -31,72 +39,175 @@ angular.module("security/login/form.tpl.html", []).run(["$templateCache", functi
 angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("security/login/profile-edit.tpl.html",
     "<div class=\"well\">\n" +
-    "    <form name=\"form\" novalidate crud-edit=\"user\">\n" +
+    "    <form name=\"form\" novalidate crud-edit=\"user\" class=\"form-horizontal\" role=\"form\">\n" +
     "        <legend>User</legend>\n" +
-    "        <input type=\"file\" style=\"display:none\"\n" +
-    "               id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\" />\n" +
-    "        <img  width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\" class=\"img-polaroid pull-right\"></gravatar>\n" +
-    "        <label for=\"email\">E-mail</label>\n" +
-    "        <input class=\"span6\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" disabled>\n" +
-    "        <label for=\"name\">Name</label>\n" +
-    "        <input class=\"span6\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
-    "        <span ng-show=\"showError('name', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <label for=\"password\">Password</label>\n" +
-    "        <input class=\"span6\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\" required>\n" +
-    "        <span ng-show=\"showError('password', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
-    "        <label for=\"passwordRepeat\">Password (repeat)</label>\n" +
-    "        <input class=\"span6\" type=\"password\" id=\"passwordRepeat\" name=\"passwordRepeat\" ng-model=\"password\" required validate-equals=\"user.password\">\n" +
-    "        <span ng-show=\"showError('passwordRepeat', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "        <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"help-inline\">Passwords do not match.</span>\n" +
-    "        <label>Admin</label>\n" +
-    "        <input type=\"checkbox\" ng-model=\"user.admin\" disabled>\n" +
-    "        <div ng-if=\"!user.admin\">\n" +
-    "            <label for=\"street\">Street</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\" required>\n" +
-    "            <span ng-show=\"showError('street', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label for=\"address\">Address</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
-    "            <label for=\"plz\">PLZ</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
-    "            <span ng-show=\"showError('plz', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label for=\"city\">City</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
-    "            <span ng-show=\"showError('city', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label for=\"telephoneNumber\">Telephone number</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\" ng-model=\"user.telephoneNumber\" required>\n" +
-    "            <span ng-show=\"showError('telephoneNumber', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label>Transport type</label>\n" +
-    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\" ng-required=\"!user.transportType\">Bicycle</label>\n" +
-    "            <label><input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\" ng-required=\"!user.transportType\">Auto</label>\n" +
-    "            <span ng-show=\"showError('transportType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label>Telephone type</label>\n" +
-    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\" ng-required=\"!user.telephoneType\">IOS</label>\n" +
-    "            <label><input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\" ng-required=\"!user.telephoneType\">Android</label>\n" +
-    "            <span ng-show=\"showError('telephoneType', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label for=\"iban\">IBAN</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
-    "            <span ng-show=\"showError('iban', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label for=\"bic\">BIC</label>\n" +
-    "            <input class=\"span6\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
-    "            <span ng-show=\"showError('bic', 'required')\" class=\"help-inline\">This field is required.</span>\n" +
-    "            <label>Contract type</label>\n" +
-    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" disabled>Minijob</label>\n" +
-    "            <label><input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" disabled>Flexible</label>\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-xs-8\">\n" +
+    "                <div class=\"form-group form-group-sm\">\n" +
+    "                    <label class=\"col-sm-2 control-label\" for=\"email\">E-mail</label>\n" +
+    "\n" +
+    "                    <div class=\"col-sm-5\">\n" +
+    "                        <input class=\"form-control\" type=\"email\" id=\"email\" name=\"email\" ng-model=\"user.email\" disabled>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"form-group form-group-sm\">\n" +
+    "                    <label class=\"col-sm-2 control-label\" for=\"name\">Name</label>\n" +
+    "\n" +
+    "                    <div class=\"col-sm-5\">\n" +
+    "                        <input class=\"form-control\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
+    "                    </div>\n" +
+    "                    <span ng-show=\"showError('name', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                </div>\n" +
+    "                <div class=\"form-group form-group-sm\">\n" +
+    "                    <label class=\"col-sm-2 control-label\" for=\"password\">Password</label>\n" +
+    "\n" +
+    "                    <div class=\"col-sm-5\">\n" +
+    "                        <input class=\"form-control\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\"\n" +
+    "                               required>\n" +
+    "                    </div>\n" +
+    "                    <span ng-show=\"showError('password', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                </div>\n" +
+    "                <div class=\"form-group form-group-sm\">\n" +
+    "                    <label class=\"col-sm-2 control-label\" for=\"passwordRepeat\">Password (repeat)</label>\n" +
+    "\n" +
+    "                    <div class=\"col-sm-5\">\n" +
+    "                        <input class=\"form-control\" type=\"password\" id=\"passwordRepeat\" name=\"passwordRepeat\"\n" +
+    "                               ng-model=\"password\" required validate-equals=\"user.password\">\n" +
+    "                    </div>\n" +
+    "                    <span ng-show=\"showError('passwordRepeat', 'equal')\" class=\"alert alert-danger\">Passwords do not match.</span>\n" +
+    "                </div>\n" +
+    "                <div class=\"form-group form-group-sm\">\n" +
+    "                    <label class=\"col-sm-2 control-label\" for=\"admin\">Admin</label>\n" +
+    "\n" +
+    "                    <div class=\"col-sm-5\">\n" +
+    "                        <input id=\"admin\" class=\"checkbox-inline\" type=\"checkbox\" ng-model=\"user.admin\" disabled>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div ng-if=\"!user.admin\">\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"street\">Street</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"street\" name=\"street\" ng-model=\"user.street\"\n" +
+    "                                   required>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('street', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"address\">Address</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"address\" name=\"address\" ng-model=\"user.address\">\n" +
+    "                        </div>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"plz\">PLZ</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('plz', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"city\">City</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('city', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"telephoneNumber\">Telephone number</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"telephoneNumber\" name=\"telephoneNumber\"\n" +
+    "                                   ng-model=\"user.telephoneNumber\" required>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('telephoneNumber', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\">Transport type</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"bicycle\"\n" +
+    "                                       ng-required=\"!user.transportType\">Bicycle\n" +
+    "                            </label>\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\"\n" +
+    "                                       ng-required=\"!user.transportType\">Auto\n" +
+    "                            </label>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('transportType', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\">Telephone type</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"ios\"\n" +
+    "                                       ng-required=\"!user.telephoneType\">IOS\n" +
+    "                            </label>\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"telephoneType\" type=\"radio\" ng-model=\"user.telephoneType\" value=\"android\"\n" +
+    "                                       ng-required=\"!user.telephoneType\">Android\n" +
+    "                            </label>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('telephoneType', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"iban\">IBAN</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('iban', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\" for=\"bic\">BIC</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <input class=\"form-control\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('bic', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"form-group form-group-sm\">\n" +
+    "                        <label class=\"col-sm-2 control-label\">Contract type</label>\n" +
+    "\n" +
+    "                        <div class=\"col-sm-5\">\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\"\n" +
+    "                                       ng-required=\"!user.contractType\">Minijob\n" +
+    "                            </label>\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\"\n" +
+    "                                       ng-required=\"!user.contractType\">Flexible\n" +
+    "                            </label>\n" +
+    "                        </div>\n" +
+    "                        <span ng-show=\"showError('contractType', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"col-xs-4\">\n" +
+    "                <input type=\"file\" style=\"display:none\"\n" +
+    "                       id=\"file\" name='file' onchange=\"angular.element(this).scope().fileChanged(this)\"/>\n" +
+    "                <img width=\"200\" height=\"200\" ng-src=\"{{user.base64Image}}\" onclick=\"$('#file').click();\"\n" +
+    "                     class=\"img-polaroid pull-right\"/>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "        <hr>\n" +
-    "        <div>\n" +
-    "			<button type=\"button\" class=\"btn btn-primary save\" ng-disabled=\"!canSave()\" ng-click=\"save()\">Save</button>\n" +
-    "			<button type=\"button\" class=\"btn btn-warning revert\" ng-click=\"revertChanges()\" ng-disabled=\"!canRevert()\">Revert changes</button>\n" +
-    "		</div>		\n" +
+    "        <crud-buttons></crud-buttons>\n" +
     "    </form>\n" +
     "</div>");
 }]);
 
 angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("security/login/toolbar.tpl.html",
-    "<ul class=\"nav pull-right\">\n" +
-    "  <li class=\"divider-vertical\"></li>\n" +
+    "<ul class=\"nav navbar-nav pull-right\">\n" +
     "  <li class=\"dropdown\" ng-class=\"{open:isProfileOpen}\" ng-show=\"isAuthenticated()\">\n" +
     "		<a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b class=\"caret\"></b></a>\n" +
     "		<ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
@@ -104,7 +215,7 @@ angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", fun
     "			<li><a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">Logout</a></li>\n" +
     "		</ul>\n" +
     "  </li>\n" +
-    "  <li ng-hide=\"isAuthenticated()\" class=\"login\">\n" +
+    "  <li ng-hide=\"isAuthenticated()\">\n" +
     "      <form class=\"navbar-form\">\n" +
     "          <button class=\"btn login\" ng-click=\"login()\">Log in</button>\n" +
     "      </form>\n" +

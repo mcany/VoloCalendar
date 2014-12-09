@@ -1,61 +1,165 @@
 <div class="well">
-    <form name="form" novalidate crud-edit="user">
+    <form name="form" novalidate crud-edit="user" class="form-horizontal" role="form">
         <legend>User</legend>
-        <input type="file" style="display:none"
-               id="file" name='file' onchange="angular.element(this).scope().fileChanged(this)" />
-        <img  width="200" height="200" ng-src="{{user.base64Image}}" onclick="$('#file').click();" class="img-polaroid pull-right"></gravatar>
-        <label for="email">E-mail</label>
-        <input class="span6" type="email" id="email" name="email" ng-model="user.email" disabled>
-        <label for="name">Name</label>
-        <input class="span6" type="text" id="name" name="name" ng-model="user.name" required>
-        <span ng-show="showError('name', 'required')" class="help-inline">This field is required.</span>
-        <label for="password">Password</label>
-        <input class="span6" type="password" id="password" name="password" ng-model="user.password" required>
-        <span ng-show="showError('password', 'required')" class="help-inline">This field is required.</span>
-        <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
-        <label for="passwordRepeat">Password (repeat)</label>
-        <input class="span6" type="password" id="passwordRepeat" name="passwordRepeat" ng-model="password" required validate-equals="user.password">
-        <span ng-show="showError('passwordRepeat', 'required')" class="help-inline">This field is required.</span>
-        <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
-        <label>Admin</label>
-        <input type="checkbox" ng-model="user.admin" disabled>
-        <div ng-if="!user.admin">
-            <label for="street">Street</label>
-            <input class="span6" type="text" id="street" name="street" ng-model="user.street" required>
-            <span ng-show="showError('street', 'required')" class="help-inline">This field is required.</span>
-            <label for="address">Address</label>
-            <input class="span6" type="text" id="address" name="address" ng-model="user.address">
-            <label for="plz">PLZ</label>
-            <input class="span6" type="text" id="plz" name="plz" ng-model="user.plz" required>
-            <span ng-show="showError('plz', 'required')" class="help-inline">This field is required.</span>
-            <label for="city">City</label>
-            <input class="span6" type="text" id="city" name="city" ng-model="user.city" required>
-            <span ng-show="showError('city', 'required')" class="help-inline">This field is required.</span>
-            <label for="telephoneNumber">Telephone number</label>
-            <input class="span6" type="text" id="telephoneNumber" name="telephoneNumber" ng-model="user.telephoneNumber" required>
-            <span ng-show="showError('telephoneNumber', 'required')" class="help-inline">This field is required.</span>
-            <label>Transport type</label>
-            <label><input name="transportType" type="radio" ng-model="user.transportType" value="bicycle" ng-required="!user.transportType">Bicycle</label>
-            <label><input name="transportType" type="radio" ng-model="user.transportType" value="auto" ng-required="!user.transportType">Auto</label>
-            <span ng-show="showError('transportType', 'required')" class="help-inline">This field is required.</span>
-            <label>Telephone type</label>
-            <label><input name="telephoneType" type="radio" ng-model="user.telephoneType" value="ios" ng-required="!user.telephoneType">IOS</label>
-            <label><input name="telephoneType" type="radio" ng-model="user.telephoneType" value="android" ng-required="!user.telephoneType">Android</label>
-            <span ng-show="showError('telephoneType', 'required')" class="help-inline">This field is required.</span>
-            <label for="iban">IBAN</label>
-            <input class="span6" type="text" id="iban" name="iban" ng-model="user.iban" required>
-            <span ng-show="showError('iban', 'required')" class="help-inline">This field is required.</span>
-            <label for="bic">BIC</label>
-            <input class="span6" type="text" id="bic" name="bic" ng-model="user.bic" required>
-            <span ng-show="showError('bic', 'required')" class="help-inline">This field is required.</span>
-            <label>Contract type</label>
-            <label><input name="contractType" type="radio" ng-model="user.contractType" value="minijob" disabled>Minijob</label>
-            <label><input name="contractType" type="radio" ng-model="user.contractType" value="flexible" disabled>Flexible</label>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="email">E-mail</label>
+
+                    <div class="col-sm-5">
+                        <input class="form-control" type="email" id="email" name="email" ng-model="user.email" disabled>
+                    </div>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="name">Name</label>
+
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" id="name" name="name" ng-model="user.name" required>
+                    </div>
+                    <span ng-show="showError('name', 'required')" class="alert alert-danger">This field is required.</span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="password">Password</label>
+
+                    <div class="col-sm-5">
+                        <input class="form-control" type="password" id="password" name="password" ng-model="user.password"
+                               required>
+                    </div>
+                    <span ng-show="showError('password', 'required')" class="alert alert-danger">This field is required.</span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="passwordRepeat">Password (repeat)</label>
+
+                    <div class="col-sm-5">
+                        <input class="form-control" type="password" id="passwordRepeat" name="passwordRepeat"
+                               ng-model="password" required validate-equals="user.password">
+                    </div>
+                    <span ng-show="showError('passwordRepeat', 'equal')" class="alert alert-danger">Passwords do not match.</span>
+                </div>
+                <div class="form-group form-group-sm">
+                    <label class="col-sm-2 control-label" for="admin">Admin</label>
+
+                    <div class="col-sm-5">
+                        <input id="admin" class="checkbox-inline" type="checkbox" ng-model="user.admin" disabled>
+                    </div>
+                </div>
+                <div ng-if="!user.admin">
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="street">Street</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="street" name="street" ng-model="user.street"
+                                   required>
+                        </div>
+                        <span ng-show="showError('street', 'required')" class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="address">Address</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="address" name="address" ng-model="user.address">
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="plz">PLZ</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="plz" name="plz" ng-model="user.plz" required>
+                        </div>
+                        <span ng-show="showError('plz', 'required')" class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="city">City</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="city" name="city" ng-model="user.city" required>
+                        </div>
+                        <span ng-show="showError('city', 'required')" class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="telephoneNumber">Telephone number</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="telephoneNumber" name="telephoneNumber"
+                                   ng-model="user.telephoneNumber" required>
+                        </div>
+                        <span ng-show="showError('telephoneNumber', 'required')"
+                              class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label">Transport type</label>
+
+                        <div class="col-sm-5">
+                            <label class="radio-inline">
+                                <input name="transportType" type="radio" ng-model="user.transportType" value="bicycle"
+                                       ng-required="!user.transportType">Bicycle
+                            </label>
+                            <label class="radio-inline">
+                                <input name="transportType" type="radio" ng-model="user.transportType" value="auto"
+                                       ng-required="!user.transportType">Auto
+                            </label>
+                        </div>
+                        <span ng-show="showError('transportType', 'required')"
+                              class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label">Telephone type</label>
+
+                        <div class="col-sm-5">
+                            <label class="radio-inline">
+                                <input name="telephoneType" type="radio" ng-model="user.telephoneType" value="ios"
+                                       ng-required="!user.telephoneType">IOS
+                            </label>
+                            <label class="radio-inline">
+                                <input name="telephoneType" type="radio" ng-model="user.telephoneType" value="android"
+                                       ng-required="!user.telephoneType">Android
+                            </label>
+                        </div>
+                        <span ng-show="showError('telephoneType', 'required')"
+                              class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="iban">IBAN</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="iban" name="iban" ng-model="user.iban" required>
+                        </div>
+                        <span ng-show="showError('iban', 'required')" class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label" for="bic">BIC</label>
+
+                        <div class="col-sm-5">
+                            <input class="form-control" type="text" id="bic" name="bic" ng-model="user.bic" required>
+                        </div>
+                        <span ng-show="showError('bic', 'required')" class="alert alert-danger">This field is required.</span>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label class="col-sm-2 control-label">Contract type</label>
+
+                        <div class="col-sm-5">
+                            <label class="radio-inline">
+                                <input name="contractType" type="radio" ng-model="user.contractType" value="minijob"
+                                       ng-required="!user.contractType">Minijob
+                            </label>
+                            <label class="radio-inline">
+                                <input name="contractType" type="radio" ng-model="user.contractType" value="flexible"
+                                       ng-required="!user.contractType">Flexible
+                            </label>
+                        </div>
+                        <span ng-show="showError('contractType', 'required')"
+                              class="alert alert-danger">This field is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <input type="file" style="display:none"
+                       id="file" name='file' onchange="angular.element(this).scope().fileChanged(this)"/>
+                <img width="200" height="200" ng-src="{{user.base64Image}}" onclick="$('#file').click();"
+                     class="img-polaroid pull-right"/>
+            </div>
         </div>
         <hr>
-        <div>
-			<button type="button" class="btn btn-primary save" ng-disabled="!canSave()" ng-click="save()">Save</button>
-			<button type="button" class="btn btn-warning revert" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert changes</button>
-		</div>		
+        <crud-buttons></crud-buttons>
     </form>
 </div>

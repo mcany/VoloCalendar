@@ -14,7 +14,6 @@ angular.module('admin-users-edit-uniqueEmail', ['resources.users'])
       
       //using push() here to run it as the last parser, after we are sure that other validators were run
       ctrl.$parsers.push(function (viewValue) {
-
         if (viewValue) {
           Users.getByEmail(viewValue + '_', function (users) {
             if (users.length === 0) {
@@ -23,8 +22,8 @@ angular.module('admin-users-edit-uniqueEmail', ['resources.users'])
               ctrl.$setValidity('uniqueEmail', false);
             }
           });
-          return viewValue;
         }
+        return viewValue;
       });
     }
   };
