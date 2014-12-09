@@ -2,3 +2,13 @@ web/resources/angular-app.js
 web/resources/mongolab.js
 web/resources/templates/app.js
 .idea/workspace.xml
+*.class
+*.woff
+out/artifacts/VoloCalendar_war_exploded/WEB-INF/views/main.jsp
+out/artifacts/VoloCalendar_war_exploded/resources/angular-app.js
+out/artifacts/VoloCalendar_war_exploded/resources/bootstrap.css
+out/artifacts/VoloCalendar_war_exploded/resources/fonts/glyphicons-halflings-regular.eot
+out/artifacts/VoloCalendar_war_exploded/resources/fonts/glyphicons-halflings-regular.svg
+out/artifacts/VoloCalendar_war_exploded/resources/fonts/glyphicons-halflings-regular.ttf
+out/artifacts/VoloCalendar_war_exploded/resources/templates/app.js
+out/artifacts/VoloCalendar_war_exploded/resources/templates/common.js
