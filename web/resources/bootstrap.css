@@ -6200,3 +6200,8 @@ button.close {
     display: none !important;
   }
 }
+
+.fill-button {
+    width: 40px !important;
+    height: 40px !important;
+}

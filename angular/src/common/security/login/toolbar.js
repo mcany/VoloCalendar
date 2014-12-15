@@ -1,11 +1,15 @@
-angular.module('security.login.toolbar', ['services.utilMethods'], ['$routeProvider', function($routeProvider){
+angular.module('security.login.toolbar',
+    ['services.utilMethods'], ['$routeProvider', function($routeProvider){
 
   $routeProvider.when('/profile', {
     templateUrl:'security/login/profile-edit.tpl.html',
     controller:'EditProfileCtrl',
 	resolve:{		
-		user:['Users', 'security', function (Users, security) {
-			return security.requestCurrentUser().then(function(value){return Users.getById(security.currentUser.id);});
+		user:['Users', 'security', 'securityAuthorization', function (Users, security, securityAuthorization) {
+			return securityAuthorization.requireAuthenticatedUser().then(
+                    function(value){
+                        return Users.getById(security.currentUser.id);
+                    });
 		}]
 	}
   });}])

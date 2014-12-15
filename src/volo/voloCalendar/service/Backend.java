@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Backend {
     private static HashMap<String, User> usersByEmail = new HashMap<String, User>();
     private static HashMap<String, User> usersById = new HashMap<String, User>();
+    private static ManualForecasting manualForecasting = new ManualForecasting();
     static {
         User emin = new User("123", "eminguliyev1987@gmail.com", "sindibad1987", "Emin Guliyev");
         User mertcan = new User("456", "mcanyigin@gmail.com", "sindibad1987", "Mertcan Yigin"
@@ -79,5 +80,13 @@ public class Backend {
 
     public static int getAllUsersCount() {
         return getAllUsers().size();
+    }
+
+    public static ManualForecasting getManualForecasting() {
+        return manualForecasting;
+    }
+
+    public static void setManualForecasting(ManualForecasting manualForecasting){
+        Backend.manualForecasting = manualForecasting;
     }
 }
