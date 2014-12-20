@@ -1,10 +1,16 @@
-angular.module('calendar', [], ['$routeProvider', function($routeProvider){
+angular.module('calendar', ['security.authorization'])
+    .config(['$routeProvider', 'securityAuthorizationProvider', function ($routeProvider, securityAuthorizationProvider) {
+        $routeProvider.when('/calendar', {
+            templateUrl: 'calendar/calendar.tpl.html',
+            controller: 'CalendarCtrl',
+            resolve: {
+                currentUser: securityAuthorizationProvider.requireAuthenticatedUser
+            }
+        });
+    }]);
 
-  $routeProvider.when('/calendar', {
-    templateUrl:'calendar/list.tpl.html',
-    controller:'CalendarListCtrl'
-  });
-}]);
-
-angular.module('calendar').controller('CalendarListCtrl', ['$scope', function($scope, projects){
+angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 'security', function($scope, $location, security){
+    if (security.isAdmin()) {
+        $location.path('/admin/calendar');
+    }
 }]);

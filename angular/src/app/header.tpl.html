@@ -7,12 +7,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" ng-click="home()">VoloCalendar</a>
+            <a class="navbar-brand" href="/home">VoloCalendar</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li ng-class="{active:isNavbarActive('calendar')}"><a href="/calendar">My calendar</a></li>
-                <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}" ng-show="isAdmin()">
+                <li ng-class="{active:isNavbarActive(['/calendar'])}" ng-show="isDriver()"><a href="/calendar">My calendar</a></li>
+                <li ng-class="{active:isNavbarActive(['/admin/calendar'])}" ng-show="isAdmin()"><a href="/admin/calendar">Calendar</a></li>
+                <li class="dropdown" ng-class="{active:isNavbarActive(['/admin/users', '/admin/settings']), open:isAdminOpen}" ng-show="isAdmin()">
                     <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b
                             class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
@@ -20,6 +21,7 @@
                         <li><a tabindex="-1" href="/admin/settings" ng-click="isAdminOpen=false">Settings</a></li>
                     </ul>
                 </li>
+                <li ng-class="{active:isNavbarActive(['/info'])}" ><a href="/info">About us</a></li>
             </ul>
             <login-toolbar></login-toolbar>
             <ul class="nav pull-right" ng-show="hasPendingRequests()">

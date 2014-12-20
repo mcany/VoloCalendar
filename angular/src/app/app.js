@@ -1,7 +1,9 @@
 angular.module('app', [
   'ngRoute',
   'calendar',
+  'info',
   'admin',
+  'home',
   'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
@@ -36,7 +38,7 @@ angular.module('app').constant('I18N.MESSAGES', {
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
-  $routeProvider.otherwise({redirectTo:'/calendar'});
+  $routeProvider.otherwise({redirectTo:'/home'});
 }]);
 
 angular.module('app').run(['security', function(security) {
@@ -65,17 +67,17 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
 
   $scope.isAuthenticated = security.isAuthenticated;
   $scope.isAdmin = security.isAdmin;
-
-  $scope.home = function () {
-    if (security.isAuthenticated()) {
-      $location.path('/calendar');
-    } else {
-      $location.path('/calendar');
-    }
+  $scope.isDriver = function(){
+      return security.isAuthenticated() && !security.isAdmin();
   };
 
-  $scope.isNavbarActive = function (navBarPath) {
-    return navBarPath === breadcrumbs.getFirst().name;
+  $scope.isNavbarActive = function (navBarPaths) {
+      for (index = 0; index < navBarPaths.length; ++index) {
+          if (navBarPaths[index] === $location.path()){
+              return true;
+          }
+      }
+      return false;
   };
 
   $scope.hasPendingRequests = function () {
