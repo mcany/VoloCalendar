@@ -1,4 +1,4 @@
-package volo.voloCalendar.model;
+package volo.voloCalendar.viewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

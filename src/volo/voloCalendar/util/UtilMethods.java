@@ -1,5 +1,8 @@
 package volo.voloCalendar.util;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -26,4 +29,32 @@ public class UtilMethods {
         }
         return result;
     }
+
+
+    public static LocalDate[] getMonthBeginDatesForCalendar(int monthCount){
+        ArrayList<LocalDate> list = new ArrayList<LocalDate>();
+        LocalDate monthBeginDate = getBeginDateOfCurrentMonth();
+        list.add(monthBeginDate);
+        for (int i = 1; i < monthCount; i++) {
+            monthBeginDate = monthBeginDate.plusMonths(1);
+            list.add(monthBeginDate);
+        }
+        return list.toArray(new LocalDate[list.size()]);
+    }
+
+    public static LocalDate getBeginDateOfCurrentMonth() {
+        return LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
+    }
+
+    public static LocalDate[] getWeekBeginDatesForMonth(LocalDate monthBeginDate){
+        ArrayList<LocalDate> list = new ArrayList<LocalDate>();
+        LocalDate date = monthBeginDate;
+        Month month = date.getMonth();
+        do{
+            list.add(date);
+            date = date.plusDays(7);
+        }while (date.getMonth() == month);
+        return list.toArray(new LocalDate[list.size()]);
+    }
+
 }

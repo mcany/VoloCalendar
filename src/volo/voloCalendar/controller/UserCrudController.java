@@ -1,12 +1,11 @@
 package volo.voloCalendar.controller;
 
 import org.springframework.web.bind.annotation.*;
-import volo.voloCalendar.model.UserTableLogic;
+import volo.voloCalendar.viewModel.UserTableLogic;
 import volo.voloCalendar.service.Backend;
 import volo.voloCalendar.model.User;
 import volo.voloCalendar.util.UtilMethods;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 

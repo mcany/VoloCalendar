@@ -1,5 +1,6 @@
 package volo.voloCalendar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
@@ -39,5 +40,16 @@ public class DayStatistics  implements Serializable {
 
     public void setHourStatisticsArray(HourStatistics[] hourStatisticsArray) {
         this.hourStatisticsArray = hourStatisticsArray;
+    }
+
+    @JsonIgnore
+    public int getDoneHours() {
+        int result = 0;
+        for(HourStatistics hourStatistics: hourStatisticsArray){
+            if (hourStatistics.isSelected()){
+                result++;
+            }
+        }
+        return result;
     }
 }

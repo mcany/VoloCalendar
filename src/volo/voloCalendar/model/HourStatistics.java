@@ -36,4 +36,8 @@ public class HourStatistics  implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public void decreaseRequiredDriverCount() {
+        requiredDriverCount--;
+    }
 }

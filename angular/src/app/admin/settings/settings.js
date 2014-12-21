@@ -67,18 +67,6 @@ angular.module('settings', [
                         scope.setColor(element, newValue);
                     });
                 });
-                element.bind('click', function (event) {
-                    scope.$apply(function () {
-                        event.preventDefault();
-                        var newValue = modelGetter(scope) + 1;
-                        if (newValue > scope.maxAllowed) {
-                            newValue = scope.maxAllowed;
-                        }
-                        modelSetter(scope, newValue);
-                        element.text(newValue);
-                        scope.setColor(element, newValue);
-                    });
-                });
                 element.bind('keydown', function (event) {
                     scope.$apply(function () {
                         event.preventDefault();

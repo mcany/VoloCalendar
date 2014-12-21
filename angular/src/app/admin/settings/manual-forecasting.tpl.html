@@ -1,4 +1,6 @@
-<legend>Manual forecasting</legend>
+<legend>
+    Manual forecasting
+</legend>
 <table  class="table-bordered" align="center">
     <thead>
     <tr>
@@ -7,13 +9,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr><td>Monday</td><td ng-repeat="forecast in manualForecasting.monday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
-    <tr><td>Tuesday</td><td ng-repeat="forecast in manualForecasting.tuesday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
-    <tr><td>Wednesday</td><td ng-repeat="forecast in manualForecasting.wednesday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
-    <tr><td>Thursday</td><td ng-repeat="forecast in manualForecasting.thursday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
-    <tr><td>Friday</td><td ng-repeat="forecast in manualForecasting.friday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
-    <tr><td>Saturday</td><td ng-repeat="forecast in manualForecasting.saturday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
-    <tr><td>Sunday</td><td ng-repeat="forecast in manualForecasting.sunday track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Monday</td><td ng-repeat="forecast in manualForecasting.days[0] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Tuesday</td><td ng-repeat="forecast in manualForecasting.days[1] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Wednesday</td><td ng-repeat="forecast in manualForecasting.days[2] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Thursday</td><td ng-repeat="forecast in manualForecasting.days[3] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Friday</td><td ng-repeat="forecast in manualForecasting.days[4] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Saturday</td><td ng-repeat="forecast in manualForecasting.days[5] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
+    <tr><td>Sunday</td><td ng-repeat="forecast in manualForecasting.days[6] track by $index"><button class="fill-button" volo-counter="forecast.count"></button></td></tr>
     </tbody>
 </table>
 <hr/>
