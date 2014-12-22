@@ -11,13 +11,13 @@ import java.io.Serializable;
 public class HourStatistics  implements Serializable {
     private int requiredDriverCount;
     private boolean selected;
-
-    public HourStatistics() {
-        selected = false;
+    private DayStatistics dayStatistics;
+    public HourStatistics(DayStatistics dayStatistics) {
+        this.dayStatistics = dayStatistics;
     }
 
-    public HourStatistics(int requiredDriverCount) {
-        this();
+    public HourStatistics(int requiredDriverCount, DayStatistics dayStatistics) {
+        this(dayStatistics);
         this.requiredDriverCount = requiredDriverCount;
     }
 
@@ -35,6 +35,10 @@ public class HourStatistics  implements Serializable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public boolean isEnabled() {
+        return dayStatistics.isActive() && requiredDriverCount > 0;
     }
 
     public void decreaseRequiredDriverCount() {

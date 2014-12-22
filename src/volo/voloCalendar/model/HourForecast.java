@@ -12,7 +12,7 @@ public class HourForecast implements Serializable{
     private int count;
 
     public HourForecast() {
-        count = 0;
+        count = 5;
     }
 
     public int getCount() {

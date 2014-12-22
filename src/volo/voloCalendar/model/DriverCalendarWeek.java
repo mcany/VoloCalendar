@@ -41,12 +41,12 @@ public class DriverCalendarWeek  implements Serializable {
             if (driverCalendarWeek == null){
                 dayStatistics = new DayStatistics(date);
             }else{
-                dayStatistics = driverCalendarWeek.dayStatisticsArray[date.getDayOfWeek().getValue()];
+                dayStatistics = driverCalendarWeek.dayStatisticsArray[date.getDayOfWeek().getValue() - 1];
                 dayStatistics.setDate(date);
             }
             list.add(dayStatistics);
             date = date.plusDays(1);
-        }while(date.getDayOfWeek() != DayOfWeek.MONDAY);
+        }while(date.getDayOfWeek() != DayOfWeek.MONDAY && date.getMonth() == this.beginDate.getMonth());
         dayStatisticsArray = list.toArray(new DayStatistics[list.size()]);
     }
 
@@ -77,7 +77,7 @@ public class DriverCalendarWeek  implements Serializable {
 
     public void setRequiredDriverCountStatistics(ManualForecasting manualForecasting) {
         for(DayStatistics dayStatistics:dayStatisticsArray){
-            HourForecast[] forecastForSameDayOfWeek = manualForecasting.getDays()[dayStatistics.getDate().getDayOfWeek().getValue()];
+            HourForecast[] forecastForSameDayOfWeek = manualForecasting.getDays()[dayStatistics.getDate().getDayOfWeek().getValue() - 1];
             for (int i = 0; i < 24; i++){
                 HourStatistics hourStatistics = dayStatistics.getHourStatisticsArray()[i];
                 hourStatistics.setRequiredDriverCount(forecastForSameDayOfWeek[i].getCount());

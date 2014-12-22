@@ -3,7 +3,7 @@ package volo.voloCalendar.service;
 import volo.voloCalendar.model.*;
 import volo.voloCalendar.util.UtilMethods;
 import volo.voloCalendar.viewModel.MonthStatistics;
-import volo.voloCalendar.viewModel.UserTableLogic;
+import volo.voloCalendar.viewModel.UserTableViewModel;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -17,8 +17,8 @@ public class Backend {
     private static HashMap<String, User> usersById = new HashMap<String, User>();
     private static ManualForecasting manualForecasting = new ManualForecasting();
     static {
-        User emin = new User("123", "eminguliyev1987@gmail.com", "sindibad1987", "Emin Guliyev");
-        User mertcan = new User("456", "mcanyigin@gmail.com", "sindibad1987", "Mertcan Yigin"
+        User emin = new User("456", "mcanyigin@gmail.com", "sindibad1987", "Mertcan Yigin");
+        User mertcan = new User("123", "eminguliyev1987@gmail.com", "sindibad1987", "Emin Guliyev"
                 , "Christ-Probst.", "10/142", "80805", "Munich", "017678947235", TransportType.bicycle, TelephoneType.ios
                 , "DE64IRCE92222212345678", "BINFFDDDXXX", ContractType.minijob);
         usersByEmail.put(emin.getEmail(), emin);
@@ -67,15 +67,15 @@ public class Backend {
         return user;
     }
 
-    public static User[] getUsers(UserTableLogic userTableLogic){
+    public static User[] getUsers(UserTableViewModel userTableViewModel){
         Collection<User> users = Backend.getAllUsers();
         User[] userArray = new User[users.size()];
         userArray = users.toArray(userArray);
-        int end = userTableLogic.getBeginIndex() - 1 + userTableLogic.getMaxNumber();
+        int end = userTableViewModel.getBeginIndex() - 1 + userTableViewModel.getMaxNumber();
         if (end >= userArray.length){
             end = userArray.length;
         }
-        userArray = Arrays.copyOfRange(userArray, userTableLogic.getBeginIndex() - 1, end);
+        userArray = Arrays.copyOfRange(userArray, userTableViewModel.getBeginIndex() - 1, end);
 
         for (User user : userArray){
             LocalDate beginDateOfCurrentMonth = UtilMethods.getBeginDateOfCurrentMonth();
@@ -102,7 +102,11 @@ public class Backend {
 
     public static DriverCalendarWeek getDriverCalendarWeek(String userId, LocalDate beginDate){
         User user = getUserById(userId);
-        if (user == null){
+        return getDriverCalendarWeek(user, beginDate);
+    }
+
+    public static DriverCalendarWeek getDriverCalendarWeek(User user, LocalDate beginDate) {
+        if (user == null || user.isAdmin()){
             return null;
         }
         DriverCalendarWeek driverCalendarWeekInDB = getDriverCalendarWeekFromDB(user, beginDate);
@@ -110,15 +114,16 @@ public class Backend {
             driverCalendarWeekInDB = new DriverCalendarWeek(getDriverCalendarWeekForever(user), beginDate);
         }
         if (driverCalendarWeekInDB == null){
-            driverCalendarWeekInDB = new DriverCalendarWeek(userId, beginDate);
+            driverCalendarWeekInDB = new DriverCalendarWeek(user.getId(), beginDate);
         }
 
         driverCalendarWeekInDB.setRequiredDriverCountStatistics(getManualForecasting());
         for (User userInDb : getAllUsers()) {
             DriverCalendarWeek driverCalendarWeekForDbUser = getDriverCalendarWeekFromDB(userInDb, driverCalendarWeekInDB.getBeginDate());
-            driverCalendarWeekInDB.subtractStatistics(driverCalendarWeekForDbUser);
+            if (driverCalendarWeekForDbUser != null) {
+                driverCalendarWeekInDB.subtractStatistics(driverCalendarWeekForDbUser);
+            }
         }
-
         return driverCalendarWeekInDB;
     }
 
@@ -132,16 +137,20 @@ public class Backend {
 
     public static DriverCalendarWeek insertOrUpdateDriverCalendarWeek(DriverCalendarWeek driverCalendarWeek) {
         User user = getUserById(driverCalendarWeek.getUserId());
-        if (user == null){
+        if (user == null || user.isAdmin()){
             return null;
         }
         user.getDriverCalendarWeekHashMap().put(driverCalendarWeek.getBeginDate(), driverCalendarWeek);
         return driverCalendarWeek;
     }
 
-    public static DriverCalendarWeek setForeverCalendarPatternForDriver(String userId, DriverCalendarWeek driverCalendarWeek){
+    public static DriverCalendarWeek setForeverCalendarPatternForDriver(String userId, LocalDate weekBeginDate){
         User user = getUserById(userId);
-        if (user == null){
+        if (user == null || user.isAdmin()){
+            return null;
+        }
+        DriverCalendarWeek driverCalendarWeek = getDriverCalendarWeekFromDB(user, weekBeginDate);
+        if (driverCalendarWeek == null){
             return null;
         }
         driverCalendarWeek.setUserId(userId);
@@ -149,9 +158,13 @@ public class Backend {
         return driverCalendarWeek;
     }
 
-    public static DriverCalendarWeek setMonthlyCalendarForDriver(String userId, DriverCalendarWeek driverCalendarWeek) {
+    public static DriverCalendarWeek setMonthlyCalendarForDriver(String userId, LocalDate weekBeginDate) {
         User user = getUserById(userId);
-        if (user == null){
+        if (user == null || user.isAdmin()){
+            return null;
+        }
+        DriverCalendarWeek driverCalendarWeek = getDriverCalendarWeekFromDB(user, weekBeginDate);
+        if (driverCalendarWeek == null){
             return null;
         }
         LocalDate date = driverCalendarWeek.getBeginDate();
@@ -166,9 +179,13 @@ public class Backend {
         return driverCalendarWeek;
     }
 
-    public static DriverCalendarWeek setNextWeekCalendarForDriver(String userId, DriverCalendarWeek driverCalendarWeek) {
+    public static DriverCalendarWeek setNextWeekCalendarForDriver(String userId, LocalDate weekBeginDate) {
         User user = getUserById(userId);
-        if (user == null){
+        if (user == null || user.isAdmin()){
+            return null;
+        }
+        DriverCalendarWeek driverCalendarWeek = getDriverCalendarWeekFromDB(user, weekBeginDate);
+        if (driverCalendarWeek == null){
             return null;
         }
         LocalDate date = driverCalendarWeek.getBeginDate();
@@ -191,6 +208,9 @@ public class Backend {
     }
 
     public static MonthStatistics getMonthStatistics(User user, LocalDate monthBeginDate) {
+        if (user.isAdmin()){
+            return null;
+        }
         int plannedHours = (user.getContractType() == ContractType.minijob)? User.minijobPlan :0;
         int doneHours = 0;
         LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);

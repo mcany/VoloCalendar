@@ -41,9 +41,10 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/home'});
 }]);
 
-angular.module('app').run(['security', function(security) {
+angular.module('app').run(['security', '$http', function(security, $http) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
+  $http.defaults.headers.common.Accept = 'application/json';
   security.requestCurrentUser();
 }]);
 

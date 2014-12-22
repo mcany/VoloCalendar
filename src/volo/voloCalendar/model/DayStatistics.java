@@ -17,7 +17,7 @@ public class DayStatistics  implements Serializable {
     public DayStatistics() {
         hourStatisticsArray = new HourStatistics[24];
         for (int i=0; i < hourStatisticsArray.length; i++){
-            hourStatisticsArray[i] = new HourStatistics();
+            hourStatisticsArray[i] = new HourStatistics(this);
         }
     }
 
@@ -40,6 +40,10 @@ public class DayStatistics  implements Serializable {
 
     public void setHourStatisticsArray(HourStatistics[] hourStatisticsArray) {
         this.hourStatisticsArray = hourStatisticsArray;
+    }
+
+    public boolean isActive(){
+        return LocalDate.now().isBefore(date);
     }
 
     @JsonIgnore

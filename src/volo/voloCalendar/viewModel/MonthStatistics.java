@@ -12,6 +12,8 @@ public class MonthStatistics implements Serializable{
     private int plannedHours;
     private int doneHours;
 
+    public MonthStatistics(){}
+
     public MonthStatistics(int plannedHours, int doneHours) {
         this.plannedHours = plannedHours;
         this.doneHours = doneHours;

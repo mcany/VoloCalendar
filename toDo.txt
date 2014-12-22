@@ -1,0 +1,6 @@
+1.create one table only
+2.monthstatistics refresh logic
+3.view selection for deactive days
+4.pattern buttons
+5.save
+6.test
