@@ -1,5 +1,5 @@
 angular.module('security.login.toolbar',
-    ['services.utilMethods'], ['$routeProvider', function($routeProvider){
+    [], ['$routeProvider', function($routeProvider){
 
   $routeProvider.when('/profile', {
     templateUrl:'security/login/profile-edit.tpl.html',

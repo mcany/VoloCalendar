@@ -1,6 +1,10 @@
 package volo.voloCalendar.viewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,33 +16,35 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DriverCalendarWeekLight implements Serializable{
-    private LocalDate weekBeginDate;
-    private LocalDate weekEndDate;
+    private LocalDate beginDate;
+    private LocalDate endDate;
 
     public DriverCalendarWeekLight(){}
 
-    public DriverCalendarWeekLight(LocalDate weekBeginDate) {
-        this.weekBeginDate = weekBeginDate;
-        LocalDate date = weekBeginDate.plusDays(7);
-        if (date.getMonth() != weekBeginDate.getMonth()){
-            date = date.with(lastDayOfMonth());
+    public DriverCalendarWeekLight(LocalDate beginDate) {
+        this.beginDate = beginDate;
+        LocalDate date = beginDate.plusDays(7 - beginDate.getDayOfWeek().getValue());
+        if (date.getMonth() != beginDate.getMonth()){
+            date = beginDate.with(lastDayOfMonth());
         }
-        this.weekEndDate = date;
+        this.endDate = date;
     }
 
-    public LocalDate getWeekBeginDate() {
-        return weekBeginDate;
+    public LocalDate getBeginDate() {
+        return beginDate;
+    }
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    public void setBeginDate(LocalDate beginDate) {
+        this.beginDate = beginDate;
     }
 
-    public void setWeekBeginDate(LocalDate weekBeginDate) {
-        this.weekBeginDate = weekBeginDate;
+    public LocalDate getEndDate() {
+        return endDate;
     }
-
-    public LocalDate getWeekEndDate() {
-        return weekEndDate;
-    }
-
-    public void setWeekEndDate(LocalDate weekEndDate) {
-        this.weekEndDate = weekEndDate;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 }

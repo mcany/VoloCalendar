@@ -56,8 +56,9 @@ public class DriverCalendarController {
         return Backend.getDriverCalendarWeek(userId, monthBeginDate);
     }
 
-    @RequestMapping(value = "/week", method = RequestMethod.POST, produces = "application/json")
-    public DriverCalendarWeek week(@RequestBody DriverCalendarWeek driverCalendarWeek){
+    @RequestMapping(value = "/week/{userId}", method = RequestMethod.POST, produces = "application/json")
+    public DriverCalendarWeek week(@PathVariable String userId, @RequestBody DriverCalendarWeek driverCalendarWeek){
+        driverCalendarWeek.init();
         return Backend.insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
     }
 
@@ -67,15 +68,15 @@ public class DriverCalendarController {
         return Backend.setNextWeekCalendarForDriver(userId, weekBeginDate);
     }
 
-    @RequestMapping(value = "/setNextMonth/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarWeek setNextMonth(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
+    @RequestMapping(value = "/setMonth/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
+    public DriverCalendarWeek setMonth(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
         LocalDate weekBeginDate = LocalDate.of(year,month,day);
         return Backend.setMonthlyCalendarForDriver(userId, weekBeginDate);
     }
 
-    @RequestMapping(value = "/setForever/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarWeek setForever(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
+    @RequestMapping(value = "/setYear/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
+    public DriverCalendarWeek setYear(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
         LocalDate weekBeginDate = LocalDate.of(year,month,day);
-        return Backend.setForeverCalendarPatternForDriver(userId, weekBeginDate);
+        return Backend.setAnnualCalendarForDriver(userId, weekBeginDate);
     }
 }

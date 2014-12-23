@@ -2,6 +2,10 @@ package volo.voloCalendar.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -13,6 +17,7 @@ import java.time.LocalDate;
 public class DayStatistics  implements Serializable {
     private LocalDate date;
     private HourStatistics[] hourStatisticsArray;
+    public static final int changeLimit = 3;
 
     public DayStatistics() {
         hourStatisticsArray = new HourStatistics[24];
@@ -29,7 +34,8 @@ public class DayStatistics  implements Serializable {
     public LocalDate getDate() {
         return date;
     }
-
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     public void setDate(LocalDate date) {
         this.date = date;
     }
@@ -43,7 +49,8 @@ public class DayStatistics  implements Serializable {
     }
 
     public boolean isActive(){
-        return LocalDate.now().isBefore(date);
+        boolean result = LocalDate.now().isBefore(date.minusDays(changeLimit));
+        return result;
     }
 
     @JsonIgnore

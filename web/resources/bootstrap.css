@@ -6201,7 +6201,17 @@ button.close {
   }
 }
 
+.fill-button-35 {
+    width: 35px !important;
+    height: 35px !important;
+}
+
 .fill-button {
     width: 40px !important;
     height: 40px !important;
+}
+
+.btn-left{
+    width: 100px !important;
+    margin-bottom: 5px !important;
 }

@@ -12,6 +12,9 @@ public class HourStatistics  implements Serializable {
     private int requiredDriverCount;
     private boolean selected;
     private DayStatistics dayStatistics;
+
+    public HourStatistics(){}
+
     public HourStatistics(DayStatistics dayStatistics) {
         this.dayStatistics = dayStatistics;
     }
@@ -43,5 +46,9 @@ public class HourStatistics  implements Serializable {
 
     public void decreaseRequiredDriverCount() {
         requiredDriverCount--;
+    }
+
+    public void init(DayStatistics dayStatistics) {
+        this.dayStatistics = dayStatistics;
     }
 }

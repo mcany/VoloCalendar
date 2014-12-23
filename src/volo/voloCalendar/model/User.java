@@ -307,14 +307,6 @@ public class User implements Serializable{
     }
 
     @JsonIgnore
-    public DriverCalendarWeek getDriverCalendarWeekForever() {
-        return driverCalendarWeekForever;
-    }
-
-    public void setDriverCalendarWeekForever(DriverCalendarWeek driverCalendarWeekForever) {
-        this.driverCalendarWeekForever = driverCalendarWeekForever;
-    }
-    @JsonIgnore
     public HashMap<LocalDate, DriverCalendarWeek> getDriverCalendarWeekHashMap() {
         return driverCalendarWeekHashMap;
     }

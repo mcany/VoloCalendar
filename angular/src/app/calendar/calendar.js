@@ -4,7 +4,6 @@ angular.module('calendar', ['security.authorization'])
             templateUrl: 'calendar/calendar.tpl.html',
             controller: 'CalendarCtrl',
             resolve: {
-                currentUser: securityAuthorizationProvider.requireAuthenticatedUser,
                 driverCalendarViewModel: ['security', '$http', 'securityAuthorization', function (security, $http, securityAuthorization) {
                     return securityAuthorization.requireAuthenticatedUser().then(
                         function (value) {
@@ -18,24 +17,66 @@ angular.module('calendar', ['security.authorization'])
         });
     }]);
 
-angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 'security', 'driverCalendarViewModel', '$http',
-    function ($scope, $location, security, driverCalendarViewModel, $http) {
-        /*if (security.isAdmin()) {
-         $location.path('/admin/calendar');
-         }*/
+angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 'security', 'driverCalendarViewModel', '$http', 'utilMethods',
+    function ($scope, $location, security, driverCalendarViewModel, $http, utilMethods) {
+        if (security.isAdmin()) {
+            $location.path('/admin/calendar');
+         }
         $scope.maxAllowed = 15;
         $scope.driverCalendarViewModel = driverCalendarViewModel;
 
         $scope.monthSelected = function(month){
-            var url = '/driver/month/' + security.currentUser.id + '/' + month.monthBeginDate.year + '-' + month.monthBeginDate.monthValue + '-' + month.monthBeginDate.dayOfMonth;
+            $scope.selectedMonthLight = month;
+            var url = '/driver/month/' + security.currentUser.id + '/' + month.beginDate[0] + '-' + month.beginDate[1] + '-' + month.beginDate[2];
             $http.get(url).then(
                 function (result) {
                     $scope.selectedMonth = result.data;
+                    if ($scope.selectedMonthLight.selectedWeekLight){
+                        $scope.weekSelected($scope.selectedMonthLight.selectedWeekLight);
+                    }else{
+                        $scope.selectedWeek = null;
+                    }
                 });
         };
 
+        $scope.setNextWeek = function(){
+            var url = '/driver/setNextWeek/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
+            $http.get(url).then(function(value){
+                var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
+                    + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
+                return $http.get(urlForMonthStatistics).then(
+                    function (result) {
+                        $scope.selectedMonth = result.data;
+                    });
+            });
+        };
+
+        $scope.setMonth = function(){
+            var url = '/driver/setMonth/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
+            $http.get(url).then(function(value){
+                var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
+                    + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
+                return $http.get(urlForMonthStatistics).then(
+                    function (result) {
+                        $scope.selectedMonth = result.data;
+                    });
+            });
+        };
+
+        $scope.setYear = function(){
+            var url = '/driver/setYear/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
+            $http.get(url).then(function(value){
+                var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
+                    + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
+                return $http.get(urlForMonthStatistics).then(
+                    function (result) {
+                        $scope.selectedMonth = result.data;
+                    });
+            });
+        };
+
         $scope.save = function () {
-            var url = '/driver/week/' + security.currentUser.id + '/' + $scope.selectedWeek.weekBeginDate.year + '-' + $scope.selectedWeek.weekBeginDate.monthValue + '-' + $scope.selectedWeek.weekBeginDate.dayOfMonth;
+            var url = '/driver/week/' + security.currentUser.id;
             $http.post(url, $scope.selectedWeek);
             $scope.original = angular.copy($scope.selectedWeek);
         };
@@ -50,7 +91,8 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
         };
 
         $scope.weekSelected = function(week){
-            var url = '/driver/week/' + security.currentUser.id + '/' + week.weekBeginDate.year + '-' + week.weekBeginDate.monthValue + '-' + week.weekBeginDate.dayOfMonth;
+            $scope.selectedMonthLight.selectedWeekLight = week;
+            var url = '/driver/week/' + security.currentUser.id + '/' + week.beginDate[0] + '-' + week.beginDate[1] + '-' + week.beginDate[2];
             $http.get(url).then(
                 function (result) {
                     $scope.selectedWeek = result.data;
@@ -60,13 +102,17 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
 
         $scope.getGreenColorShade = function(hourStatistics){
             var result;
-            if (!hourStatistics.enabled) {
+            if (hourStatistics.requiredDriverCount == 0){
                 result = 'white';
-            } else {
+            }else {
                 var r = Math.floor(124 * (1 - hourStatistics.requiredDriverCount / (2 * $scope.maxAllowed)));
                 var g = Math.floor(252 * (1 - hourStatistics.requiredDriverCount / (2 * $scope.maxAllowed)));
                 var b = Math.floor(0 * (1 - hourStatistics.requiredDriverCount / (2 * $scope.maxAllowed)));
-                result = 'rgb(' + r + ',' + g + ',' + b + ')';
+                if (!hourStatistics.enabled) {
+                    result = 'rgba(' + r + ',' + g + ',' + b + ', 0.5)';
+                } else {
+                    result = 'rgb(' + r + ',' + g + ',' + b + ')';
+                }
             }
             return result;
         };
@@ -78,6 +124,24 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
                 element.css('backgroundColor', greenColorShade);
             }
         };
+
+        $scope.isSelected = function(week){
+            return $scope.selectedWeek && angular.equals(week.beginDate, $scope.selectedWeek.beginDate);
+        }
+
+        $scope.isAnyWeekSelected = function(){
+            return $scope.selectedWeek;
+        }
+
+        $scope.getMonthName = function(month){
+            return utilMethods.get('monthNames')[month];
+        }
+
+        $scope.getWeekDayName = function(date){
+            var dateObj = new Date(date[0] + '/' + date[1] + '/' + date[2]);
+            var dayOfWeek = dateObj.getDay();
+            return utilMethods.get('weekDayNames')[dayOfWeek];
+        }
     }])
     .directive('selectHour', function ($parse) {
         return {
@@ -104,10 +168,16 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
                         }
                         if (newValue.selected){
                             scope.selectedMonth.doneHours--;
-                            scope.selectedMonth.diffHours++;
+                            if (scope.selectedMonth.plannedHours > 0){
+                                scope.selectedMonth.diffHours++;
+                            }
+                            scope.selectedWeek.selectedHoursCount--;
                         }else{
                             scope.selectedMonth.doneHours++;
-                            scope.selectedMonth.diffHours--;
+                            if (scope.selectedMonth.plannedHours > 0){
+                                scope.selectedMonth.diffHours--;
+                            }
+                            scope.selectedWeek.selectedHoursCount++;
                         }
                         newValue.selected = !newValue.selected;
                         modelSetter(scope, newValue);

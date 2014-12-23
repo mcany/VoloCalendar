@@ -52,7 +52,7 @@ public class UtilMethods {
         Month month = date.getMonth();
         do{
             list.add(date);
-            date = date.plusDays(7);
+            date = date.plusDays(8 - date.getDayOfWeek().getValue());
         }while (date.getMonth() == month);
         return list.toArray(new LocalDate[list.size()]);
     }

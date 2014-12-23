@@ -1,6 +1,10 @@
 package volo.voloCalendar.viewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,19 +14,20 @@ import java.time.LocalDate;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CalendarMonth implements Serializable{
-    private LocalDate monthBeginDate;
+    private LocalDate beginDate;
     private DriverCalendarWeekLight[] driverCalendarWeekLights;
 
-    public CalendarMonth(LocalDate monthBeginDate) {
-        this.monthBeginDate = monthBeginDate;
+    public CalendarMonth(LocalDate beginDate) {
+        this.beginDate = beginDate;
     }
 
-    public LocalDate getMonthBeginDate() {
-        return monthBeginDate;
+    public LocalDate getBeginDate() {
+        return beginDate;
     }
-
-    public void setMonthBeginDate(LocalDate monthBeginDate) {
-        this.monthBeginDate = monthBeginDate;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    public void setBeginDate(LocalDate beginDate) {
+        this.beginDate = beginDate;
     }
 
     public DriverCalendarWeekLight[] getDriverCalendarWeekLights() {
