@@ -46,6 +46,19 @@ angular.module('services.utilMethods').factory('utilMethods', [function () {
     utilMethodsService.get = function (key) {
         return container[key];
     }
+    utilMethodsService.maxAllowed = 15;
+    utilMethodsService.getGreenColorShade = function(actualValue){
+        var result;
+        if (actualValue == 0){
+            result = 'white';
+        }else {
+            var r = Math.floor(124 * (1 - actualValue / (2 * utilMethodsService.maxAllowed)));
+            var g = Math.floor(252 * (1 - actualValue / (2 * utilMethodsService.maxAllowed)));
+            var b = Math.floor(0 * (1 - actualValue / (2 * utilMethodsService.maxAllowed)));
+            result = 'rgb(' + r + ',' + g + ',' + b + ')';
+        }
+        return result;
+    }
 
     return utilMethodsService;
 }]);

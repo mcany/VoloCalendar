@@ -16,39 +16,33 @@ angular.module('settings', [
             }
         });
     }])
-    .controller('ManualForecastingCtrl', ['$http', 'manualForecasting', '$scope', '$route', 'i18nNotifications', function ($http, manualForecasting, $scope, $route, i18nNotifications) {
-        $scope.maxAllowed = 15;
-        $scope.original = angular.copy(manualForecasting);
-        $scope.manualForecasting = manualForecasting;
-        $scope.save = function () {
-            $http.post('/admin/settings/manualForecasting', $scope.manualForecasting);
-            $scope.original = angular.copy($scope.manualForecasting);
-        };
-        $scope.revertChanges = function () {
-            $route.reload();
-        };
-        $scope.canSave = function() {
-            return !angular.equals($scope.manualForecasting, $scope.original);
-        };
-        $scope.canRevert = function() {
-            return !angular.equals($scope.manualForecasting, $scope.original);
-        };
+    .controller('ManualForecastingCtrl', ['$http', 'manualForecasting', '$scope', '$route', 'i18nNotifications', 'utilMethods',
+        function ($http, manualForecasting, $scope, $route, i18nNotifications, utilMethods) {
+            $scope.original = angular.copy(manualForecasting);
+            $scope.manualForecasting = manualForecasting;
+            $scope.save = function () {
+                $http.post('/admin/settings/manualForecasting', $scope.manualForecasting);
+                $scope.original = angular.copy($scope.manualForecasting);
+            };
+            $scope.revertChanges = function () {
+                $route.reload();
+            };
+            $scope.canSave = function () {
+                return !angular.equals($scope.manualForecasting, $scope.original);
+            };
+            $scope.canRevert = function () {
+                return !angular.equals($scope.manualForecasting, $scope.original);
+            };
 
-        $scope.setColor = function(element, hourCount){
-            if (hourCount == 0){
-                element.css('backgroundColor', 'white');
-            }else {
-                var r = Math.floor(124 * (1 - hourCount / (2*$scope.maxAllowed)));
-                var g = Math.floor(252 * (1 - hourCount / (2*$scope.maxAllowed)));
-                var b = Math.floor(0 * (1 - hourCount / (2*$scope.maxAllowed)));
-                element.css('backgroundColor', 'rgb(' + r + ',' + g + ',' + b + ')');
-            }
-        };
-    }])
-    .directive('voloCounter', function ($parse) {
+            $scope.setColor = function (element, hourCount) {
+                var greenColorShade = utilMethods.getGreenColorShade(hourCount);
+                element.css('backgroundColor', greenColorShade);
+            };
+        }])
+    .directive('voloCounter', ['$parse', 'utilMethods', function ($parse, utilMethods) {
         return {
-            scope:false,
-            link:function(scope, element, attrs) {
+            scope: false,
+            link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.voloCounter);
                 var hourCount = modelGetter(scope);
                 element.text(hourCount);
@@ -59,8 +53,8 @@ angular.module('settings', [
                     scope.$apply(function () {
                         event.preventDefault();
                         var newValue = modelGetter(scope) + 1;
-                        if (newValue > scope.maxAllowed) {
-                            newValue = scope.maxAllowed;
+                        if (newValue > utilMethods.maxAllowed) {
+                            newValue = utilMethods.maxAllowed;
                         }
                         modelSetter(scope, newValue);
                         element.text(newValue);
@@ -73,24 +67,21 @@ angular.module('settings', [
 
                         var newValue;
                         var oldValue = modelGetter(scope);
-                        if (event.keyCode == 32){
+                        if (event.keyCode == 32) {
                             newValue = 0;
-                        }else
-                        if (event.keyCode == 8){
+                        } else if (event.keyCode == 8) {
                             newValue = Math.floor(oldValue / 10);
-                        }else
-                        if (48 < event.keyCode && event.keyCode < 58) {
+                        } else if (48 < event.keyCode && event.keyCode < 58) {
                             newValue = parseInt('' + oldValue + (event.keyCode - 48))
-                            if (newValue > scope.maxAllowed){
-                                newValue = scope.maxAllowed;
+                            if (newValue > utilMethods.maxAllowed) {
+                                newValue = utilMethods.maxAllowed;
                             }
-                        }else
-                        if (96 < event.keyCode && event.keyCode < 106) {
+                        } else if (96 < event.keyCode && event.keyCode < 106) {
                             newValue = parseInt('' + oldValue + (event.keyCode - 96))
-                            if (newValue > scope.maxAllowed){
-                                newValue = scope.maxAllowed;
+                            if (newValue > utilMethods.maxAllowed) {
+                                newValue = utilMethods.maxAllowed;
                             }
-                        }else{
+                        } else {
                             return;
                         }
                         modelSetter(scope, newValue);
@@ -112,5 +103,5 @@ angular.module('settings', [
                 });
             }
         }
-        ;
-    });
+            ;
+    }]);

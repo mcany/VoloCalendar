@@ -30,6 +30,9 @@ angular.module('security.service', [
     loginDialog = null;
     if ( success ) {
       queue.retryAll();
+        if (angular.equals($location.path(), '/info')){
+            $location.path('/');
+        }
     } else {
       queue.cancelAll();
       redirect();

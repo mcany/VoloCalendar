@@ -39,7 +39,7 @@ angular.module('app').constant('I18N.MESSAGES', {
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
-    $routeProvider.otherwise({redirectTo: '/home'});
+    $routeProvider.otherwise({redirectTo: '/'});
 }]);
 
 angular.module('app').run(['security', '$http', function (security, $http) {

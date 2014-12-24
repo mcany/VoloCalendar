@@ -21,27 +21,26 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
     function ($scope, $location, security, driverCalendarViewModel, $http, utilMethods) {
         if (security.isAdmin()) {
             $location.path('/admin/calendar');
-         }
-        $scope.maxAllowed = 15;
+        }
         $scope.driverCalendarViewModel = driverCalendarViewModel;
 
-        $scope.monthSelected = function(month){
+        $scope.monthSelected = function (month) {
             $scope.selectedMonthLight = month;
             var url = '/driver/month/' + security.currentUser.id + '/' + month.beginDate[0] + '-' + month.beginDate[1] + '-' + month.beginDate[2];
             $http.get(url).then(
                 function (result) {
                     $scope.selectedMonth = result.data;
-                    if ($scope.selectedMonthLight.selectedWeekLight){
+                    if ($scope.selectedMonthLight.selectedWeekLight) {
                         $scope.weekSelected($scope.selectedMonthLight.selectedWeekLight);
-                    }else{
+                    } else {
                         $scope.selectedWeek = null;
                     }
                 });
         };
 
-        $scope.setNextWeek = function(){
+        $scope.setNextWeek = function () {
             var url = '/driver/setNextWeek/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
-            $http.get(url).then(function(value){
+            $http.get(url).then(function (value) {
                 var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
                     + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
                 return $http.get(urlForMonthStatistics).then(
@@ -51,9 +50,9 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
             });
         };
 
-        $scope.setMonth = function(){
+        $scope.setMonth = function () {
             var url = '/driver/setMonth/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
-            $http.get(url).then(function(value){
+            $http.get(url).then(function (value) {
                 var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
                     + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
                 return $http.get(urlForMonthStatistics).then(
@@ -63,9 +62,9 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
             });
         };
 
-        $scope.setYear = function(){
+        $scope.setYear = function () {
             var url = '/driver/setYear/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
-            $http.get(url).then(function(value){
+            $http.get(url).then(function (value) {
                 var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
                     + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
                 return $http.get(urlForMonthStatistics).then(
@@ -83,14 +82,14 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
         $scope.revertChanges = function () {
             $route.reload();
         };
-        $scope.canSave = function() {
+        $scope.canSave = function () {
             return !angular.equals($scope.selectedWeek, $scope.original);
         };
-        $scope.canRevert = function() {
+        $scope.canRevert = function () {
             return !angular.equals($scope.selectedWeek, $scope.original);
         };
 
-        $scope.weekSelected = function(week){
+        $scope.weekSelected = function (week) {
             $scope.selectedMonthLight.selectedWeekLight = week;
             var url = '/driver/week/' + security.currentUser.id + '/' + week.beginDate[0] + '-' + week.beginDate[1] + '-' + week.beginDate[2];
             $http.get(url).then(
@@ -100,61 +99,48 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
                 });
         };
 
-        $scope.getGreenColorShade = function(hourStatistics){
-            var result;
-            if (hourStatistics.requiredDriverCount == 0){
-                result = 'white';
-            }else {
-                var r = Math.floor(124 * (1 - hourStatistics.requiredDriverCount / (2 * $scope.maxAllowed)));
-                var g = Math.floor(252 * (1 - hourStatistics.requiredDriverCount / (2 * $scope.maxAllowed)));
-                var b = Math.floor(0 * (1 - hourStatistics.requiredDriverCount / (2 * $scope.maxAllowed)));
-                if (!hourStatistics.enabled) {
-                    result = 'rgba(' + r + ',' + g + ',' + b + ', 0.5)';
-                } else {
-                    result = 'rgb(' + r + ',' + g + ',' + b + ')';
-                }
-            }
-            return result;
-        };
-
-        $scope.setColor = function(element, hourStatistics, greenColorShade){
-            if (hourStatistics.selected){
+        $scope.setColor = function (element, hourStatistics, greenColorShade) {
+            if (hourStatistics.selected) {
                 element.css('backgroundColor', 'blue');
-            }else {
+            } else {
                 element.css('backgroundColor', greenColorShade);
             }
+
+            if (!hourStatistics.enabled) {
+                element.css('opacity', 0.5);
+            }
         };
 
-        $scope.isSelected = function(week){
+        $scope.isSelected = function (week) {
             return $scope.selectedWeek && angular.equals(week.beginDate, $scope.selectedWeek.beginDate);
-        }
+        };
 
-        $scope.isAnyWeekSelected = function(){
+        $scope.isAnyWeekSelected = function () {
             return $scope.selectedWeek;
-        }
+        };
 
-        $scope.getMonthName = function(month){
+        $scope.getMonthName = function (month) {
             return utilMethods.get('monthNames')[month];
-        }
+        };
 
-        $scope.getWeekDayName = function(date){
+        $scope.getWeekDayName = function (date) {
             var dateObj = new Date(date[0] + '/' + date[1] + '/' + date[2]);
             var dayOfWeek = dateObj.getDay();
             return utilMethods.get('weekDayNames')[dayOfWeek];
-        }
+        };
     }])
-    .directive('selectHour', function ($parse) {
+    .directive('selectHour', [ 'utilMethods', '$parse', function (utilMethods, $parse) {
         return {
-            scope:false,
-            link:function(scope, element, attrs) {
+            scope: false,
+            link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.selectHour);
                 var hourStatistics = modelGetter(scope);
-                if (hourStatistics.enabled){
+                if (hourStatistics.enabled) {
                     element.removeAttr('disabled');
-                }else{
+                } else {
                     element.attr('disabled', 'disabled');
                 }
-                var greenColorShade = scope.getGreenColorShade(hourStatistics);
+                var greenColorShade = utilMethods.getGreenColorShade(hourStatistics.requiredDriverCount);
                 scope.setColor(element, hourStatistics, greenColorShade);
 
                 var modelSetter = modelGetter.assign;
@@ -163,18 +149,18 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
                         event.preventDefault();
 
                         var newValue = modelGetter(scope);
-                        if (!newValue.enabled){
+                        if (!newValue.enabled) {
                             return;
                         }
-                        if (newValue.selected){
+                        if (newValue.selected) {
                             scope.selectedMonth.doneHours--;
-                            if (scope.selectedMonth.plannedHours > 0){
+                            if (scope.selectedMonth.plannedHours > 0) {
                                 scope.selectedMonth.diffHours++;
                             }
                             scope.selectedWeek.selectedHoursCount--;
-                        }else{
+                        } else {
                             scope.selectedMonth.doneHours++;
-                            if (scope.selectedMonth.plannedHours > 0){
+                            if (scope.selectedMonth.plannedHours > 0) {
                                 scope.selectedMonth.diffHours--;
                             }
                             scope.selectedWeek.selectedHoursCount++;
@@ -186,4 +172,4 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
                 });
             }
         };
-    });
+    }]);
