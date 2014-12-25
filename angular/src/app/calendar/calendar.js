@@ -4,7 +4,7 @@ angular.module('calendar', ['security.authorization'])
             templateUrl: 'calendar/calendar.tpl.html',
             controller: 'CalendarCtrl',
             resolve: {
-                driverCalendarViewModel: ['security', '$http', 'securityAuthorization', function (security, $http, securityAuthorization) {
+                calendarViewModel: ['security', '$http', 'securityAuthorization', function (security, $http, securityAuthorization) {
                     return securityAuthorization.requireAuthenticatedUser().then(
                         function (value) {
                             return $http.get('/driver/calendar/' + security.currentUser.id).then(
@@ -17,12 +17,12 @@ angular.module('calendar', ['security.authorization'])
         });
     }]);
 
-angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 'security', 'driverCalendarViewModel', '$http', 'utilMethods',
-    function ($scope, $location, security, driverCalendarViewModel, $http, utilMethods) {
+angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 'security', 'calendarViewModel', '$http', 'utilMethods',
+    function ($scope, $location, security, calendarViewModel, $http, utilMethods) {
         if (security.isAdmin()) {
             $location.path('/admin/calendar');
         }
-        $scope.driverCalendarViewModel = driverCalendarViewModel;
+        $scope.calendarViewModel = calendarViewModel;
 
         $scope.monthSelected = function (month) {
             $scope.selectedMonthLight = month;

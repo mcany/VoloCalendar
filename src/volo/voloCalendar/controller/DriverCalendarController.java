@@ -5,8 +5,8 @@ import volo.voloCalendar.model.DriverCalendarWeek;
 import volo.voloCalendar.service.Backend;
 import volo.voloCalendar.util.UtilMethods;
 import volo.voloCalendar.viewModel.CalendarMonth;
-import volo.voloCalendar.viewModel.DriverCalendarViewModel;
-import volo.voloCalendar.viewModel.DriverCalendarWeekLight;
+import volo.voloCalendar.viewModel.CalendarViewModel;
+import volo.voloCalendar.viewModel.CalendarWeekLight;
 import volo.voloCalendar.viewModel.MonthStatistics;
 
 import java.time.LocalDate;
@@ -21,26 +21,26 @@ public class DriverCalendarController {
     private static final int calendarMonthsCount = 3;
 
     @RequestMapping(value = "/calendar/{userId}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarViewModel calendar(@PathVariable String userId){
-        DriverCalendarViewModel driverCalendarViewModel = new DriverCalendarViewModel();
-        driverCalendarViewModel.setCalendarMonths(new CalendarMonth[calendarMonthsCount]);
+    public CalendarViewModel calendar(@PathVariable String userId){
+        CalendarViewModel calendarViewModel = new CalendarViewModel();
+        calendarViewModel.setCalendarMonths(new CalendarMonth[calendarMonthsCount]);
         LocalDate[] monthBeginDates = UtilMethods.getMonthBeginDatesForCalendar(calendarMonthsCount);
         for(int i = 0; i < monthBeginDates.length; i++){
             LocalDate monthBeginDate = monthBeginDates[i];
             CalendarMonth calendarMonth = getCalendarMonth(monthBeginDate);
-            driverCalendarViewModel.getCalendarMonths()[i] = calendarMonth;
+            calendarViewModel.getCalendarMonths()[i] = calendarMonth;
         }
-        return driverCalendarViewModel;
+        return calendarViewModel;
     }
 
     private CalendarMonth getCalendarMonth(LocalDate monthBeginDate) {
         CalendarMonth calendarMonth = new CalendarMonth(monthBeginDate);
         LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
-        DriverCalendarWeekLight[] driverCalendarWeekLights = new DriverCalendarWeekLight[weekBeginDates.length];
+        CalendarWeekLight[] calendarWeekLights = new CalendarWeekLight[weekBeginDates.length];
         for (int j = 0; j < weekBeginDates.length; j++){
-            driverCalendarWeekLights[j] = new DriverCalendarWeekLight(weekBeginDates[j]);
+            calendarWeekLights[j] = new CalendarWeekLight(weekBeginDates[j]);
         }
-        calendarMonth.setDriverCalendarWeekLights(driverCalendarWeekLights);
+        calendarMonth.setCalendarWeekLights(calendarWeekLights);
         return calendarMonth;
     }
 

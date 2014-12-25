@@ -15,13 +15,13 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
  * Created by Emin Guliyev on 22/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DriverCalendarWeekLight implements Serializable{
+public class CalendarWeekLight implements Serializable{
     private LocalDate beginDate;
     private LocalDate endDate;
 
-    public DriverCalendarWeekLight(){}
+    public CalendarWeekLight(){}
 
-    public DriverCalendarWeekLight(LocalDate beginDate) {
+    public CalendarWeekLight(LocalDate beginDate) {
         this.beginDate = beginDate;
         LocalDate date = beginDate.plusDays(7 - beginDate.getDayOfWeek().getValue());
         if (date.getMonth() != beginDate.getMonth()){

@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CalendarMonth implements Serializable{
     private LocalDate beginDate;
-    private DriverCalendarWeekLight[] driverCalendarWeekLights;
+    private CalendarWeekLight[] calendarWeekLights;
 
     public CalendarMonth(LocalDate beginDate) {
         this.beginDate = beginDate;
@@ -30,11 +30,11 @@ public class CalendarMonth implements Serializable{
         this.beginDate = beginDate;
     }
 
-    public DriverCalendarWeekLight[] getDriverCalendarWeekLights() {
-        return driverCalendarWeekLights;
+    public CalendarWeekLight[] getCalendarWeekLights() {
+        return calendarWeekLights;
     }
 
-    public void setDriverCalendarWeekLights(DriverCalendarWeekLight[] driverCalendarWeekLights) {
-        this.driverCalendarWeekLights = driverCalendarWeekLights;
+    public void setCalendarWeekLights(CalendarWeekLight[] calendarWeekLights) {
+        this.calendarWeekLights = calendarWeekLights;
     }
 }

@@ -41,19 +41,19 @@ public class Backend {
             usersById.put(mertcan.getId(), mertcan);
         }
     }
-
+    //rest
     public static User getUserByEmail(String email){
         return usersByEmail.get(email);
     }
-
+    //rest
     public static User getUserById(String id){
         return usersById.get(id);
     }
-
+    //rest
     public static Collection<User> getAllUsers(){
         return usersByEmail.values();
     }
-
+    //rest
     public static User insertOrUpdateUser(User user){
         User userInDb = getUserById(user.getId());
         if (userInDb != null && !userInDb.isAdmin() && user.isAdmin()){
@@ -63,7 +63,7 @@ public class Backend {
         usersById.put(user.getId(), user);
         return user;
     }
-
+    //rest
     public static User deleteUser(String id){
         User user = usersById.get(id);
         usersByEmail.remove(user.getEmail());
@@ -72,14 +72,7 @@ public class Backend {
     }
 
     public static User[] getUsers(UserTableViewModel userTableViewModel){
-        Collection<User> users = Backend.getAllUsers();
-        User[] userArray = new User[users.size()];
-        userArray = users.toArray(userArray);
-        int end = userTableViewModel.getBeginIndex() - 1 + userTableViewModel.getMaxNumber();
-        if (end >= userArray.length){
-            end = userArray.length;
-        }
-        userArray = Arrays.copyOfRange(userArray, userTableViewModel.getBeginIndex() - 1, end);
+        User[] userArray = getSortedFilteredPagedUsersWithoutStatistics(userTableViewModel);
 
         for (User user : userArray){
             LocalDate beginDateOfCurrentMonth = UtilMethods.getBeginDateOfCurrentMonth();
@@ -99,15 +92,27 @@ public class Backend {
 
         return userArray;
     }
-
+    //rest
+    private static User[] getSortedFilteredPagedUsersWithoutStatistics(UserTableViewModel userTableViewModel) {
+        Collection<User> users = Backend.getAllUsers();
+        User[] userArray = new User[users.size()];
+        userArray = users.toArray(userArray);
+        int end = userTableViewModel.getBeginIndex() - 1 + userTableViewModel.getMaxNumber();
+        if (end >= userArray.length){
+            end = userArray.length;
+        }
+        userArray = Arrays.copyOfRange(userArray, userTableViewModel.getBeginIndex() - 1, end);
+        return userArray;
+    }
+    //rest
     public static int getAllUsersCount() {
         return getAllUsers().size();
     }
-
+    //rest
     public static ManualForecasting getManualForecasting() {
         return manualForecasting;
     }
-
+    //rest
     public static void setManualForecasting(ManualForecasting manualForecasting){
         Backend.manualForecasting = manualForecasting;
     }
@@ -126,6 +131,11 @@ public class Backend {
             driverCalendarWeekInDB = new DriverCalendarWeek(user.getId(), beginDate);
         }
 
+        driverCalendarWeekInDB = getStatisticsForDriverWeek(driverCalendarWeekInDB);
+        return driverCalendarWeekInDB;
+    }
+    //rest
+    private static DriverCalendarWeek getStatisticsForDriverWeek(DriverCalendarWeek driverCalendarWeekInDB) {
         driverCalendarWeekInDB.setRequiredDriverCountStatistics(getManualForecasting());
         for (User userInDb : getAllUsers()) {
             DriverCalendarWeek driverCalendarWeekForDbUser = getDriverCalendarWeekFromDB(userInDb, driverCalendarWeekInDB.getBeginDate());
@@ -136,10 +146,11 @@ public class Backend {
         return driverCalendarWeekInDB;
     }
 
+    //rest
     private static DriverCalendarWeek getDriverCalendarWeekFromDB(User user, LocalDate beginDate) {
         return user.getDriverCalendarWeekHashMap().get(beginDate);
     }
-
+    //rest
     public static DriverCalendarWeek insertOrUpdateDriverCalendarWeek(DriverCalendarWeek driverCalendarWeek) {
         User user = getUserById(driverCalendarWeek.getUserId());
         if (user == null || user.isAdmin()){
@@ -171,14 +182,7 @@ public class Backend {
         int year = date.getYear();
         LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek().getValue());
         while (isForMonthlyOperation ? (month == nextWeekBeginDate.getMonth()): (year == nextWeekBeginDate.getYear())){
-            DriverCalendarWeek nextDriverCalendarWeek = getDriverCalendarWeekFromDB(user, nextWeekBeginDate);
-            if (nextDriverCalendarWeek == null){
-                nextDriverCalendarWeek = new DriverCalendarWeek(driverCalendarWeek, nextWeekBeginDate);
-            }else{
-                nextDriverCalendarWeek.fillDayStatisticsArray(driverCalendarWeek);
-            }
-            nextDriverCalendarWeek.setUserId(userId);
-            insertOrUpdateDriverCalendarWeek(nextDriverCalendarWeek);
+            generateNewDriverCalendarWeek(user, driverCalendarWeek, nextWeekBeginDate);
             nextWeekBeginDate = nextWeekBeginDate.plusDays(7);
         }
         return driverCalendarWeek;
@@ -197,16 +201,20 @@ public class Backend {
         Month month = date.getMonth();
         LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek().getValue());
         if (month == nextWeekBeginDate.getMonth()){
-            DriverCalendarWeek nextDriverCalendarWeek = getDriverCalendarWeekFromDB(user, nextWeekBeginDate);
-            if (nextDriverCalendarWeek == null){
-                nextDriverCalendarWeek = new DriverCalendarWeek(driverCalendarWeek, nextWeekBeginDate);
-            }else{
-                nextDriverCalendarWeek.fillDayStatisticsArray(driverCalendarWeek);
-            }
-            nextDriverCalendarWeek.setUserId(userId);
-            insertOrUpdateDriverCalendarWeek(nextDriverCalendarWeek);
+            generateNewDriverCalendarWeek(user, driverCalendarWeek, nextWeekBeginDate);
         }
         return driverCalendarWeek;
+    }
+
+    public static void generateNewDriverCalendarWeek(User user, DriverCalendarWeek driverCalendarWeekTemplate, LocalDate newWeekBeginDate) {
+        DriverCalendarWeek nextDriverCalendarWeek = getDriverCalendarWeekFromDB(user, newWeekBeginDate);
+        if (nextDriverCalendarWeek == null){
+            nextDriverCalendarWeek = new DriverCalendarWeek(driverCalendarWeekTemplate, newWeekBeginDate);
+        }else{
+            nextDriverCalendarWeek.fillDayStatisticsArray(driverCalendarWeekTemplate);
+        }
+        nextDriverCalendarWeek.setUserId(user.getId());
+        insertOrUpdateDriverCalendarWeek(nextDriverCalendarWeek);
     }
 
     public static MonthStatistics getMonthStatistics(String userId, LocalDate monthBeginDate){
@@ -216,7 +224,7 @@ public class Backend {
         }
         return getMonthStatistics(user, monthBeginDate);
     }
-
+    //rest
     public static MonthStatistics getMonthStatistics(User user, LocalDate monthBeginDate) {
         if (user.isAdmin()){
             return null;

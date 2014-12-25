@@ -44,28 +44,13 @@ public class DriverCalendarWeek implements Serializable {
             DayStatistics dayStatistics = null;
             if (LocalDate.now().isBefore(date.minusDays(DayStatistics.changeLimit))) {
                 if (driverCalendarWeek != null) {
-                    //for monday one
-                    int numberOfFirstDayInTemplateWeek = driverCalendarWeek.dayStatisticsArray[0].getDate().getDayOfWeek().getValue();
-                    int indexOfProperDayInTemplateWeek = date.getDayOfWeek().getValue() - numberOfFirstDayInTemplateWeek;
-                    if (indexOfProperDayInTemplateWeek > -1 && driverCalendarWeek.dayStatisticsArray.length > indexOfProperDayInTemplateWeek) {
-                        dayStatistics = driverCalendarWeek.dayStatisticsArray[indexOfProperDayInTemplateWeek];
-                        dayStatistics.setDate(date);
-                    } else {
-                        dayStatistics = new DayStatistics(date);
-                    }
+                    dayStatistics = getDayStatistics(driverCalendarWeek, date);
                 } else {
                     dayStatistics = new DayStatistics(date);
                 }
             }else{
                 if (this.dayStatisticsArray != null && this.dayStatisticsArray.length > 0) {
-                    int numberOfFirstDayInCurrentWeek = this.dayStatisticsArray[0].getDate().getDayOfWeek().getValue();
-                    int indexOfProperDayInCurrentWeek = date.getDayOfWeek().getValue() - numberOfFirstDayInCurrentWeek;
-                    if (indexOfProperDayInCurrentWeek > -1 && this.dayStatisticsArray.length > indexOfProperDayInCurrentWeek) {
-                        dayStatistics = this.dayStatisticsArray[indexOfProperDayInCurrentWeek];
-                        dayStatistics.setDate(date);
-                    } else {
-                        dayStatistics = new DayStatistics(date);
-                    }
+                    dayStatistics = getDayStatistics(this, date);
                 }else {
                     dayStatistics = new DayStatistics(date);
                 }
@@ -74,6 +59,19 @@ public class DriverCalendarWeek implements Serializable {
             date = date.plusDays(1);
         } while (date.getDayOfWeek() != DayOfWeek.MONDAY && date.getMonth() == this.beginDate.getMonth());
         dayStatisticsArray = list.toArray(new DayStatistics[list.size()]);
+    }
+
+    public DayStatistics getDayStatistics(DriverCalendarWeek driverCalendarWeekTemplate, LocalDate date) {
+        DayStatistics dayStatistics;
+        int numberOfFirstDayInTemplateWeek = driverCalendarWeekTemplate.dayStatisticsArray[0].getDate().getDayOfWeek().getValue();
+        int indexOfProperDayInTemplateWeek = date.getDayOfWeek().getValue() - numberOfFirstDayInTemplateWeek;
+        if (indexOfProperDayInTemplateWeek > -1 && driverCalendarWeekTemplate.dayStatisticsArray.length > indexOfProperDayInTemplateWeek) {
+            dayStatistics = driverCalendarWeekTemplate.dayStatisticsArray[indexOfProperDayInTemplateWeek];
+            dayStatistics.setDate(date);
+        } else {
+            dayStatistics = new DayStatistics(date);
+        }
+        return dayStatistics;
     }
 
 
