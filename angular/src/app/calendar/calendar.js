@@ -38,40 +38,28 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
                 });
         };
 
+        var refreshSelectedMonthStatistics = function (value) {
+            var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
+                + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
+            return $http.get(urlForMonthStatistics).then(
+                function (result) {
+                    $scope.selectedMonth = result.data;
+                });
+        };
+
         $scope.setNextWeek = function () {
             var url = '/driver/setNextWeek/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
-            $http.get(url).then(function (value) {
-                var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
-                    + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
-                return $http.get(urlForMonthStatistics).then(
-                    function (result) {
-                        $scope.selectedMonth = result.data;
-                    });
-            });
+            $http.get(url).then(refreshSelectedMonthStatistics);
         };
 
         $scope.setMonth = function () {
             var url = '/driver/setMonth/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
-            $http.get(url).then(function (value) {
-                var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
-                    + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
-                return $http.get(urlForMonthStatistics).then(
-                    function (result) {
-                        $scope.selectedMonth = result.data;
-                    });
-            });
+            $http.get(url).then(refreshSelectedMonthStatistics);
         };
 
         $scope.setYear = function () {
             var url = '/driver/setYear/' + security.currentUser.id + '/' + $scope.selectedWeek.beginDate[0] + '-' + $scope.selectedWeek.beginDate[1] + '-' + $scope.selectedWeek.beginDate[2];
-            $http.get(url).then(function (value) {
-                var urlForMonthStatistics = '/driver/month/' + security.currentUser.id + '/'
-                    + $scope.selectedMonth.beginDate[0] + '-' + $scope.selectedMonth.beginDate[1] + '-' + $scope.selectedMonth.beginDate[2];
-                return $http.get(urlForMonthStatistics).then(
-                    function (result) {
-                        $scope.selectedMonth = result.data;
-                    });
-            });
+            $http.get(url).then(refreshSelectedMonthStatistics);
         };
 
         $scope.save = function () {
