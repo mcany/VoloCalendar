@@ -1,6 +1,7 @@
 package volo.voloCalendar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -27,19 +28,21 @@ import java.util.HashMap;
 public class LoginController {
     @Autowired
     LoginService loginService;
+
     //private static String email;
     @RequestMapping(value = "/current-user", method = RequestMethod.GET, produces = "application/json")
-    public HashMap<String, User> currentUser(){
+    public HashMap<String, User> currentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         return UtilMethods.getHashMap(Backend.getUserByEmail(email));
     }
-    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public HashMap<String, User> login(@RequestBody User user, HttpServletRequest request){
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public HashMap<String, User> login(@RequestBody User user, HttpServletRequest request) {
         UserDetails userDetails = loginService.loadUserByUsername(user.getEmail());
         if (userDetails != null
                 && (user.getPassword() != null && userDetails.getPassword() != null
-                    && user.getPassword().equals(userDetails.getPassword()))){
+                && user.getPassword().equals(userDetails.getPassword()))) {
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 
@@ -52,18 +55,33 @@ public class LoginController {
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
             return UtilMethods.getHashMap(Backend.getUserByEmail(user.getEmail()));
-        }else {
+        } else {
             return UtilMethods.getHashMap(null);
         }
     }
+
     @RequestMapping(value = "/logout", method = RequestMethod.POST, produces = "application/json")
+    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
     public void logout(HttpServletRequest httpServletRequest) throws ServletException {
-        //httpServletRequest.logout();
         SecurityContextHolder.clearContext();
         HttpSession session = httpServletRequest.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        //email = null;
+    }
+
+    @RequestMapping(value = "/updateProfile", method = RequestMethod.POST, produces = "application/json")
+    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
+    public User updateProfile(@RequestBody User user) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User currentUser = Backend.getUserByEmail(email);
+        if (user != null && user.equals(currentUser)){
+            Backend.insertOrUpdateUser(user);
+            return user;
+        }else {
+            return null;
+        }
+
     }
 }

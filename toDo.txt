@@ -1,7 +1,2 @@
-+1.create one table only
-+2.monthstatistics refresh logic
-+3.view selection for deactive days
-+4.pattern buttons
-+5.save
-+6.test(user list, settings)
-7.change 5 to 0
+1.change 5 to 0
+2.server side validation

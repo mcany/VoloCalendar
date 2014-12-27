@@ -14,14 +14,14 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 20/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DayStatistics  implements Serializable {
+public class DayStatistics implements Serializable {
     private LocalDate date;
     private HourStatistics[] hourStatisticsArray;
     public static final int changeLimit = 3;
 
     public DayStatistics() {
         hourStatisticsArray = new HourStatistics[24];
-        for (int i=0; i < hourStatisticsArray.length; i++){
+        for (int i = 0; i < hourStatisticsArray.length; i++) {
             hourStatisticsArray[i] = new HourStatistics(this);
         }
     }
@@ -34,6 +34,7 @@ public class DayStatistics  implements Serializable {
     public LocalDate getDate() {
         return date;
     }
+
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     public void setDate(LocalDate date) {
@@ -48,7 +49,7 @@ public class DayStatistics  implements Serializable {
         this.hourStatisticsArray = hourStatisticsArray;
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         boolean result = LocalDate.now().isBefore(date.minusDays(changeLimit));
         return result;
     }
@@ -56,8 +57,8 @@ public class DayStatistics  implements Serializable {
     @JsonIgnore
     public int getDoneHours() {
         int result = 0;
-        for(HourStatistics hourStatistics: hourStatisticsArray){
-            if (hourStatistics.isSelected()){
+        for (HourStatistics hourStatistics : hourStatisticsArray) {
+            if (hourStatistics.isSelected()) {
                 result++;
             }
         }

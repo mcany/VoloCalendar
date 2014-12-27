@@ -8,12 +8,13 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 20/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HourStatistics  implements Serializable {
+public class HourStatistics implements Serializable {
     private int requiredDriverCount;
     private boolean selected;
     private DayStatistics dayStatistics;
 
-    public HourStatistics(){}
+    public HourStatistics() {
+    }
 
     public HourStatistics(DayStatistics dayStatistics) {
         this.dayStatistics = dayStatistics;

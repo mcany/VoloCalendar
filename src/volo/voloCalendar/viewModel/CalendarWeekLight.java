@@ -15,16 +15,17 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
  * Created by Emin Guliyev on 22/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CalendarWeekLight implements Serializable{
+public class CalendarWeekLight implements Serializable {
     private LocalDate beginDate;
     private LocalDate endDate;
 
-    public CalendarWeekLight(){}
+    public CalendarWeekLight() {
+    }
 
     public CalendarWeekLight(LocalDate beginDate) {
         this.beginDate = beginDate;
         LocalDate date = beginDate.plusDays(7 - beginDate.getDayOfWeek().getValue());
-        if (date.getMonth() != beginDate.getMonth()){
+        if (date.getMonth() != beginDate.getMonth()) {
             date = beginDate.with(lastDayOfMonth());
         }
         this.endDate = date;
@@ -33,6 +34,7 @@ public class CalendarWeekLight implements Serializable{
     public LocalDate getBeginDate() {
         return beginDate;
     }
+
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     public void setBeginDate(LocalDate beginDate) {
@@ -42,6 +44,7 @@ public class CalendarWeekLight implements Serializable{
     public LocalDate getEndDate() {
         return endDate;
     }
+
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     public void setEndDate(LocalDate endDate) {

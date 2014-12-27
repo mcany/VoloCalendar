@@ -48,10 +48,10 @@ public class DriverCalendarWeek implements Serializable {
                 } else {
                     dayStatistics = new DayStatistics(date);
                 }
-            }else{
+            } else {
                 if (this.dayStatisticsArray != null && this.dayStatisticsArray.length > 0) {
                     dayStatistics = getDayStatistics(this, date);
-                }else {
+                } else {
                     dayStatistics = new DayStatistics(date);
                 }
             }

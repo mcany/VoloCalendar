@@ -15,38 +15,38 @@ import volo.voloCalendar.model.User;
 @Component(value = "loginService")
 public class LoginService implements UserDetailsService, Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public UserDetails loadUserByUsername(String userEmail)
-			throws UsernameNotFoundException {
-		try {
-			User user = Backend.getUserByEmail(userEmail);
-			if (user == null) {
-				return null;
-			}
-			List<GrantedAuthority> authorities = addAccordingRoleByUserType(user
-					.isAdmin()?"admin":"driver");
-			org.springframework.security.core.userdetails.User springUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-					authorities);
-			return springUser;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
+    public UserDetails loadUserByUsername(String userEmail)
+            throws UsernameNotFoundException {
+        try {
+            User user = Backend.getUserByEmail(userEmail);
+            if (user == null) {
+                return null;
+            }
+            List<GrantedAuthority> authorities = addAccordingRoleByUserType(user
+                    .isAdmin() ? "ROLE_ADMIN" : "ROLE_DRIVER");
+            org.springframework.security.core.userdetails.User springUser = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                    authorities);
+            return springUser;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
-	private List<GrantedAuthority> addAccordingRoleByUserType(
-			final String userType) {
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		GrantedAuthority authority = new GrantedAuthority() {
-			private static final long serialVersionUID = 1L;
+    private List<GrantedAuthority> addAccordingRoleByUserType(
+            final String userType) {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        GrantedAuthority authority = new GrantedAuthority() {
+            private static final long serialVersionUID = 1L;
 
-			public String getAuthority() {
-				return userType.toLowerCase();
-			}
-		};
-		authorities.add(authority);
-		return authorities;
-	}
+            public String getAuthority() {
+                return userType;
+            }
+        };
+        authorities.add(authority);
+        return authorities;
+    }
 
 }

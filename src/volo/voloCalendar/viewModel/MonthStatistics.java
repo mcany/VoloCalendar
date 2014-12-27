@@ -13,12 +13,13 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 21/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MonthStatistics implements Serializable{
+public class MonthStatistics implements Serializable {
     private int plannedHours;
     private int doneHours;
     private LocalDate beginDate;
 
-    public MonthStatistics(){}
+    public MonthStatistics() {
+    }
 
     public MonthStatistics(int plannedHours, int doneHours, LocalDate beginDate) {
         this.plannedHours = plannedHours;

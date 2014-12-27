@@ -2,7 +2,7 @@ angular.module('templates.common', ['security/login/form.tpl.html', 'security/lo
 
 angular.module("security/login/form.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("security/login/form.tpl.html",
-    "<form name=\"form\" novalidate  class=\"form-horizontal\" role=\"form\">\n" +
+    "<form name=\"form\" novalidate class=\"form-horizontal\" role=\"form\">\n" +
     "    <div class=\"modal-header\">\n" +
     "        <h4>Sign in</h4>\n" +
     "    </div>\n" +
@@ -16,14 +16,18 @@ angular.module("security/login/form.tpl.html", []).run(["$templateCache", functi
     "        <div class=\"alert alert-info\">Please enter your login details</div>\n" +
     "        <div class=\"form-group form-group-sm\">\n" +
     "            <label class=\"col-sm-2 control-label\" for=\"email\">E-mail</label>\n" +
+    "\n" +
     "            <div class=\"col-sm-8\">\n" +
-    "                <input id=\"email\" class=\"form-control\" name=\"email\" type=\"email\" ng-model=\"user.email\" required autofocus>\n" +
+    "                <input id=\"email\" class=\"form-control\" name=\"email\" type=\"email\" ng-model=\"user.email\" required\n" +
+    "                       autofocus>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"form-group form-group-sm\">\n" +
     "            <label class=\"col-sm-2 control-label\" for=\"password\">Password</label>\n" +
+    "\n" +
     "            <div class=\"col-sm-8\">\n" +
-    "                <input id=\"password\" class=\"form-control\" name=\"password\" type=\"password\" ng-model=\"user.password\" required>\n" +
+    "                <input id=\"password\" class=\"form-control\" name=\"password\" type=\"password\" ng-model=\"user.password\"\n" +
+    "                       required>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -39,7 +43,7 @@ angular.module("security/login/form.tpl.html", []).run(["$templateCache", functi
 angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("security/login/profile-edit.tpl.html",
     "<div class=\"well\">\n" +
-    "    <form name=\"form\" novalidate crud-edit=\"user\" class=\"form-horizontal\" role=\"form\">\n" +
+    "    <form name=\"form\" novalidate class=\"form-horizontal\" role=\"form\">\n" +
     "        <legend>User</legend>\n" +
     "        <div class=\"row\">\n" +
     "            <div class=\"col-xs-8\">\n" +
@@ -56,16 +60,19 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "                    <div class=\"col-sm-5\">\n" +
     "                        <input class=\"form-control\" type=\"text\" id=\"name\" name=\"name\" ng-model=\"user.name\" required>\n" +
     "                    </div>\n" +
-    "                    <span ng-show=\"showError('name', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    <span ng-show=\"showError('name', 'required')\"\n" +
+    "                          class=\"alert alert-danger\">This field is required.</span>\n" +
     "                </div>\n" +
     "                <div class=\"form-group form-group-sm\">\n" +
     "                    <label class=\"col-sm-2 control-label\" for=\"password\">Password</label>\n" +
     "\n" +
     "                    <div class=\"col-sm-5\">\n" +
-    "                        <input class=\"form-control\" type=\"password\" id=\"password\" name=\"password\" ng-model=\"user.password\"\n" +
+    "                        <input class=\"form-control\" type=\"password\" id=\"password\" name=\"password\"\n" +
+    "                               ng-model=\"user.password\"\n" +
     "                               required>\n" +
     "                    </div>\n" +
-    "                    <span ng-show=\"showError('password', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                    <span ng-show=\"showError('password', 'required')\"\n" +
+    "                          class=\"alert alert-danger\">This field is required.</span>\n" +
     "                </div>\n" +
     "                <div class=\"form-group form-group-sm\">\n" +
     "                    <label class=\"col-sm-2 control-label\" for=\"passwordRepeat\">Password (repeat)</label>\n" +
@@ -106,7 +113,8 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "                        <div class=\"col-sm-5\">\n" +
     "                            <input class=\"form-control\" type=\"text\" id=\"plz\" name=\"plz\" ng-model=\"user.plz\" required>\n" +
     "                        </div>\n" +
-    "                        <span ng-show=\"showError('plz', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                        <span ng-show=\"showError('plz', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
     "                    </div>\n" +
     "                    <div class=\"form-group form-group-sm\">\n" +
     "                        <label class=\"col-sm-2 control-label\" for=\"city\">City</label>\n" +
@@ -114,7 +122,8 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "                        <div class=\"col-sm-5\">\n" +
     "                            <input class=\"form-control\" type=\"text\" id=\"city\" name=\"city\" ng-model=\"user.city\" required>\n" +
     "                        </div>\n" +
-    "                        <span ng-show=\"showError('city', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                        <span ng-show=\"showError('city', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
     "                    </div>\n" +
     "                    <div class=\"form-group form-group-sm\">\n" +
     "                        <label class=\"col-sm-2 control-label\" for=\"telephoneNumber\">Telephone number</label>\n" +
@@ -164,7 +173,8 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "                        <div class=\"col-sm-5\">\n" +
     "                            <input class=\"form-control\" type=\"text\" id=\"iban\" name=\"iban\" ng-model=\"user.iban\" required>\n" +
     "                        </div>\n" +
-    "                        <span ng-show=\"showError('iban', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                        <span ng-show=\"showError('iban', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
     "                    </div>\n" +
     "                    <div class=\"form-group form-group-sm\">\n" +
     "                        <label class=\"col-sm-2 control-label\" for=\"bic\">BIC</label>\n" +
@@ -172,7 +182,8 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "                        <div class=\"col-sm-5\">\n" +
     "                            <input class=\"form-control\" type=\"text\" id=\"bic\" name=\"bic\" ng-model=\"user.bic\" required>\n" +
     "                        </div>\n" +
-    "                        <span ng-show=\"showError('bic', 'required')\" class=\"alert alert-danger\">This field is required.</span>\n" +
+    "                        <span ng-show=\"showError('bic', 'required')\"\n" +
+    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
     "                    </div>\n" +
     "                    <div class=\"form-group form-group-sm\">\n" +
     "                        <label class=\"col-sm-2 control-label\">Contract type</label>\n" +
@@ -200,7 +211,12 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "            </div>\n" +
     "        </div>\n" +
     "        <hr>\n" +
-    "        <crud-buttons></crud-buttons>\n" +
+    "        <div>\n" +
+    "            <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!canSave()\" ng-click=\"save()\">Save</button>\n" +
+    "            <button type=\"button\" class=\"btn btn-warning\" ng-click=\"revertChanges()\" ng-disabled=\"!canRevert()\">Revert\n" +
+    "                changes\n" +
+    "            </button>\n" +
+    "        </div>\n" +
     "    </form>\n" +
     "</div>");
 }]);
@@ -208,23 +224,24 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
 angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("security/login/toolbar.tpl.html",
     "<ul class=\"nav navbar-nav pull-right\">\n" +
-    "  <li class=\"dropdown\" ng-class=\"{open:isProfileOpen}\" ng-show=\"isAuthenticated()\">\n" +
-    "		<a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b class=\"caret\"></b></a>\n" +
-    "		<ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
-    "			<li><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
-    "			<li>\n" +
+    "    <li class=\"dropdown\" ng-class=\"{open:isProfileOpen}\" ng-show=\"isAuthenticated()\">\n" +
+    "        <a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b\n" +
+    "                class=\"caret\"></b></a>\n" +
+    "        <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
+    "            <li><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
+    "            <li>\n" +
     "                <a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">\n" +
     "                    <span class=\"glyphicon glyphicon-log-out\"></span> Logout\n" +
     "                </a>\n" +
     "            </li>\n" +
-    "		</ul>\n" +
-    "  </li>\n" +
-    "  <li ng-hide=\"isAuthenticated()\">\n" +
-    "      <form class=\"navbar-form\">\n" +
-    "          <button class=\"btn login\" ng-click=\"login()\">\n" +
-    "              <span class=\"glyphicon glyphicon-log-in\"></span> Log in\n" +
-    "          </button>\n" +
-    "      </form>\n" +
-    "  </li>\n" +
+    "        </ul>\n" +
+    "    </li>\n" +
+    "    <li ng-hide=\"isAuthenticated()\">\n" +
+    "        <form class=\"navbar-form\">\n" +
+    "            <button class=\"btn login\" ng-click=\"login()\">\n" +
+    "                <span class=\"glyphicon glyphicon-log-in\"></span> Log in\n" +
+    "            </button>\n" +
+    "        </form>\n" +
+    "    </li>\n" +
     "</ul>");
 }]);

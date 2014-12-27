@@ -1,5 +1,8 @@
 package volo.voloCalendar.controller;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import volo.voloCalendar.model.DriverCalendarWeek;
 import volo.voloCalendar.service.Backend;
@@ -16,16 +19,17 @@ import java.time.LocalDate;
  */
 @RestController
 @RequestMapping("/driver")
+@Secured({"ROLE_DRIVER"})
 public class DriverCalendarController {
 
     private static final int calendarMonthsCount = 3;
 
     @RequestMapping(value = "/calendar/{userId}", method = RequestMethod.GET, produces = "application/json")
-    public CalendarViewModel calendar(@PathVariable String userId){
+    public CalendarViewModel calendar(@PathVariable String userId) {
         CalendarViewModel calendarViewModel = new CalendarViewModel();
         calendarViewModel.setCalendarMonths(new CalendarMonth[calendarMonthsCount]);
         LocalDate[] monthBeginDates = UtilMethods.getMonthBeginDatesForCalendar(calendarMonthsCount);
-        for(int i = 0; i < monthBeginDates.length; i++){
+        for (int i = 0; i < monthBeginDates.length; i++) {
             LocalDate monthBeginDate = monthBeginDates[i];
             CalendarMonth calendarMonth = getCalendarMonth(monthBeginDate);
             calendarViewModel.getCalendarMonths()[i] = calendarMonth;
@@ -37,7 +41,7 @@ public class DriverCalendarController {
         CalendarMonth calendarMonth = new CalendarMonth(monthBeginDate);
         LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
         CalendarWeekLight[] calendarWeekLights = new CalendarWeekLight[weekBeginDates.length];
-        for (int j = 0; j < weekBeginDates.length; j++){
+        for (int j = 0; j < weekBeginDates.length; j++) {
             calendarWeekLights[j] = new CalendarWeekLight(weekBeginDates[j]);
         }
         calendarMonth.setCalendarWeekLights(calendarWeekLights);
@@ -45,38 +49,38 @@ public class DriverCalendarController {
     }
 
     @RequestMapping(value = "/month/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public MonthStatistics month(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
-        LocalDate monthBeginDate = LocalDate.of(year,month,day);
+    public MonthStatistics month(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+        LocalDate monthBeginDate = LocalDate.of(year, month, day);
         return Backend.getMonthStatistics(userId, monthBeginDate);
     }
 
     @RequestMapping(value = "/week/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarWeek week(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
-        LocalDate monthBeginDate = LocalDate.of(year,month,day);
+    public DriverCalendarWeek week(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+        LocalDate monthBeginDate = LocalDate.of(year, month, day);
         return Backend.getDriverCalendarWeek(userId, monthBeginDate);
     }
 
     @RequestMapping(value = "/week/{userId}", method = RequestMethod.POST, produces = "application/json")
-    public DriverCalendarWeek week(@PathVariable String userId, @RequestBody DriverCalendarWeek driverCalendarWeek){
+    public DriverCalendarWeek week(@PathVariable String userId, @RequestBody DriverCalendarWeek driverCalendarWeek) {
         driverCalendarWeek.init();
         return Backend.insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
     }
 
     @RequestMapping(value = "/setNextWeek/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarWeek setNextWeek(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
-        LocalDate weekBeginDate = LocalDate.of(year,month,day);
+    public DriverCalendarWeek setNextWeek(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+        LocalDate weekBeginDate = LocalDate.of(year, month, day);
         return Backend.setNextWeekCalendarForDriver(userId, weekBeginDate);
     }
 
     @RequestMapping(value = "/setMonth/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarWeek setMonth(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
-        LocalDate weekBeginDate = LocalDate.of(year,month,day);
+    public DriverCalendarWeek setMonth(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+        LocalDate weekBeginDate = LocalDate.of(year, month, day);
         return Backend.setMonthlyCalendarForDriver(userId, weekBeginDate);
     }
 
     @RequestMapping(value = "/setYear/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
-    public DriverCalendarWeek setYear(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day){
-        LocalDate weekBeginDate = LocalDate.of(year,month,day);
+    public DriverCalendarWeek setYear(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+        LocalDate weekBeginDate = LocalDate.of(year, month, day);
         return Backend.setAnnualCalendarForDriver(userId, weekBeginDate);
     }
 }

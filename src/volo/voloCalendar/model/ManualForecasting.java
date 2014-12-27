@@ -10,19 +10,19 @@ import java.util.ArrayList;
  * Created by Emin Guliyev on 15/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ManualForecasting implements Serializable{
+public class ManualForecasting implements Serializable {
     private HourForecast[][] days;
 
     public ManualForecasting() {
         days = new HourForecast[7][];
-        for(int i=0; i<7; i++) {
+        for (int i = 0; i < 7; i++) {
             days[i] = new HourForecast[24];
             setZeroToAll(days[i]);
         }
     }
 
     private void setZeroToAll(HourForecast[] day) {
-        for (int i = 0; i < day.length; i++){
+        for (int i = 0; i < day.length; i++) {
             day[i] = new HourForecast();
         }
     }

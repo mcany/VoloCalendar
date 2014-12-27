@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 22/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CalendarViewModel implements Serializable{
+public class CalendarViewModel implements Serializable {
     private CalendarMonth[] calendarMonths;
 
     public CalendarMonth[] getCalendarMonths() {

@@ -16,16 +16,19 @@
                     <div class="col-sm-5">
                         <input class="form-control" type="text" id="name" name="name" ng-model="user.name" required>
                     </div>
-                    <span ng-show="showError('name', 'required')" class="alert alert-danger">This field is required.</span>
+                    <span ng-show="showError('name', 'required')"
+                          class="alert alert-danger">This field is required.</span>
                 </div>
                 <div class="form-group form-group-sm">
                     <label class="col-sm-2 control-label" for="password">Password</label>
 
                     <div class="col-sm-5">
-                        <input class="form-control" type="password" id="password" name="password" ng-model="user.password"
+                        <input class="form-control" type="password" id="password" name="password"
+                               ng-model="user.password"
                                required>
                     </div>
-                    <span ng-show="showError('password', 'required')" class="alert alert-danger">This field is required.</span>
+                    <span ng-show="showError('password', 'required')"
+                          class="alert alert-danger">This field is required.</span>
                 </div>
                 <div class="form-group form-group-sm">
                     <label class="col-sm-2 control-label" for="passwordRepeat">Password (repeat)</label>
@@ -66,7 +69,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="plz" name="plz" ng-model="user.plz" required>
                         </div>
-                        <span ng-show="showError('plz', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('plz', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="city">City</label>
@@ -74,7 +78,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="city" name="city" ng-model="user.city" required>
                         </div>
-                        <span ng-show="showError('city', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('city', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="telephoneNumber">Telephone number</label>
@@ -124,7 +129,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="iban" name="iban" ng-model="user.iban" required>
                         </div>
-                        <span ng-show="showError('iban', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('iban', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="bic">BIC</label>
@@ -132,7 +138,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="bic" name="bic" ng-model="user.bic" required>
                         </div>
-                        <span ng-show="showError('bic', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('bic', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label">Contract type</label>
@@ -155,7 +162,8 @@
             <div class="col-xs-4">
                 <input type="file" style="display:none"
                        id="file" name='file' onchange="angular.element(this).scope().fileChanged(this)"/>
-                <img width="200" height="200" ng-src="{{user.base64Image}}" onclick="$('#file').click();" class="img-polaroid pull-right"/>
+                <img width="200" height="200" ng-src="{{user.base64Image}}" onclick="$('#file').click();"
+                     class="img-polaroid pull-right"/>
             </div>
         </div>
         <hr>

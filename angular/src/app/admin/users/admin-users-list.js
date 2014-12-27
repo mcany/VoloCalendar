@@ -8,7 +8,7 @@ angular.module('admin-users-list', [
         , function ($scope, crudListMethods, i18nNotifications, $http, mongolabResource, utilMethods) {
             angular.extend($scope, crudListMethods('/admin/users'));
 
-            $scope.changePageVolume = function(){
+            $scope.changePageVolume = function () {
                 $scope.itemsPerPage = parseInt($scope.itemsPerPageStr, 10);
                 $scope.pageChanged();
             }
@@ -20,7 +20,7 @@ angular.module('admin-users-list', [
                 user.deleted = true;
                 user.$saveOrUpdate(null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id: user.$id()});
-                },null ,function () {
+                }, null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id: user.$id()});
                 });
             };
@@ -32,7 +32,7 @@ angular.module('admin-users-list', [
                 user.deleted = false;
                 user.$saveOrUpdate(null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.restore.success', 'success', {id: user.$id()});
-                },null ,function () {
+                }, null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.restore.error', 'error', {id: user.$id()});
                 });
             };
@@ -44,11 +44,7 @@ angular.module('admin-users-list', [
 
             $scope.pageChanged = function () {
                 $http.post('/databases/scrumdb/collections/users/pagination'
-                    , {sortingField: $scope.sortingField
-                        , reverse: $scope.reverse
-                        , beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1)
-                        , maxNumber: $scope.itemsPerPage
-                        , keyword: $scope.keyword
+                    , {sortingField: $scope.sortingField, reverse: $scope.reverse, beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1), maxNumber: $scope.itemsPerPage, keyword: $scope.keyword
                     }).
                     success(function (data, status, headers, config) {
                         result = [];

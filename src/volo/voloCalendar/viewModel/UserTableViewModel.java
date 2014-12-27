@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 06/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserTableViewModel implements Serializable{
+public class UserTableViewModel implements Serializable {
     private String sortingField;
     private boolean reverse;
     private int beginIndex;

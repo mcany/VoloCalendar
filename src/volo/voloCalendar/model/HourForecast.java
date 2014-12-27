@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 15/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HourForecast implements Serializable{
+public class HourForecast implements Serializable {
     private int count;
 
     public HourForecast() {

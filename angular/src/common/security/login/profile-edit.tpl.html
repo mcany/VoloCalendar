@@ -1,5 +1,5 @@
 <div class="well">
-    <form name="form" novalidate crud-edit="user" class="form-horizontal" role="form">
+    <form name="form" novalidate class="form-horizontal" role="form">
         <legend>User</legend>
         <div class="row">
             <div class="col-xs-8">
@@ -16,16 +16,19 @@
                     <div class="col-sm-5">
                         <input class="form-control" type="text" id="name" name="name" ng-model="user.name" required>
                     </div>
-                    <span ng-show="showError('name', 'required')" class="alert alert-danger">This field is required.</span>
+                    <span ng-show="showError('name', 'required')"
+                          class="alert alert-danger">This field is required.</span>
                 </div>
                 <div class="form-group form-group-sm">
                     <label class="col-sm-2 control-label" for="password">Password</label>
 
                     <div class="col-sm-5">
-                        <input class="form-control" type="password" id="password" name="password" ng-model="user.password"
+                        <input class="form-control" type="password" id="password" name="password"
+                               ng-model="user.password"
                                required>
                     </div>
-                    <span ng-show="showError('password', 'required')" class="alert alert-danger">This field is required.</span>
+                    <span ng-show="showError('password', 'required')"
+                          class="alert alert-danger">This field is required.</span>
                 </div>
                 <div class="form-group form-group-sm">
                     <label class="col-sm-2 control-label" for="passwordRepeat">Password (repeat)</label>
@@ -66,7 +69,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="plz" name="plz" ng-model="user.plz" required>
                         </div>
-                        <span ng-show="showError('plz', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('plz', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="city">City</label>
@@ -74,7 +78,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="city" name="city" ng-model="user.city" required>
                         </div>
-                        <span ng-show="showError('city', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('city', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="telephoneNumber">Telephone number</label>
@@ -124,7 +129,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="iban" name="iban" ng-model="user.iban" required>
                         </div>
-                        <span ng-show="showError('iban', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('iban', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="bic">BIC</label>
@@ -132,7 +138,8 @@
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="bic" name="bic" ng-model="user.bic" required>
                         </div>
-                        <span ng-show="showError('bic', 'required')" class="alert alert-danger">This field is required.</span>
+                        <span ng-show="showError('bic', 'required')"
+                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label">Contract type</label>
@@ -160,6 +167,11 @@
             </div>
         </div>
         <hr>
-        <crud-buttons></crud-buttons>
+        <div>
+            <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="save()">Save</button>
+            <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert
+                changes
+            </button>
+        </div>
     </form>
 </div>

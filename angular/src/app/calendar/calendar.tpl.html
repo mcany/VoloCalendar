@@ -39,15 +39,18 @@ Planned hours: {{selectedMonth.plannedHours}} Set: {{selectedMonth.doneHours}} D
     <div class="col-sm-1">
         <br/>
         <br/>
-        <button type="button" class="btn btn-primary btn-left" ng-disabled="!isAnyWeekSelected()" ng-click="setNextWeek()">Next
+        <button type="button" class="btn btn-primary btn-left" ng-disabled="!isAnyWeekSelected()"
+                ng-click="setNextWeek()">Next
             week
         </button>
         <br/>
-        <button type="button" class="btn btn-primary btn-left" ng-disabled="!isAnyWeekSelected()" ng-click="setMonth()">This
+        <button type="button" class="btn btn-primary btn-left" ng-disabled="!isAnyWeekSelected()" ng-click="setMonth()">
+            This
             month
         </button>
         <br/>
-        <button type="button" class="btn btn-primary btn-left" ng-disabled="!isAnyWeekSelected()" ng-click="setYear()">This
+        <button type="button" class="btn btn-primary btn-left" ng-disabled="!isAnyWeekSelected()" ng-click="setYear()">
+            This
             Year
         </button>
         Count: {{selectedWeek.selectedHoursCount}}

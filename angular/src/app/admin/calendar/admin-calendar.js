@@ -9,5 +9,5 @@ angular.module('admin-calendar', ['security.authorization'])
         });
     }]);
 
-angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', function($scope){
+angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', function ($scope) {
 }]);

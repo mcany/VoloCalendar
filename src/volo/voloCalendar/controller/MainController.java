@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class MainController {
-    @RequestMapping(value = {"/{symbolicName:^(?!static).+}/**"}, method = RequestMethod.GET, produces = {"text/html","application/xhtml+xml","application/xml"})
-    public String main(@PathVariable String symbolicName){
+    @RequestMapping(value = {"/{symbolicName:^(?!static).+}/**"}, method = RequestMethod.GET, produces = {"text/html", "application/xhtml+xml", "application/xml"})
+    public String main(@PathVariable String symbolicName) {
         return "main";
     }
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET, produces = {"text/html","application/xhtml+xml","application/xml"})
-    public String index(){
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET, produces = {"text/html", "application/xhtml+xml", "application/xml"})
+    public String index() {
         return "main";
     }
 }

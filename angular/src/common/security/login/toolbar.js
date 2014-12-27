@@ -1,57 +1,56 @@
-angular.module('security.login.toolbar',
-    [], ['$routeProvider', function($routeProvider){
+angular.module('security.login.toolbar', [])
+    .config(['$routeProvider', function ($routeProvider) {
+        $routeProvider.when('/profile', {
+            templateUrl: 'security/login/profile-edit.tpl.html',
+            controller: 'EditProfileCtrl',
+            resolve: {
+                currentUser: ['securityAuthorization', function (securityAuthorization) {
+                    return securityAuthorization.requireAuthenticatedUser();
+                }]
+            }
+        });
+    }])
+    .controller('EditProfileCtrl', ['$scope', '$location', '$http', 'security', 'utilMethods', function ($scope, $location, $http, security, utilMethods) {
+        $scope.user = angular.copy(security.currentUser);
+        $scope.password = $scope.user.password;
+        $scope.original = angular.copy($scope.user);
 
-  $routeProvider.when('/profile', {
-    templateUrl:'security/login/profile-edit.tpl.html',
-    controller:'EditProfileCtrl',
-	resolve:{		
-		user:['Users', 'security', 'securityAuthorization', function (Users, security, securityAuthorization) {
-			return securityAuthorization.requireAuthenticatedUser().then(
-                    function(value){
-                        return Users.getById(security.currentUser.id);
-                    });
-		}]
-	}
-  });}])
-.controller('EditProfileCtrl', ['$scope', '$location', 'i18nNotifications', 'user', 'security', 'utilMethods', function ($scope, $location, i18nNotifications, user, security, utilMethods) {
+        $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
 
-  $scope.user = user;
-  $scope.password = user.password;
-
-  $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
-
-  $scope.onSave = function (user) {
-    i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id : user.$id()});
-    $location.path('/');
-  };
-
-  $scope.onError = function() {
-    i18nNotifications.pushForCurrentRoute('crud.user.save.error', 'error');
-  };
-
-  $scope.onRemove = function(user) {
-    //unreachable function
-  };
-
-}])
+        $scope.save = function (user) {
+            $http.post('/updateProfile', $scope.user).then(function(user){
+                security.currentUser = user.data;
+                $location.path('/');
+            });
+        };
+        $scope.revertChanges = function () {
+            $scope.user = angular.copy($scope.original);
+        };
+        $scope.canSave = function () {
+            return $scope.form.$valid && !angular.equals($scope.user, $scope.original);
+        };
+        $scope.canRevert = function () {
+            return !angular.equals($scope.user, $scope.original);
+        };
+    }])
 // The loginToolbar directive is a reusable widget that can show login or logout buttons
 // and information the current authenticated user
-.directive('loginToolbar', ['security', function(security) {
-  var directive = {
-    templateUrl: 'security/login/toolbar.tpl.html',
-    restrict: 'E',
-    replace: true,
-    scope: true,
-    link: function($scope, $element, $attrs, $controller) {
-      $scope.isAuthenticated = security.isAuthenticated;
-      $scope.login = security.showLogin;
-      $scope.logout = security.logout;
-	  $scope.$watch(function() {
-        return security.currentUser;
-      }, function(currentUser) {
-        $scope.currentUser = currentUser;
-      });
-    }
-  };
-  return directive;
-}]);
+    .directive('loginToolbar', ['security', function (security) {
+        var directive = {
+            templateUrl: 'security/login/toolbar.tpl.html',
+            restrict: 'E',
+            replace: true,
+            scope: true,
+            link: function ($scope, $element, $attrs, $controller) {
+                $scope.isAuthenticated = security.isAuthenticated;
+                $scope.login = security.showLogin;
+                $scope.logout = security.logout;
+                $scope.$watch(function () {
+                    return security.currentUser;
+                }, function (currentUser) {
+                    $scope.currentUser = currentUser;
+                });
+            }
+        };
+        return directive;
+    }]);

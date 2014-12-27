@@ -6,8 +6,8 @@ angular.module('home', [])
         });
     }]);
 
-angular.module('home').controller('HomeCtrl', ['$scope', '$location', 'security', function($scope, $location, security){
-    security.requestCurrentUser().then(function(value) {
+angular.module('home').controller('HomeCtrl', ['$scope', '$location', 'security', function ($scope, $location, security) {
+    security.requestCurrentUser().then(function (value) {
         if (security.isAdmin()) {
             $location.path('/admin/calendar');
         } else {
