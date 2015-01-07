@@ -7,7 +7,7 @@ angular.module('calendar', ['security.authorization'])
                 calendarViewModel: ['security', '$http', 'securityAuthorization', function (security, $http, securityAuthorization) {
                     return securityAuthorization.requireAuthenticatedUser().then(
                         function (value) {
-                            return $http.get('/driver/calendar/' + security.currentUser.id).then(
+                            return $http.get('/driver/calendar').then(
                                 function (result) {
                                     return result.data;
                                 });
@@ -17,8 +17,8 @@ angular.module('calendar', ['security.authorization'])
         });
     }]);
 
-angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 'security', 'calendarViewModel', '$http', 'utilMethods',
-    function ($scope, $location, security, calendarViewModel, $http, utilMethods) {
+angular.module('calendar').controller('CalendarCtrl', ['$scope', '$route', '$location', 'security', 'calendarViewModel', '$http', 'utilMethods',
+    function ($scope, $route, $location, security, calendarViewModel, $http, utilMethods) {
         if (security.isAdmin()) {
             $location.path('/admin/calendar');
         }
@@ -63,7 +63,7 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
         };
 
         $scope.save = function () {
-            var url = '/driver/week/' + security.currentUser.id;
+            var url = '/driver/week';
             $http.post(url, $scope.selectedWeek);
             $scope.original = angular.copy($scope.selectedWeek);
         };
@@ -97,6 +97,8 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$location', 's
             if (!hourStatistics.enabled) {
                 element.css('opacity', 0.5);
             }
+            element.css('color', 'white');
+            element.text(hourStatistics.requiredDriverCount)
         };
 
         $scope.isSelected = function (week) {

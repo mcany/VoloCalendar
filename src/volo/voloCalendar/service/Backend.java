@@ -132,7 +132,7 @@ public class Backend {
         return getDriverCalendarWeek(user, beginDate);
     }
 
-    public static DriverCalendarWeek getDriverCalendarWeek(User user, LocalDate beginDate) {
+    private static DriverCalendarWeek getDriverCalendarWeek(User user, LocalDate beginDate) {
         if (user == null || user.isAdmin()) {
             return null;
         }
@@ -254,4 +254,27 @@ public class Backend {
         return new MonthStatistics(plannedHours, doneHours, monthBeginDate);
     }
 
+    public static MonthStatistics getMonthStatistics(LocalDate monthBeginDate) {
+        return null;
+    }
+
+    public static AdminCalendarWeek getAdminCalendarWeek(LocalDate beginDate) {
+        return null;
+    }
+
+    public static DriverDayStatistics insertOrUpdateDriverDayStatistics(DriverDayStatistics driverDayStatistics) {
+        return null;
+    }
+
+    public static DriverDayStatistics deleteDriverDayStatistics(LocalDate date) {
+        return null;
+    }
+
+    public static DetailedAdminDayStatistics getDetailedAdminDayStatistics(LocalDate date) {
+        return null;
+    }
+
+    public static DetailedAdminDayStatistics insertOrUpdateDetailedAdminDayStatistics(DetailedAdminDayStatistics detailedAdminDayStatistics) {
+        return null;
+    }
 }

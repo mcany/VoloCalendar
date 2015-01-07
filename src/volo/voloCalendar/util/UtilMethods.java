@@ -1,5 +1,9 @@
 package volo.voloCalendar.util;
 
+import volo.voloCalendar.viewModel.CalendarMonth;
+import volo.voloCalendar.viewModel.CalendarViewModel;
+import volo.voloCalendar.viewModel.CalendarWeekLight;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -9,6 +13,28 @@ import java.util.HashMap;
  * Created by Emin Guliyev on 29/11/2014.
  */
 public class UtilMethods {
+    public static CalendarViewModel getCalendarViewModel(int calendarMonthsCount) {
+        CalendarViewModel calendarViewModel = new CalendarViewModel();
+        calendarViewModel.setCalendarMonths(new CalendarMonth[calendarMonthsCount]);
+        LocalDate[] monthBeginDates = UtilMethods.getMonthBeginDatesForCalendar(calendarMonthsCount);
+        for (int i = 0; i < monthBeginDates.length; i++) {
+            LocalDate monthBeginDate = monthBeginDates[i];
+            CalendarMonth calendarMonth = getCalendarMonth(monthBeginDate);
+            calendarViewModel.getCalendarMonths()[i] = calendarMonth;
+        }
+        return calendarViewModel;
+    }
+
+    private static CalendarMonth getCalendarMonth(LocalDate monthBeginDate) {
+        CalendarMonth calendarMonth = new CalendarMonth(monthBeginDate);
+        LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        CalendarWeekLight[] calendarWeekLights = new CalendarWeekLight[weekBeginDates.length];
+        for (int j = 0; j < weekBeginDates.length; j++) {
+            calendarWeekLights[j] = new CalendarWeekLight(weekBeginDates[j]);
+        }
+        calendarMonth.setCalendarWeekLights(calendarWeekLights);
+        return calendarMonth;
+    }
     public static Object[] getArray(Object obj) {
         Object[] result;
         if (obj != null) {

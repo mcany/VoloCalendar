@@ -14,21 +14,30 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 20/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DayStatistics implements Serializable {
+public class DriverDayStatistics implements Serializable {
+    private String userId;
     private LocalDate date;
-    private HourStatistics[] hourStatisticsArray;
+    private DriverHourStatistics[] hourStatisticsArray;
     public static final int changeLimit = 3;
 
-    public DayStatistics() {
-        hourStatisticsArray = new HourStatistics[24];
+    public DriverDayStatistics() {
+        hourStatisticsArray = new DriverHourStatistics[24];
         for (int i = 0; i < hourStatisticsArray.length; i++) {
-            hourStatisticsArray[i] = new HourStatistics(this);
+            hourStatisticsArray[i] = new DriverHourStatistics(this);
         }
     }
 
-    public DayStatistics(LocalDate date) {
+    public DriverDayStatistics(LocalDate date) {
         this();
         this.date = date;
+    }
+
+    public DriverDayStatistics(DriverDayStatistics dayStatistics) {
+        this();
+        this.date = dayStatistics.date;
+        for (int i = 0; i < this.hourStatisticsArray.length; i++){
+            this.hourStatisticsArray[i].setSelected(dayStatistics.hourStatisticsArray[i].isSelected());
+        }
     }
 
     public LocalDate getDate() {
@@ -41,11 +50,11 @@ public class DayStatistics implements Serializable {
         this.date = date;
     }
 
-    public HourStatistics[] getHourStatisticsArray() {
+    public DriverHourStatistics[] getHourStatisticsArray() {
         return hourStatisticsArray;
     }
 
-    public void setHourStatisticsArray(HourStatistics[] hourStatisticsArray) {
+    public void setHourStatisticsArray(DriverHourStatistics[] hourStatisticsArray) {
         this.hourStatisticsArray = hourStatisticsArray;
     }
 
@@ -57,11 +66,26 @@ public class DayStatistics implements Serializable {
     @JsonIgnore
     public int getDoneHours() {
         int result = 0;
-        for (HourStatistics hourStatistics : hourStatisticsArray) {
+        for (DriverHourStatistics hourStatistics : hourStatisticsArray) {
             if (hourStatistics.isSelected()) {
                 result++;
             }
         }
         return result;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void init(DriverCalendarWeek driverCalendarWeek) {
+        this.userId = driverCalendarWeek.getUserId();
+        for (DriverHourStatistics hourStatistics : this.getHourStatisticsArray()) {
+            hourStatistics.init(this);
+        }
     }
 }

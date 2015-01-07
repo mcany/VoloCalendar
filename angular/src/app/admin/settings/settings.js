@@ -45,6 +45,7 @@ angular.module('settings', [
             link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.voloCounter);
                 var hourCount = modelGetter(scope);
+                element.css('color', 'white');
                 element.text(hourCount);
                 scope.setColor(element, hourCount);
 
