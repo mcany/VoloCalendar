@@ -15,9 +15,10 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DetailedAdminDayStatistics implements Serializable {
     private LocalDate date;
-    private DriverDayStatistics[] driverDayStatisticsArray;
+    private DetailedDriverDayStatistics[] detailedDriverDayStatisticsArray;
 
-    public DetailedAdminDayStatistics() {
+    public DetailedAdminDayStatistics(LocalDate date) {
+        this.date = date;
     }
 
     public LocalDate getDate() {
@@ -29,11 +30,11 @@ public class DetailedAdminDayStatistics implements Serializable {
         this.date = date;
     }
 
-    public DriverDayStatistics[] getDriverDayStatistics() {
-        return driverDayStatisticsArray;
+    public DetailedDriverDayStatistics[] getDetailedDriverDayStatistics() {
+        return detailedDriverDayStatisticsArray;
     }
 
-    public void setDriverDayStatistics(DriverDayStatistics[] driverDayStatisticsArray) {
-        this.driverDayStatisticsArray = driverDayStatisticsArray;
+    public void setDetailedDriverDayStatistics(DetailedDriverDayStatistics[] driverDayStatisticsArray) {
+        this.detailedDriverDayStatisticsArray = driverDayStatisticsArray;
     }
 }

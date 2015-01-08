@@ -20,6 +20,15 @@ public class AdminCalendarWeek implements Serializable{
     public AdminCalendarWeek() {
     }
 
+    public AdminCalendarWeek(LocalDate beginDate) {
+        this.beginDate = beginDate;
+        int lengthOfMonth = beginDate.getMonth().length(beginDate.isLeapYear());
+        adminDayStatisticsArray = new AdminDayStatistics[lengthOfMonth];
+        for (int i = 0; i < lengthOfMonth; i++){
+            adminDayStatisticsArray[i] = new AdminDayStatistics(beginDate.plusDays(i));
+        }
+    }
+
     public LocalDate getBeginDate() {
         return beginDate;
     }
@@ -35,5 +44,21 @@ public class AdminCalendarWeek implements Serializable{
 
     public void setAdminDayStatisticsArray(AdminDayStatistics[] adminDayStatisticsArray) {
         this.adminDayStatisticsArray = adminDayStatisticsArray;
+    }
+
+    public int getDoneHours(){
+        int result = 0;
+        for (AdminDayStatistics adminDayStatistics: adminDayStatisticsArray){
+            result += adminDayStatistics.getDoneHours();
+        }
+        return result;
+    }
+
+    public int getPlanningHours(){
+        int result = 0;
+        for (AdminDayStatistics adminDayStatistics: adminDayStatisticsArray){
+            result += adminDayStatistics.getPlanningHours();
+        }
+        return result;
     }
 }

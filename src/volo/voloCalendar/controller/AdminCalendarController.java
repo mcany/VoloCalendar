@@ -43,15 +43,16 @@ public class AdminCalendarController {
         return Backend.getDetailedAdminDayStatistics(date);
     }
 
-    @RequestMapping(value = "/day", method = RequestMethod.POST, produces = "application/json")
-    public DriverDayStatistics addDriverDayStatistics(@RequestBody DriverDayStatistics driverDayStatistics) {
-        return Backend.insertOrUpdateDriverDayStatistics(driverDayStatistics);
+    @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.POST, produces = "application/json")
+    public DriverDayStatistics addDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+        LocalDate date = LocalDate.of(year, month, day);
+        return Backend.insertDriverDayStatistics(date, userId);
     }
 
-    @RequestMapping(value = "/day/{year}-{month}-{day}", method = RequestMethod.DELETE, produces = "application/json")
-    public DriverDayStatistics deleteDriverDayStatistics(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
+    @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.DELETE, produces = "application/json")
+    public DriverDayStatistics deleteDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate date = LocalDate.of(year, month, day);
-        return Backend.deleteDriverDayStatistics(date);
+        return Backend.deleteDriverDayStatistics(date, userId);
     }
 
     @RequestMapping(value = "/detailedAdminDay", method = RequestMethod.POST, produces = "application/json")

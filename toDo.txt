@@ -2,3 +2,4 @@
 2.server side validation
 3.change root : /databases/scrumdb/collections/users to admin/user in UserCrudController class
 4.custom error pages
+5.rename adminHourStatistics.getRequiredDriverCount to PlanningHours

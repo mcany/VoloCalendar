@@ -36,6 +36,10 @@ public class HourStatistics implements Serializable {
         requiredDriverCount--;
     }
 
+    public void increaseRequiredHours(int count) {
+        requiredDriverCount += count;
+    }
+
     public void init(DriverDayStatistics dayStatistics) {
         this.dayStatistics = dayStatistics;
     }

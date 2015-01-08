@@ -17,7 +17,17 @@ public class AdminDayStatistics implements Serializable {
     public static final int changeLimit = 1;
     private LocalDate date;
     private AdminHourStatistics[] adminHourStatisticsArray;
+
     public AdminDayStatistics() {
+        adminHourStatisticsArray = new AdminHourStatistics[24];
+        for (int i = 0; i < adminHourStatisticsArray.length; i++){
+            adminHourStatisticsArray[i] = new AdminHourStatistics();
+        }
+    }
+
+    public AdminDayStatistics(LocalDate date) {
+        this();
+        this.date = date;
     }
 
     public LocalDate getDate() {
@@ -39,6 +49,22 @@ public class AdminDayStatistics implements Serializable {
 
     public boolean isActive() {
         boolean result = LocalDate.now().isBefore(date.minusDays(changeLimit));
+        return result;
+    }
+
+    public int getDoneHours(){
+        int result = 0;
+        for (AdminHourStatistics adminHourStatistics: adminHourStatisticsArray){
+            result += adminHourStatistics.getDoneHours();
+        }
+        return result;
+    }
+
+    public int getPlanningHours(){
+        int result = 0;
+        for (AdminHourStatistics adminHourStatistics: adminHourStatisticsArray){
+            result += adminHourStatistics.getRequiredDriverCount();
+        }
         return result;
     }
 }

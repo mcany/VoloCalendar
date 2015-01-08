@@ -15,9 +15,9 @@ import java.time.LocalDate;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DriverDayStatistics implements Serializable {
-    private String userId;
-    private LocalDate date;
-    private DriverHourStatistics[] hourStatisticsArray;
+    protected String userId;
+    protected LocalDate date;
+    protected DriverHourStatistics[] hourStatisticsArray;
     public static final int changeLimit = 3;
 
     public DriverDayStatistics() {
@@ -87,5 +87,24 @@ public class DriverDayStatistics implements Serializable {
         for (DriverHourStatistics hourStatistics : this.getHourStatisticsArray()) {
             hourStatistics.init(this);
         }
+    }
+
+    public void cancelAll() {
+        for (DriverHourStatistics hourStatistics : this.getHourStatisticsArray()) {
+            hourStatistics.setSelected(false);
+        }
+    }
+    @JsonIgnore
+    public boolean isNotEmpty() {
+        for (DriverHourStatistics hourStatistics : hourStatisticsArray) {
+            if (hourStatistics.isSelected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public DetailedDriverDayStatistics addDriverInfo(User user) {
+        return new DetailedDriverDayStatistics(this, user.getName(), user.getId());
     }
 }

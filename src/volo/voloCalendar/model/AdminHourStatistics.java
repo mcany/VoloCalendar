@@ -12,14 +12,6 @@ public class AdminHourStatistics extends HourStatistics implements Serializable{
     private int doneHours;
     public AdminHourStatistics(){}
 
-    public AdminHourStatistics(DriverDayStatistics dayStatistics) {
-        super(dayStatistics);
-    }
-
-    public AdminHourStatistics(int requiredDriverCount, DriverDayStatistics dayStatistics) {
-        super(requiredDriverCount, dayStatistics);
-    }
-
     public int getDoneHours() {
         return doneHours;
     }
@@ -27,4 +19,9 @@ public class AdminHourStatistics extends HourStatistics implements Serializable{
     public void setDoneHours(int doneHours) {
         this.doneHours = doneHours;
     }
+
+    public void increaseDoneHours() {
+        doneHours++;
+    }
+
 }
