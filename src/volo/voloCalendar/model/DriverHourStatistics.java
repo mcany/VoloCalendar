@@ -10,16 +10,27 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DriverHourStatistics extends HourStatistics implements Serializable {
     private boolean selected;
+    private DriverDayStatistics dayStatistics;
 
     public DriverHourStatistics() {
     }
 
-    public DriverHourStatistics(DriverDayStatistics dayStatistics) {
-        super(dayStatistics);
+    public DriverHourStatistics(DriverDayStatistics dayStatistics, int index) {
+        this.dayStatistics = dayStatistics;
+        this.index = index;
     }
 
-    public DriverHourStatistics(int requiredDriverCount, DriverDayStatistics dayStatistics) {
-        super(requiredDriverCount, dayStatistics);
+    public DriverHourStatistics( DriverDayStatistics dayStatistics, int requiredDriverCount, int index) {
+        this(dayStatistics, index);
+        this.requiredDriverCount = requiredDriverCount;
+    }
+
+    public void init(DriverDayStatistics dayStatistics) {
+        this.dayStatistics = dayStatistics;
+    }
+
+    public boolean isEnabled() {
+        return dayStatistics.isActive() && requiredDriverCount > 0;
     }
 
     public boolean isSelected() {
@@ -30,7 +41,4 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
         this.selected = selected;
     }
 
-    public boolean isEnabled() {
-        return dayStatistics.isActive() && requiredDriverCount > 0;
-    }
 }

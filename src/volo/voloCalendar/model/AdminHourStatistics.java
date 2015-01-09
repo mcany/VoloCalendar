@@ -10,7 +10,14 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdminHourStatistics extends HourStatistics implements Serializable{
     private int doneHours;
+    private AdminDayStatistics adminDayStatistics;
+
     public AdminHourStatistics(){}
+
+    public AdminHourStatistics(AdminDayStatistics adminDayStatistics, int index) {
+        this.adminDayStatistics = adminDayStatistics;
+        this.index = index;
+    }
 
     public int getDoneHours() {
         return doneHours;
@@ -22,6 +29,10 @@ public class AdminHourStatistics extends HourStatistics implements Serializable{
 
     public void increaseDoneHours() {
         doneHours++;
+    }
+
+    public boolean isEnabled() {
+        return adminDayStatistics.isActive();
     }
 
 }

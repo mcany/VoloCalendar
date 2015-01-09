@@ -10,18 +10,9 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HourStatistics implements Serializable {
     protected int requiredDriverCount;
-    protected DriverDayStatistics dayStatistics;
+    protected int index;
 
     public HourStatistics() {
-    }
-
-    protected HourStatistics(DriverDayStatistics dayStatistics) {
-        this.dayStatistics = dayStatistics;
-    }
-
-    protected HourStatistics(int requiredDriverCount, DriverDayStatistics dayStatistics) {
-        this(dayStatistics);
-        this.requiredDriverCount = requiredDriverCount;
     }
 
     public int getRequiredDriverCount() {
@@ -40,7 +31,12 @@ public class HourStatistics implements Serializable {
         requiredDriverCount += count;
     }
 
-    public void init(DriverDayStatistics dayStatistics) {
-        this.dayStatistics = dayStatistics;
+    public int getIndex() {
+        return index;
     }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
 }

@@ -19,8 +19,8 @@ public class Backend {
     private static ManualForecasting manualForecasting = new ManualForecasting();
 
     static {
-        User emin = new User("456", "mcanyigin@gmail.com", "sindibad1987", "Mertcan Yigin");
-        User mertcan = new User("123", "eminguliyev1987@gmail.com", "sindibad1987", "Emin Guliyev"
+        User emin = new User("123", "eminguliyev1987@gmail.com", "1", "Emin Guliyev");
+        User mertcan = new User("456", "dr_ilashka@live.ru", "1", "Mertcan Yigin"
                 , "Christ-Probst.", "10/142", "80805", "Munich", "017678947235", TransportType.bicycle, TelephoneType.ios
                 , "DE64IRCE92222212345678", "BINFFDDDXXX", ContractType.minijob);
         usersByEmail.put(emin.getEmail(), emin);
@@ -30,7 +30,7 @@ public class Backend {
         for (int i = 0; i < 35; i++) {
             emin = new User(emin);
             emin.setId(UUID.randomUUID().toString());
-            emin.setEmail(UUID.randomUUID().toString() + "@gmail.com");
+            emin.setEmail(i + emin.getEmail());
             usersByEmail.put(emin.getEmail(), emin);
             usersById.put(emin.getId(), emin);
         }
@@ -38,7 +38,7 @@ public class Backend {
         for (int i = 0; i < 35; i++) {
             mertcan = new User(mertcan);
             mertcan.setId(UUID.randomUUID().toString());
-            mertcan.setEmail(UUID.randomUUID().toString() + "@gmail.com");
+            mertcan.setEmail(i + mertcan.getEmail());
             usersByEmail.put(mertcan.getEmail(), mertcan);
             usersById.put(mertcan.getId(), mertcan);
         }
@@ -307,17 +307,12 @@ public class Backend {
     }
 
     private static void fixPlannedHours(AdminCalendarWeek adminCalendarWeek) {
-        LocalDate date = LocalDate.of(adminCalendarWeek.getBeginDate().getYear()
-                , adminCalendarWeek.getBeginDate().getMonthValue(), adminCalendarWeek.getBeginDate().getDayOfMonth());
-        do{
-            for (int i = 0; i < adminCalendarWeek.getAdminDayStatisticsArray().length; i++){
-                for (int j = 0; j < adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray().length; j++){
-                    HourForecast hourForecast = manualForecasting.getDays()[adminCalendarWeek.getAdminDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
-                    adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseRequiredHours(hourForecast.getCount());
-                }
+        for (int i = 0; i < adminCalendarWeek.getAdminDayStatisticsArray().length; i++) {
+            for (int j = 0; j < adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray().length; j++) {
+                HourForecast hourForecast = manualForecasting.getDays()[adminCalendarWeek.getAdminDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
+                adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseRequiredHours(hourForecast.getCount());
             }
-            date.plusDays(1);
-        }while (date.getDayOfWeek() != DayOfWeek.MONDAY && date.getMonthValue() == adminCalendarWeek.getBeginDate().getMonthValue());
+        }
     }
 
     private static void fixDoneHours(AdminCalendarWeek adminCalendarWeek) {
@@ -327,7 +322,9 @@ public class Backend {
                 if (driverCalendarWeek != null) {
                     for (int i = 0; i < driverCalendarWeek.getDayStatisticsArray().length; i++){
                         for (int j = 0; j < driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray().length; j++){
-                            adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseDoneHours();
+                            if (driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray()[j].isSelected()){
+                                adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseDoneHours();
+                            }
                         }
                     }
                 }
@@ -401,7 +398,7 @@ public class Backend {
                 }
             }
         }
-        detailedAdminDayStatistics.setDetailedDriverDayStatistics(dayStatisticsArrayList.toArray(new DetailedDriverDayStatistics[dayStatisticsArrayList.size()]));
+        detailedAdminDayStatistics.setDetailedDriverDayStatisticsArray(dayStatisticsArrayList.toArray(new DetailedDriverDayStatistics[dayStatisticsArrayList.size()]));
         return detailedAdminDayStatistics;
     }
 
@@ -411,7 +408,7 @@ public class Backend {
             beginDateOfProperWeek = LocalDate.of(detailedAdminDayStatistics.getDate().getYear(), detailedAdminDayStatistics.getDate().getMonthValue(), 1);
         }
 
-        for (DetailedDriverDayStatistics detailedDriverDayStatistics : detailedAdminDayStatistics.getDetailedDriverDayStatistics()){
+        for (DetailedDriverDayStatistics detailedDriverDayStatistics : detailedAdminDayStatistics.getDetailedDriverDayStatisticsArray()){
             DriverCalendarWeek driverCalendarWeekInDB = getDriverCalendarWeekFromDB(detailedDriverDayStatistics.getUserId(), beginDateOfProperWeek);
             DriverDayStatistics driverDayStatistics = driverCalendarWeekInDB.getDayStatisticsArray()[detailedAdminDayStatistics.getDate().getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
             for (int i = 0; i < driverDayStatistics.getHourStatisticsArray().length; i++){
@@ -419,7 +416,7 @@ public class Backend {
             }
             insertOrUpdateDriverCalendarWeek(driverCalendarWeekInDB);
         }
-
+        detailedAdminDayStatistics.init();
         return detailedAdminDayStatistics;
     }
     //rest

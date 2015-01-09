@@ -21,7 +21,7 @@ public class AdminDayStatistics implements Serializable {
     public AdminDayStatistics() {
         adminHourStatisticsArray = new AdminHourStatistics[24];
         for (int i = 0; i < adminHourStatisticsArray.length; i++){
-            adminHourStatisticsArray[i] = new AdminHourStatistics();
+            adminHourStatisticsArray[i] = new AdminHourStatistics(this, i);
         }
     }
 
@@ -60,7 +60,7 @@ public class AdminDayStatistics implements Serializable {
         return result;
     }
 
-    public int getPlanningHours(){
+    public int getPlannedHours(){
         int result = 0;
         for (AdminHourStatistics adminHourStatistics: adminHourStatisticsArray){
             result += adminHourStatistics.getRequiredDriverCount();

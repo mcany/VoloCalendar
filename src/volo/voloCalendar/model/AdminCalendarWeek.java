@@ -7,7 +7,9 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.io.Serializable;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * Created by Emin Guliyev on 07/01/2015.
@@ -22,11 +24,13 @@ public class AdminCalendarWeek implements Serializable{
 
     public AdminCalendarWeek(LocalDate beginDate) {
         this.beginDate = beginDate;
-        int lengthOfMonth = beginDate.getMonth().length(beginDate.isLeapYear());
-        adminDayStatisticsArray = new AdminDayStatistics[lengthOfMonth];
-        for (int i = 0; i < lengthOfMonth; i++){
-            adminDayStatisticsArray[i] = new AdminDayStatistics(beginDate.plusDays(i));
-        }
+        LocalDate date = LocalDate.of(beginDate.getYear(), beginDate.getMonthValue(), beginDate.getDayOfMonth());
+        ArrayList<AdminDayStatistics> adminDayStatisticsArrayList = new ArrayList<AdminDayStatistics>();
+        do{
+            adminDayStatisticsArrayList.add(new AdminDayStatistics(date));
+            date = date.plusDays(1);
+        }while(date.getDayOfWeek() != DayOfWeek.MONDAY && date.getMonthValue() == date.getMonthValue());
+        setAdminDayStatisticsArray(adminDayStatisticsArrayList.toArray(new AdminDayStatistics[adminDayStatisticsArrayList.size()]));
     }
 
     public LocalDate getBeginDate() {
@@ -54,10 +58,10 @@ public class AdminCalendarWeek implements Serializable{
         return result;
     }
 
-    public int getPlanningHours(){
+    public int getPlannedHours(){
         int result = 0;
         for (AdminDayStatistics adminDayStatistics: adminDayStatisticsArray){
-            result += adminDayStatistics.getPlanningHours();
+            result += adminDayStatistics.getPlannedHours();
         }
         return result;
     }

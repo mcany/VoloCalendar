@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class DetailedAdminDayStatistics implements Serializable {
     private LocalDate date;
     private DetailedDriverDayStatistics[] detailedDriverDayStatisticsArray;
-
+    public DetailedAdminDayStatistics(){}
     public DetailedAdminDayStatistics(LocalDate date) {
         this.date = date;
     }
@@ -30,11 +30,17 @@ public class DetailedAdminDayStatistics implements Serializable {
         this.date = date;
     }
 
-    public DetailedDriverDayStatistics[] getDetailedDriverDayStatistics() {
+    public DetailedDriverDayStatistics[] getDetailedDriverDayStatisticsArray() {
         return detailedDriverDayStatisticsArray;
     }
 
-    public void setDetailedDriverDayStatistics(DetailedDriverDayStatistics[] driverDayStatisticsArray) {
-        this.detailedDriverDayStatisticsArray = driverDayStatisticsArray;
+    public void setDetailedDriverDayStatisticsArray(DetailedDriverDayStatistics[] detailedDriverDayStatisticsArray) {
+        this.detailedDriverDayStatisticsArray = detailedDriverDayStatisticsArray;
+    }
+
+    public void init() {
+        for (DetailedDriverDayStatistics detailedDriverDayStatistics: detailedDriverDayStatisticsArray){
+            detailedDriverDayStatistics.init();
+        }
     }
 }

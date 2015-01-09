@@ -23,7 +23,7 @@ public class DriverDayStatistics implements Serializable {
     public DriverDayStatistics() {
         hourStatisticsArray = new DriverHourStatistics[24];
         for (int i = 0; i < hourStatisticsArray.length; i++) {
-            hourStatisticsArray[i] = new DriverHourStatistics(this);
+            hourStatisticsArray[i] = new DriverHourStatistics(this, i);
         }
     }
 
@@ -63,7 +63,6 @@ public class DriverDayStatistics implements Serializable {
         return result;
     }
 
-    @JsonIgnore
     public int getDoneHours() {
         int result = 0;
         for (DriverHourStatistics hourStatistics : hourStatisticsArray) {
@@ -82,8 +81,8 @@ public class DriverDayStatistics implements Serializable {
         this.userId = userId;
     }
 
-    public void init(DriverCalendarWeek driverCalendarWeek) {
-        this.userId = driverCalendarWeek.getUserId();
+    public void init(String userId) {
+        this.userId = userId;
         for (DriverHourStatistics hourStatistics : this.getHourStatisticsArray()) {
             hourStatistics.init(this);
         }

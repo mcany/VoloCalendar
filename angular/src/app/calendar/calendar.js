@@ -97,7 +97,7 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$route', '$loc
             if (!hourStatistics.enabled) {
                 element.css('opacity', 0.5);
             }
-            element.css('color', 'white');
+            element.css('color', 'brown');
             element.text(hourStatistics.requiredDriverCount)
         };
 

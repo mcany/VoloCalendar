@@ -27,4 +27,8 @@ public class DetailedDriverDayStatistics extends DriverDayStatistics implements 
     public void setDriverInfo(String driverInfo) {
         this.driverInfo = driverInfo;
     }
+
+    public void init(){
+        init(userId);
+    }
 }

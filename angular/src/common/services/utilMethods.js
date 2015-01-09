@@ -46,16 +46,32 @@ angular.module('services.utilMethods').factory('utilMethods', [function () {
     utilMethodsService.get = function (key) {
         return container[key];
     }
+
+    var getGreenColorShadePrivate = function (actualValue, max) {
+        var r = Math.floor(124 * (1 - actualValue / (2 * max)));
+        var g = Math.floor(252 * (1 - actualValue / (2 * max)));
+        var b = Math.floor(0 * (1 - actualValue / (2 * max)));
+        var result = 'rgb(' + r + ',' + g + ',' + b + ')';
+        return result;
+    }
+
     utilMethodsService.maxAllowed = 15;
     utilMethodsService.getGreenColorShade = function (actualValue) {
         var result;
         if (actualValue == 0) {
             result = 'white';
         } else {
-            var r = Math.floor(124 * (1 - actualValue / (2 * utilMethodsService.maxAllowed)));
-            var g = Math.floor(252 * (1 - actualValue / (2 * utilMethodsService.maxAllowed)));
-            var b = Math.floor(0 * (1 - actualValue / (2 * utilMethodsService.maxAllowed)));
-            result = 'rgb(' + r + ',' + g + ',' + b + ')';
+            result = getGreenColorShadePrivate(actualValue, utilMethodsService.maxAllowed);
+        }
+        return result;
+    };
+
+    utilMethodsService.getGreenColorShadeWithMaxDefined = function (actualValue, max) {
+        var result;
+        if (actualValue == 0) {
+            result = 'white';
+        } else {
+            result = getGreenColorShadePrivate(actualValue, max);
         }
         return result;
     }

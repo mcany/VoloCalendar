@@ -147,7 +147,7 @@ public class DriverCalendarWeek implements Serializable {
 
     public void init() {
         for (DriverDayStatistics dayStatistics : dayStatisticsArray) {
-            dayStatistics.init(this);
+            dayStatistics.init(this.getUserId());
         }
     }
 

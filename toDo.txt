@@ -3,3 +3,9 @@
 3.change root : /databases/scrumdb/collections/users to admin/user in UserCrudController class
 4.custom error pages
 5.rename adminHourStatistics.getRequiredDriverCount to PlanningHours
+6.refresh button
+7.bug disabled admin calendar cells, not detecting now
+8.bug after going to next month and come back
+9.admin parametres setting page
+
+1.45 for minijob but what for other type?

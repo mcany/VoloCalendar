@@ -26,7 +26,7 @@ Planned hours: {{selectedMonth.plannedHours}} Set: {{selectedMonth.doneHours}} D
                             <tr ng-disabled="!day.active" ng-repeat="day in selectedWeek.dayStatisticsArray">
                                 <td>{{day.date[2]}} {{getWeekDayName(day.date)}}</td>
                                 <td ng-repeat="hour in day.hourStatisticsArray track by $index">
-                                    <button class="fill-button-35" select-hour="hour"></button>
+                                    <button class="fill-button-37" select-hour="hour"></button>
                                 </td>
                             </tr>
                             </tbody>
