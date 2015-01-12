@@ -22,7 +22,7 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
 
     public DriverHourStatistics( DriverDayStatistics dayStatistics, int requiredDriverCount, int index) {
         this(dayStatistics, index);
-        this.requiredDriverCount = requiredDriverCount;
+        this.planningHours = requiredDriverCount;
     }
 
     public void init(DriverDayStatistics dayStatistics) {
@@ -30,7 +30,7 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
     }
 
     public boolean isEnabled() {
-        return dayStatistics.isActive() && requiredDriverCount > 0;
+        return dayStatistics.isActive() && planningHours > 0;
     }
 
     public boolean isSelected() {

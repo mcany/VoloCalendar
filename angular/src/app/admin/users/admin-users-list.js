@@ -25,6 +25,14 @@ angular.module('admin-users-list', [
                 });
             };
 
+            $scope.select = function (user, $index, $event) {
+                // Don't let the click bubble up to the ng-click on the enclosing div, which will try to trigger
+                // an edit of this item.
+                $event.stopPropagation();
+                var userListDialog = utilMethods.get('userListDialog');
+                userListDialog.close(user.$id());
+            };
+
             $scope.restore = function (user, $index, $event) {
                 // Don't let the click bubble up to the ng-click on the enclosing div, which will try to trigger
                 // an edit of this item.

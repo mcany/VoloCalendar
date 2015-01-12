@@ -17,26 +17,18 @@ angular.module('admin-calendar', ['security.authorization'])
         });
     }]);
 
-angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$route', '$location', 'security', 'calendarViewModel', '$http', 'utilMethods',
-    function ($scope, $route, $location, security, calendarViewModel, $http, utilMethods) {
+angular.module('admin-calendar').controller('AdminCalendarCtrl'
+    , ['$scope', '$route', '$location', 'security', 'calendarViewModel', '$http', 'utilMethods', '$modal',
+    function ($scope, $route, $location, security, calendarViewModel, $http, utilMethods, $modal) {
         $scope.calendarViewModel = calendarViewModel;
 
         $scope.monthSelected = function (month) {
-            $scope.selectedMonthLight = month;
             var url = '/admin/schedule/month/' + month.beginDate[0] + '-' + month.beginDate[1] + '-' + month.beginDate[2];
             $http.get(url).then(
                 function (result) {
                     $scope.selectedMonth = result.data;
-                    if ($scope.selectedMonthLight.selectedWeekLight) {
-                        $scope.weekSelected($scope.selectedMonthLight.selectedWeekLight);
-                    } else {
-                        $scope.selectedWeek = null;
-                    }
-                    if ($scope.selectedMonthLight.selectedDayLight) {
-                        $scope.daySelected($scope.selectedMonthLight.selectedDayLight);
-                    } else {
-                        $scope.selectedDay = null;
-                    }
+                    $scope.selectedWeek = null;
+                    $scope.setNullSelectedDay();
                 });
         };
 
@@ -44,6 +36,7 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
             var url = '/admin/schedule/detailedAdminDay';
             $http.post(url, $scope.selectedDay);
             $scope.originalSelectedDay = angular.copy($scope.selectedDay);
+            $scope.originalSelectedDayLight = angular.copy($scope.selectedDayLight);
         };
         $scope.revertChanges = function () {
             $route.reload();
@@ -56,21 +49,18 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
         };
 
         $scope.weekSelected = function (week) {
-            $scope.selectedMonthLight.selectedWeekLight = week;
             var url = '/admin/schedule/week/' + week.beginDate[0] + '-' + week.beginDate[1] + '-' + week.beginDate[2];
             $http.get(url).then(
                 function (result) {
                     $scope.selectedWeek = result.data;
-                    if ($scope.selectedMonthLight.selectedDayLight) {
-                        $scope.daySelected($scope.selectedMonthLight.selectedDayLight);
-                    } else {
-                        $scope.selectedDay = null;
-                    }
+                    $scope.setNullSelectedDay();
                 });
         };
 
         $scope.daySelected = function (day) {
-            $scope.selectedMonthLight.selectedDayLight = day;
+            $scope.setNullSelectedDay();
+            $scope.selectedDayLight = day;
+            $scope.originalSelectedDayLight = angular.copy(day);
             var url = '/admin/schedule/day/' + day.date[0] + '-' + day.date[1] + '-' + day.date[2];
             $http.get(url).then(
                 function (result) {
@@ -91,7 +81,7 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
         };
 
         $scope.getBackgroundColorStyle = function (hourStatistics) {
-            var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.requiredDriverCount);
+            var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.planningHours);
             var style = {'background-color' : greenColorShade, 'color' : 'brown'};
 
             if (!hourStatistics.enabled) {
@@ -111,6 +101,10 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
                 element.css('opacity', 0.5);
             }
             element.css('color', 'brown');
+        };
+
+        $scope.isSelectedMonth = function (month) {
+            return $scope.selectedMonth && angular.equals(month.beginDate, $scope.selectedMonth.beginDate);
         };
 
         $scope.isSelectedWeek = function (week) {
@@ -144,7 +138,7 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
                         $scope.selectedDay.detailedDriverDayStatisticsArray.splice(idx, 1);
                         for(var i = 0; i < driverDay.hourStatisticsArray.length; i++){
                             if (driverDay.hourStatisticsArray[i].selected){
-                                $scope.selectedMonthLight.selectedDayLight.adminHourStatisticsArray[i].doneHours--;
+                                $scope.selectedDayLight.adminHourStatisticsArray[i].doneHours--;
                                 $scope.selectedMonth.doneHours--;
                                 $scope.selectedMonth.diffHours++;
                                 $scope.selectedWeek.doneHours--;
@@ -152,15 +146,34 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
                             }
                         }
                     }
+                    $scope.originalSelectedDay = angular.copy($scope.selectedDay);
+                    $scope.originalSelectedDayLight = angular.copy($scope.selectedDayLight);
                 });
         };
 
         $scope.addDriverDay = function(){
+            var userListDialog = $modal.open({templateUrl: 'admin/users/users-list-mini.tpl.html', controller: 'UsersListCtrl'});
+            utilMethods.save('userListDialog', userListDialog);
+            userListDialog.result.then(function(userId) {
+                var url = '/admin/schedule/day/' + userId + '/' + $scope.selectedDay.date[0] + '-' + $scope.selectedDay.date[1] + '-' + $scope.selectedDay.date[2];
 
+                $http.post(url).then(
+                    function (result) {
+                        var driverDay = result.data;
+                        //$scope.selectedDay.detailedDriverDayStatisticsArray.add(driverDay);
+                    });
+            });
         };
 
         $scope.setNullSelectedDay = function(){
             $scope.selectedDay = null;
+            $scope.originalSelectedDay = null;
+            if ($scope.selectedDayLight && $scope.originalSelectedDayLight) {
+                $scope.selectedDayLight.date = $scope.originalSelectedDayLight.date;
+                $scope.selectedDayLight.adminHourStatisticsArray = $scope.originalSelectedDayLight.adminHourStatisticsArray;
+            }
+            $scope.originalSelectedDayLight = null;
+            $scope.selectedDayLight = null;
         };
 
     }])
@@ -170,9 +183,9 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
             link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.infoHour);
                 var hourStatistics = modelGetter(scope);
-                var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.requiredDriverCount);
+                var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.planningHours);
                 scope.setColor(element, hourStatistics, greenColorShade);
-                element.text(hourStatistics.doneHours + '/' + hourStatistics.requiredDriverCount);
+                element.text(hourStatistics.doneHours + '/' + hourStatistics.planningHours);
             }
         };
     }])
@@ -199,13 +212,13 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl', ['$scope', '$ro
                             return;
                         }
                         if (newValue.selected) {
-                            scope.selectedMonthLight.selectedDayLight.adminHourStatisticsArray[hourStatistics.index].doneHours--;
+                            scope.selectedDayLight.adminHourStatisticsArray[hourStatistics.index].doneHours--;
                             scope.selectedMonth.doneHours--;
                             scope.selectedMonth.diffHours++;
                             scope.selectedWeek.doneHours--;
                             scope.selectedDay.doneHours--;
                         } else {
-                            scope.selectedMonthLight.selectedDayLight.adminHourStatisticsArray[hourStatistics.index].doneHours++;
+                            scope.selectedDayLight.adminHourStatisticsArray[hourStatistics.index].doneHours++;
                             scope.selectedMonth.doneHours++;
                             scope.selectedMonth.diffHours--;
                             scope.selectedWeek.doneHours++;

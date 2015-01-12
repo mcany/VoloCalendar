@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HourStatistics implements Serializable {
-    protected int requiredDriverCount;
+    protected int planningHours;
     protected int index;
 
     public HourStatistics() {
     }
 
-    public int getRequiredDriverCount() {
-        return requiredDriverCount;
+    public int getPlanningHours() {
+        return planningHours;
     }
 
-    public void setRequiredDriverCount(int requiredDriverCount) {
-        this.requiredDriverCount = requiredDriverCount;
+    public void setPlanningHours(int planningHours) {
+        this.planningHours = planningHours;
     }
 
-    public void decreaseRequiredDriverCount() {
-        requiredDriverCount--;
+    public void decreasePlanningHours() {
+        planningHours--;
     }
 
     public void increaseRequiredHours(int count) {
-        requiredDriverCount += count;
+        planningHours += count;
     }
 
     public int getIndex() {
@@ -39,4 +39,7 @@ public class HourStatistics implements Serializable {
         this.index = index;
     }
 
+    public void increasePlanningHours() {
+        planningHours++;
+    }
 }

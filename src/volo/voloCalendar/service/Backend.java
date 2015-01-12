@@ -227,6 +227,8 @@ public class Backend {
             nextDriverCalendarWeek.fillDayStatisticsArray(driverCalendarWeekTemplate);
         }
         nextDriverCalendarWeek.setUserId(user.getId());
+        //next line only for local backend
+        fixPlannedHours(nextDriverCalendarWeek);
         insertOrUpdateDriverCalendarWeek(nextDriverCalendarWeek);
     }
 
@@ -315,6 +317,15 @@ public class Backend {
         }
     }
 
+    private static void fixPlannedHours(DriverCalendarWeek driverCalendarWeek) {
+        for (int i = 0; i < driverCalendarWeek.getDayStatisticsArray().length; i++) {
+            for (int j = 0; j < driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray().length; j++) {
+                HourForecast hourForecast = manualForecasting.getDays()[driverCalendarWeek.getDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
+                driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray()[j].increaseRequiredHours(hourForecast.getCount());
+            }
+        }
+    }
+
     private static void fixDoneHours(AdminCalendarWeek adminCalendarWeek) {
         for(User user: getAllUsers()){
             if (user.getDriverCalendarWeekHashMap() != null){
@@ -334,7 +345,7 @@ public class Backend {
 
     public static DriverDayStatistics insertDriverDayStatistics(LocalDate date, String userId) {
         User user = getUserById(userId);
-        if (user == null){
+        if (user == null || user.isDeleted() || user.isAdmin()){
             return null;
         }
 
@@ -345,10 +356,19 @@ public class Backend {
 
         DriverCalendarWeek driverCalendarWeek = getDriverCalendarWeek(userId, beginDateOfProperWeek);
         if (!driverHasCalendarWeek(user, beginDateOfProperWeek)){
+            //next line only for local backend
+            fixPlannedHours(driverCalendarWeek);
             insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
+        }else{
+            DriverDayStatistics driverDayStatistics = driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
+            if (driverDayStatistics.isNotEmpty()){
+                return null;
+            }
         }
-
-        return driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
+        DriverDayStatistics driverDayStatistics = driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
+        driverDayStatistics.deselectAllHours();
+        insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
+        return driverDayStatistics;
     }
 
     //rest

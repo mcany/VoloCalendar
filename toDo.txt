@@ -2,10 +2,13 @@
 2.server side validation
 3.change root : /databases/scrumdb/collections/users to admin/user in UserCrudController class
 4.custom error pages
-5.rename adminHourStatistics.getRequiredDriverCount to PlanningHours
-6.refresh button
-7.bug disabled admin calendar cells, not detecting now
-8.bug after going to next month and come back
-9.admin parametres setting page
+5.refresh button
+6.admin parameters setting page
+7.bug, in admin calendar disable old data change possibilities
+8.add driver hour ui/logic bug
+9.delete numbers from driver table
 
-1.45 for minijob but what for other type?
+bug in set next month for last week
+driver can not change contract type
+
+numbers for restriction, visible hours in the table, 45, report buttons

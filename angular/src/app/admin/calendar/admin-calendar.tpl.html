@@ -5,7 +5,7 @@ Planned hours: {{selectedMonth.plannedHours}} Set: {{selectedMonth.doneHours}} D
         <tabset>
             <tab select="monthSelected(month)" ng-repeat="month in calendarViewModel.calendarMonths"
                  heading="{{getMonthName(month.beginDate[1])}}">
-                <accordion close-others="true">
+                <accordion close-others="true" ng-if="isSelectedMonth(month)">
                     <accordion-group ng-repeat="week in month.calendarWeekLights">
                         <accordion-heading>
                             <span ng-click="weekSelected(week)">
@@ -36,7 +36,7 @@ Planned hours: {{selectedMonth.plannedHours}} Set: {{selectedMonth.doneHours}} D
                                 </td>
                                 <td ng-repeat="hour in day.adminHourStatisticsArray track by $index">
                                     <font size="2">
-                                        <button class="fill-button-37" disabled ng-style="getBackgroundColorStyle(hour)">{{hour.doneHours + '/' + hour.requiredDriverCount}}
+                                        <button class="fill-button-37" disabled ng-style="getBackgroundColorStyle(hour)">{{hour.doneHours + '/' + hour.planningHours}}
                                         </button>
                                     </font>
                                 </td>

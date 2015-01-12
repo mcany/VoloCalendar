@@ -105,7 +105,7 @@ public class DriverCalendarWeek implements Serializable {
             HourForecast[] forecastForSameDayOfWeek = manualForecasting.getDays()[dayStatistics.getDate().getDayOfWeek().getValue() - 1];
             for (int i = 0; i < 24; i++) {
                 DriverHourStatistics hourStatistics = dayStatistics.getHourStatisticsArray()[i];
-                hourStatistics.setRequiredDriverCount(forecastForSameDayOfWeek[i].getCount());
+                hourStatistics.setPlanningHours(forecastForSameDayOfWeek[i].getCount());
             }
         }
     }
@@ -117,7 +117,7 @@ public class DriverCalendarWeek implements Serializable {
                 for (int i = 0; i < 24; i++) {
                     DriverHourStatistics hourStatistics = dayStatistics.getHourStatisticsArray()[i];
                     if (sameDayOfWeekStatistics.getHourStatisticsArray()[i].isSelected()) {
-                        hourStatistics.decreaseRequiredDriverCount();
+                        hourStatistics.decreasePlanningHours();
                     }
                 }
             }

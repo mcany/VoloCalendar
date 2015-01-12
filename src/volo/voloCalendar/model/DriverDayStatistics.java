@@ -106,4 +106,12 @@ public class DriverDayStatistics implements Serializable {
     public DetailedDriverDayStatistics addDriverInfo(User user) {
         return new DetailedDriverDayStatistics(this, user.getName(), user.getId());
     }
+
+    public void deselectAllHours() {
+        for (DriverHourStatistics driverHourStatistics: getHourStatisticsArray()){
+            driverHourStatistics.setSelected(false);
+            //next line only for local backend
+            driverHourStatistics.increasePlanningHours();
+        }
+    }
 }
