@@ -9,26 +9,26 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HourStatistics implements Serializable {
-    protected int planningHours;
+    protected int plannedHours;
     protected int index;
 
     public HourStatistics() {
     }
 
-    public int getPlanningHours() {
-        return planningHours;
+    public int getPlannedHours() {
+        return plannedHours;
     }
 
-    public void setPlanningHours(int planningHours) {
-        this.planningHours = planningHours;
+    public void setPlannedHours(int plannedHours) {
+        this.plannedHours = plannedHours;
     }
 
-    public void decreasePlanningHours() {
-        planningHours--;
+    public void decreasePlannedHours() {
+        plannedHours--;
     }
 
     public void increaseRequiredHours(int count) {
-        planningHours += count;
+        plannedHours += count;
     }
 
     public int getIndex() {
@@ -39,7 +39,7 @@ public class HourStatistics implements Serializable {
         this.index = index;
     }
 
-    public void increasePlanningHours() {
-        planningHours++;
+    public void increasePlannedHours() {
+        plannedHours++;
     }
 }

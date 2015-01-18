@@ -25,11 +25,12 @@ public class AdminCalendarWeek implements Serializable{
     public AdminCalendarWeek(LocalDate beginDate) {
         this.beginDate = beginDate;
         LocalDate date = LocalDate.of(beginDate.getYear(), beginDate.getMonthValue(), beginDate.getDayOfMonth());
+        int month = date.getMonthValue();
         ArrayList<AdminDayStatistics> adminDayStatisticsArrayList = new ArrayList<AdminDayStatistics>();
         do{
             adminDayStatisticsArrayList.add(new AdminDayStatistics(date));
             date = date.plusDays(1);
-        }while(date.getDayOfWeek() != DayOfWeek.MONDAY && date.getMonthValue() == date.getMonthValue());
+        }while(date.getDayOfWeek() != DayOfWeek.MONDAY && month == date.getMonthValue());
         setAdminDayStatisticsArray(adminDayStatisticsArrayList.toArray(new AdminDayStatistics[adminDayStatisticsArrayList.size()]));
     }
 

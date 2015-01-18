@@ -1,8 +1,8 @@
-angular.module('mongolabResource', []).factory('mongolabResource', ['MONGOLAB_CONFIG', '$http', '$q', function (MONGOLAB_CONFIG, $http, $q) {
+angular.module('mongolabResource', []).factory('mongolabResource', [ '$http', '$q', function ( $http, $q) {
 
     function MongolabResourceFactory(collectionName) {
 
-        var url = MONGOLAB_CONFIG.baseUrl + MONGOLAB_CONFIG.dbName + '/collections/' + collectionName;
+        var url = '/admin/' + collectionName;
         var defaultParams = {};
 
         var thenFactoryMethod = function (httpPromise, successcb, errorcb, isArray) {

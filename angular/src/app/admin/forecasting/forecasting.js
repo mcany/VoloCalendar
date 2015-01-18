@@ -1,15 +1,15 @@
-angular.module('settings', [
+angular.module('forecasting', [
     'security.authorization'
 ])
 
     .config(['$routeProvider', 'securityAuthorizationProvider', function ($routeProvider, securityAuthorizationProvider) {
-        $routeProvider.when('/admin/settings', {
-            templateUrl: 'admin/settings/manual-forecasting.tpl.html',
+        $routeProvider.when('/admin/forecasting', {
+            templateUrl: 'admin/forecasting/manual-forecasting.tpl.html',
             controller: 'ManualForecastingCtrl',
             resolve: {
                 currentUser: securityAuthorizationProvider.requireAdminUser,
                 manualForecasting: ['$http', function ($http) {
-                    return $http.get('/admin/settings/manualForecasting').then(function (result) {
+                    return $http.get('/admin/forecasting/manualForecasting').then(function (result) {
                         return result.data;
                     });
                 }]
@@ -21,7 +21,7 @@ angular.module('settings', [
             $scope.original = angular.copy(manualForecasting);
             $scope.manualForecasting = manualForecasting;
             $scope.save = function () {
-                $http.post('/admin/settings/manualForecasting', $scope.manualForecasting);
+                $http.post('/admin/forecasting/manualForecasting', $scope.manualForecasting);
                 $scope.original = angular.copy($scope.manualForecasting);
             };
             $scope.revertChanges = function () {
@@ -45,7 +45,6 @@ angular.module('settings', [
             link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.voloCounter);
                 var hourCount = modelGetter(scope);
-                element.css('color', 'white');
                 element.text(hourCount);
                 scope.setColor(element, hourCount);
 

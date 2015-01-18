@@ -92,8 +92,8 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$route', '$loc
             if (!hourStatistics.enabled) {
                 element.css('opacity', 0.5);
             }
-            element.css('color', 'brown');
-            element.text(hourStatistics.planningHours);
+            //element.css('color', 'brown');
+            //element.text(hourStatistics.plannedHours);
         };
 
         $scope.isSelectedMonth = function (month) {
@@ -129,7 +129,7 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$route', '$loc
                 } else {
                     element.attr('disabled', 'disabled');
                 }
-                var greenColorShade = utilMethods.getGreenColorShade(hourStatistics.planningHours);
+                var greenColorShade = utilMethods.getGreenColorShade(hourStatistics.plannedHours);
                 scope.setColor(element, hourStatistics, greenColorShade);
 
                 var modelSetter = modelGetter.assign;
@@ -138,18 +138,20 @@ angular.module('calendar').controller('CalendarCtrl', ['$scope', '$route', '$loc
                         event.preventDefault();
 
                         var newValue = modelGetter(scope);
-                        if (!newValue.enabled) {
-                            return;
-                        }
                         if (newValue.selected) {
-                            hourStatistics.planningHours++;
+                            hourStatistics.plannedHours++;
+                            greenColorShade = utilMethods.getGreenColorShade(hourStatistics.plannedHours);
                             scope.selectedMonth.doneHours--;
                             if (scope.selectedMonth.plannedHours > 0) {
                                 scope.selectedMonth.diffHours++;
                             }
                             scope.selectedWeek.selectedHoursCount--;
                         } else {
-                            hourStatistics.planningHours--;
+                            if (newValue.plannedHours <= 0) {
+                                return;
+                            }
+                            hourStatistics.plannedHours--;
+                            greenColorShade = utilMethods.getGreenColorShade(hourStatistics.plannedHours);
                             scope.selectedMonth.doneHours++;
                             if (scope.selectedMonth.plannedHours > 0) {
                                 scope.selectedMonth.diffHours--;

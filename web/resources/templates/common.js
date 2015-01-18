@@ -190,16 +190,14 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "\n" +
     "                        <div class=\"col-sm-5\">\n" +
     "                            <label class=\"radio-inline\">\n" +
-    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\"\n" +
+    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" disabled\n" +
     "                                       ng-required=\"!user.contractType\">Minijob\n" +
     "                            </label>\n" +
     "                            <label class=\"radio-inline\">\n" +
-    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\"\n" +
+    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" disabled\n" +
     "                                       ng-required=\"!user.contractType\">Flexible\n" +
     "                            </label>\n" +
     "                        </div>\n" +
-    "                        <span ng-show=\"showError('contractType', 'required')\"\n" +
-    "                              class=\"alert alert-danger\">This field is required.</span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +

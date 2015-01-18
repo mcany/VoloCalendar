@@ -51,7 +51,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users" ng-click="editUser(user.$id())">
+    <tr ng-repeat="user in users">
         <td><img width="50" height="50" ng-src="{{user.base64Image}}" class="img-polaroid"/></td>
         <td>{{user.name}}</td>
         <td>{{user.telephoneNumber}}</td>

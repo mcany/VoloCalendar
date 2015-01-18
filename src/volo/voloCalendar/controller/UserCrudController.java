@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 @RestController
 @Secured({"ROLE_ADMIN"})
-@RequestMapping("/databases/scrumdb/collections/users")
+@RequestMapping("/admin/users")
 public class UserCrudController {
     @RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
     public User[] getAllUsers() {

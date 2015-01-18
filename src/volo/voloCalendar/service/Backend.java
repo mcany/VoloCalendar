@@ -28,19 +28,19 @@ public class Backend {
         usersByEmail.put(mertcan.getEmail(), mertcan);
         usersById.put(mertcan.getId(), mertcan);
         for (int i = 0; i < 35; i++) {
-            emin = new User(emin);
-            emin.setId(UUID.randomUUID().toString());
-            emin.setEmail(i + emin.getEmail());
-            usersByEmail.put(emin.getEmail(), emin);
-            usersById.put(emin.getId(), emin);
+            User emin1 = new User(emin);
+            emin1.setId(UUID.randomUUID().toString());
+            emin1.setEmail(i + emin.getEmail());
+            usersByEmail.put(emin1.getEmail(), emin1);
+            usersById.put(emin1.getId(), emin1);
         }
 
         for (int i = 0; i < 35; i++) {
-            mertcan = new User(mertcan);
-            mertcan.setId(UUID.randomUUID().toString());
-            mertcan.setEmail(i + mertcan.getEmail());
-            usersByEmail.put(mertcan.getEmail(), mertcan);
-            usersById.put(mertcan.getId(), mertcan);
+            User mertcan1 = new User(mertcan);
+            mertcan1.setId(UUID.randomUUID().toString());
+            mertcan1.setEmail(i + mertcan.getEmail());
+            usersByEmail.put(mertcan1.getEmail(), mertcan1);
+            usersById.put(mertcan1.getId(), mertcan1);
         }
     }
 
@@ -195,8 +195,12 @@ public class Backend {
         int year = date.getYear();
         LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek().getValue());
         while (isForMonthlyOperation ? (month == nextWeekBeginDate.getMonth()) : (year == nextWeekBeginDate.getYear())) {
+            if (month != nextWeekBeginDate.getMonth()){
+                nextWeekBeginDate = LocalDate.of(nextWeekBeginDate.getYear(), nextWeekBeginDate.getMonthValue(), 1);
+                month = nextWeekBeginDate.getMonth();
+            }
             generateNewDriverCalendarWeek(user, driverCalendarWeek, nextWeekBeginDate);
-            nextWeekBeginDate = nextWeekBeginDate.plusDays(7);
+            nextWeekBeginDate = nextWeekBeginDate.plusDays(8 - nextWeekBeginDate.getDayOfWeek().getValue());
         }
         return driverCalendarWeek;
     }
@@ -343,7 +347,7 @@ public class Backend {
         }
     }
 
-    public static DriverDayStatistics insertDriverDayStatistics(LocalDate date, String userId) {
+    public static DetailedDriverDayStatistics insertDriverDayStatistics(LocalDate date, String userId) {
         User user = getUserById(userId);
         if (user == null || user.isDeleted() || user.isAdmin()){
             return null;
@@ -368,7 +372,7 @@ public class Backend {
         DriverDayStatistics driverDayStatistics = driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
         driverDayStatistics.deselectAllHours();
         insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
-        return driverDayStatistics;
+        return driverDayStatistics.addDriverInfo(user);
     }
 
     //rest

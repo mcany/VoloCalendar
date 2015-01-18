@@ -44,7 +44,7 @@ public class AdminCalendarController {
     }
 
     @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.POST, produces = "application/json")
-    public DriverDayStatistics addDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
+    public DetailedDriverDayStatistics addDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate date = LocalDate.of(year, month, day);
         return Backend.insertDriverDayStatistics(date, userId);
     }

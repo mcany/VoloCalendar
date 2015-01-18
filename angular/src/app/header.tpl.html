@@ -16,13 +16,13 @@
                 <li ng-class="{active:isNavbarActive(['/admin/calendar'])}" ng-show="isAdmin()"><a
                         href="/admin/calendar">Calendar</a></li>
                 <li class="dropdown"
-                    ng-class="{active:isNavbarActive(['/admin/users', '/admin/settings']), open:isAdminOpen}"
+                    ng-class="{active:isNavbarActive(['/admin/users', '/admin/forecasting']), open:isAdminOpen}"
                     ng-show="isAdmin()">
                     <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b
                             class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
                         <li><a tabindex="-1" href="/admin/users" ng-click="isAdminOpen=false">Manage Users</a></li>
-                        <li><a tabindex="-1" href="/admin/settings" ng-click="isAdminOpen=false">Settings</a></li>
+                        <li><a tabindex="-1" href="/admin/forecasting" ng-click="isAdminOpen=false">Forecasting</a></li>
                     </ul>
                 </li>
                 <li ng-class="{active:isNavbarActive(['/info'])}"><a href="/info">About us</a></li>

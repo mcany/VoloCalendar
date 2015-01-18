@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdminDayStatistics implements Serializable {
-    public static final int changeLimit = 1;
+    private static final int changeLimit = 1;
     private LocalDate date;
     private AdminHourStatistics[] adminHourStatisticsArray;
 
@@ -63,7 +63,7 @@ public class AdminDayStatistics implements Serializable {
     public int getPlannedHours(){
         int result = 0;
         for (AdminHourStatistics adminHourStatistics: adminHourStatisticsArray){
-            result += adminHourStatistics.getPlanningHours();
+            result += adminHourStatistics.getPlannedHours();
         }
         return result;
     }

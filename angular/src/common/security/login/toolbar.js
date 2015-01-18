@@ -32,6 +32,10 @@ angular.module('security.login.toolbar', [])
         $scope.canRevert = function () {
             return !angular.equals($scope.user, $scope.original);
         };
+
+        $scope.showError = function (fieldName, error) {
+            return $scope.form[fieldName].$error[error];
+        };
     }])
 // The loginToolbar directive is a reusable widget that can show login or logout buttons
 // and information the current authenticated user

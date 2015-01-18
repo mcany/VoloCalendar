@@ -14,11 +14,6 @@ angular.module('app', [
     'templates.common',
     'ui.bootstrap']);
 
-angular.module('app').constant('MONGOLAB_CONFIG', {
-    baseUrl: '/databases/',
-    dbName: 'scrumdb'
-});
-
 //TODO: move those messages to a separate module
 angular.module('app').constant('I18N.MESSAGES', {
     'errors.route.changeError': 'Route change error',

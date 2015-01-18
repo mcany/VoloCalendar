@@ -14,8 +14,8 @@ import volo.voloCalendar.service.Backend;
  */
 @RestController
 @Secured({"ROLE_ADMIN"})
-@RequestMapping("/admin/settings")
-public class SettingsController {
+@RequestMapping("/admin/forecasting")
+public class ForecastingController {
     @RequestMapping(value = "/manualForecasting", method = RequestMethod.GET, produces = "application/json")
     public ManualForecasting manualForecasting() {
         return Backend.getManualForecasting();

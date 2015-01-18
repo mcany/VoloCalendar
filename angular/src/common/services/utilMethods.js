@@ -48,6 +48,9 @@ angular.module('services.utilMethods').factory('utilMethods', [function () {
     }
 
     var getGreenColorShadePrivate = function (actualValue, max) {
+        if (max < actualValue){
+            return 'white';
+        }
         var r = Math.floor(124 * (1 - actualValue / (2 * max)));
         var g = Math.floor(252 * (1 - actualValue / (2 * max)));
         var b = Math.floor(0 * (1 - actualValue / (2 * max)));

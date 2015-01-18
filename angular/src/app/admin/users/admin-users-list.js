@@ -51,7 +51,7 @@ angular.module('admin-users-list', [
             };
 
             $scope.pageChanged = function () {
-                $http.post('/databases/scrumdb/collections/users/pagination'
+                $http.post('/admin/users/pagination'
                     , {sortingField: $scope.sortingField, reverse: $scope.reverse, beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1), maxNumber: $scope.itemsPerPage, keyword: $scope.keyword
                     }).
                     success(function (data, status, headers, config) {
@@ -93,7 +93,7 @@ angular.module('admin-users-list', [
             var cache = utilMethods.get('pagingData');
 
             if (cache == null) {
-                $http.get('/databases/scrumdb/collections/users/count').
+                $http.get('/admin/users/count').
                     success(function (data, status, headers, config) {
                         $scope.totalItems = data;
                     }).

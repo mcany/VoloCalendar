@@ -18,7 +18,7 @@ public class DriverDayStatistics implements Serializable {
     protected String userId;
     protected LocalDate date;
     protected DriverHourStatistics[] hourStatisticsArray;
-    public static final int changeLimit = 3;
+    private static final int changeLimit = 3;
 
     public DriverDayStatistics() {
         hourStatisticsArray = new DriverHourStatistics[24];
@@ -38,6 +38,10 @@ public class DriverDayStatistics implements Serializable {
         for (int i = 0; i < this.hourStatisticsArray.length; i++){
             this.hourStatisticsArray[i].setSelected(dayStatistics.hourStatisticsArray[i].isSelected());
         }
+    }
+    @JsonIgnore
+    public static int getChangeLimit() {
+        return changeLimit;
     }
 
     public LocalDate getDate() {
@@ -111,7 +115,7 @@ public class DriverDayStatistics implements Serializable {
         for (DriverHourStatistics driverHourStatistics: getHourStatisticsArray()){
             driverHourStatistics.setSelected(false);
             //next line only for local backend
-            driverHourStatistics.increasePlanningHours();
+            driverHourStatistics.increasePlannedHours();
         }
     }
 }

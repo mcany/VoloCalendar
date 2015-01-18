@@ -77,12 +77,11 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
             if (!hourStatistics.enabled) {
                 element.css('opacity', 0.5);
             }
-            element.css('color', 'brown');
         };
 
         $scope.getBackgroundColorStyle = function (hourStatistics) {
-            var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.planningHours);
-            var style = {'background-color' : greenColorShade, 'color' : 'brown'};
+            var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.plannedHours);
+            var style = {'background-color' : greenColorShade};
 
             if (!hourStatistics.enabled) {
                 angular.extend(style, {'opacity' : '0.5'});
@@ -100,7 +99,6 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
             if (!hourStatistics.enabled) {
                 element.css('opacity', 0.5);
             }
-            element.css('color', 'brown');
         };
 
         $scope.isSelectedMonth = function (month) {
@@ -152,7 +150,10 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
         };
 
         $scope.addDriverDay = function(){
-            var userListDialog = $modal.open({templateUrl: 'admin/users/users-list-mini.tpl.html', controller: 'UsersListCtrl'});
+            var userListDialog = $modal.open({
+                templateUrl: 'admin/users/users-list-mini.tpl.html',
+                controller: 'UsersListCtrl',
+                size: 'lg'});
             utilMethods.save('userListDialog', userListDialog);
             userListDialog.result.then(function(userId) {
                 var url = '/admin/schedule/day/' + userId + '/' + $scope.selectedDay.date[0] + '-' + $scope.selectedDay.date[1] + '-' + $scope.selectedDay.date[2];
@@ -160,7 +161,9 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
                 $http.post(url).then(
                     function (result) {
                         var driverDay = result.data;
-                        //$scope.selectedDay.detailedDriverDayStatisticsArray.add(driverDay);
+                        if (driverDay) {
+                            $scope.selectedDay.detailedDriverDayStatisticsArray.push(driverDay);
+                        }
                     });
             });
         };
@@ -183,9 +186,10 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
             link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.infoHour);
                 var hourStatistics = modelGetter(scope);
-                var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.planningHours);
+                var greenColorShade = utilMethods.getGreenColorShadeWithMaxDefined(hourStatistics.doneHours, hourStatistics.plannedHours);
                 scope.setColor(element, hourStatistics, greenColorShade);
-                element.text(hourStatistics.doneHours + '/' + hourStatistics.planningHours);
+                element.css('color', 'brown');
+                element.text(hourStatistics.doneHours + '/' + hourStatistics.plannedHours);
             }
         };
     }])
@@ -195,6 +199,7 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
             link: function (scope, element, attrs) {
                 var modelGetter = $parse(attrs.selectHourSimple);
                 var hourStatistics = modelGetter(scope);
+                element.css('color', 'brown');
                 if (hourStatistics.enabled) {
                     element.removeAttr('disabled');
                 } else {
@@ -208,17 +213,18 @@ angular.module('admin-calendar').controller('AdminCalendarCtrl'
                         event.preventDefault();
 
                         var newValue = modelGetter(scope);
-                        if (!newValue.enabled) {
-                            return;
-                        }
+                        var adminHourStatistics = scope.selectedDayLight.adminHourStatisticsArray[hourStatistics.index];
                         if (newValue.selected) {
-                            scope.selectedDayLight.adminHourStatisticsArray[hourStatistics.index].doneHours--;
+                            adminHourStatistics.doneHours--;
                             scope.selectedMonth.doneHours--;
                             scope.selectedMonth.diffHours++;
                             scope.selectedWeek.doneHours--;
                             scope.selectedDay.doneHours--;
                         } else {
-                            scope.selectedDayLight.adminHourStatisticsArray[hourStatistics.index].doneHours++;
+                            if (adminHourStatistics.plannedHours - adminHourStatistics.doneHours <= 0) {
+                                return;
+                            }
+                            adminHourStatistics.doneHours++;
                             scope.selectedMonth.doneHours++;
                             scope.selectedMonth.diffHours--;
                             scope.selectedWeek.doneHours++;

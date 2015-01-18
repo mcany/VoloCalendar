@@ -20,9 +20,14 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
         this.index = index;
     }
 
-    public DriverHourStatistics( DriverDayStatistics dayStatistics, int requiredDriverCount, int index) {
+    public DriverHourStatistics( DriverDayStatistics dayStatistics, int plannedHours, int index) {
         this(dayStatistics, index);
-        this.planningHours = requiredDriverCount;
+        this.plannedHours = plannedHours;
+    }
+
+    public DriverHourStatistics(DriverDayStatistics dayStatistics, int plannedHours, int index, boolean selected) {
+        this(dayStatistics, plannedHours, index);
+        this.selected = selected;
     }
 
     public void init(DriverDayStatistics dayStatistics) {
@@ -30,15 +35,22 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
     }
 
     public boolean isEnabled() {
-        return dayStatistics.isActive() && planningHours > 0;
+        return dayStatistics.isActive();
     }
 
     public boolean isSelected() {
         return selected;
     }
 
+    public void setDayStatistics(DriverDayStatistics dayStatistics) {
+        this.dayStatistics = dayStatistics;
+    }
+
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
+    public DriverHourStatistics copy() {
+        return new DriverHourStatistics(this.dayStatistics, this.plannedHours, this.index, this.selected);
+    }
 }
