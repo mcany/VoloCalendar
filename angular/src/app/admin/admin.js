@@ -1,1 +1,1 @@
-angular.module('admin', ['admin-users', 'forecasting', 'admin-calendar']);
+angular.module('admin', ['admin-users', 'forecasting', 'reporting', 'admin-calendar']);

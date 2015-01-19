@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import volo.voloCalendar.util.Settings;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -18,7 +19,6 @@ public class DriverDayStatistics implements Serializable {
     protected String userId;
     protected LocalDate date;
     protected DriverHourStatistics[] hourStatisticsArray;
-    private static final int changeLimit = 3;
 
     public DriverDayStatistics() {
         hourStatisticsArray = new DriverHourStatistics[24];
@@ -38,10 +38,6 @@ public class DriverDayStatistics implements Serializable {
         for (int i = 0; i < this.hourStatisticsArray.length; i++){
             this.hourStatisticsArray[i].setSelected(dayStatistics.hourStatisticsArray[i].isSelected());
         }
-    }
-    @JsonIgnore
-    public static int getChangeLimit() {
-        return changeLimit;
     }
 
     public LocalDate getDate() {
@@ -63,7 +59,7 @@ public class DriverDayStatistics implements Serializable {
     }
 
     public boolean isActive() {
-        boolean result = LocalDate.now().isBefore(date.minusDays(changeLimit));
+        boolean result = LocalDate.now().isBefore(date.minusDays(Settings.driverRestriction));
         return result;
     }
 

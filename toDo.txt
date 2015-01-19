@@ -3,5 +3,4 @@
 3.ui restrictions as maxLength,required,pattern
 4.custom error pages
 5.refresh button
-6.admin parameters setting page(numbers for restriction, visible hours in the table, 45, report buttons)
-7.update notifications
+6.admin parameters setting page(numbers for restriction, visible hours in the table, 45)

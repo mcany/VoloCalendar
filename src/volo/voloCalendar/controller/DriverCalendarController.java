@@ -22,7 +22,7 @@ public class DriverCalendarController {
 
     @RequestMapping(value = "/calendar", method = RequestMethod.GET, produces = "application/json")
     public CalendarViewModel calendar() {
-        return UtilMethods.getCalendarViewModel(calendarMonthsCount);
+        return UtilMethods.getCalendarViewModel(calendarMonthsCount, UtilMethods.getBeginDateOfCurrentMonth());
     }
 
     @RequestMapping(value = "/month/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")

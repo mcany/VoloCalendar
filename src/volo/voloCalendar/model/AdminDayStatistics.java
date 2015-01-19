@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import volo.voloCalendar.util.Settings;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,7 +15,6 @@ import java.time.LocalDate;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AdminDayStatistics implements Serializable {
-    private static final int changeLimit = 1;
     private LocalDate date;
     private AdminHourStatistics[] adminHourStatisticsArray;
 
@@ -48,7 +48,7 @@ public class AdminDayStatistics implements Serializable {
     }
 
     public boolean isActive() {
-        boolean result = LocalDate.now().isBefore(date.minusDays(changeLimit));
+        boolean result = LocalDate.now().isBefore(date.minusDays(Settings.adminRestriction));
         return result;
     }
 

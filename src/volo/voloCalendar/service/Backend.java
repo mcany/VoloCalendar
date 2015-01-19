@@ -1,6 +1,7 @@
 package volo.voloCalendar.service;
 
 import volo.voloCalendar.model.*;
+import volo.voloCalendar.util.Settings;
 import volo.voloCalendar.util.UtilMethods;
 import volo.voloCalendar.viewModel.MonthStatistics;
 import volo.voloCalendar.viewModel.UserTableViewModel;
@@ -81,23 +82,32 @@ public class Backend {
     public static User[] getUsers(UserTableViewModel userTableViewModel) {
         User[] userArray = getSortedFilteredPagedUsersWithoutStatistics(userTableViewModel);
 
+        LocalDate beginDateOfCurrentMonth = UtilMethods.getBeginDateOfCurrentMonth();
         for (User user : userArray) {
-            LocalDate beginDateOfCurrentMonth = UtilMethods.getBeginDateOfCurrentMonth();
-            MonthStatistics monthStatistics = getMonthStatistics(user, beginDateOfCurrentMonth);
-            if (monthStatistics != null) {
-                user.setDoneHours(monthStatistics.getDoneHours());
-            } else {
-                user.setDoneHours(0);
-            }
-            monthStatistics = getMonthStatistics(user, beginDateOfCurrentMonth.minusMonths(1));
-            if (monthStatistics != null) {
-                user.setDiffPrevHours(monthStatistics.getDiffHours());
-            } else {
-                user.setDiffPrevHours(0);
-            }
+            setStatistics(user, beginDateOfCurrentMonth);
         }
 
         return userArray;
+    }
+
+    public static void setStatistics(User user, LocalDate beginDateOfMonth) {
+        setDoneHours(user, beginDateOfMonth);
+        MonthStatistics monthStatistics;
+        monthStatistics = getMonthStatistics(user, beginDateOfMonth.minusMonths(1));
+        if (monthStatistics != null) {
+            user.setDiffPrevHours(monthStatistics.getDiffHours());
+        } else {
+            user.setDiffPrevHours(0);
+        }
+    }
+
+    public static void setDoneHours(User user, LocalDate beginDateOfMonth) {
+        MonthStatistics monthStatistics = getMonthStatistics(user, beginDateOfMonth);
+        if (monthStatistics != null) {
+            user.setDoneHours(monthStatistics.getDoneHours());
+        } else {
+            user.setDoneHours(0);
+        }
     }
 
     //rest
@@ -249,7 +259,7 @@ public class Backend {
         if (user.isAdmin()) {
             return null;
         }
-        int plannedHours = (user.getContractType() == ContractType.minijob) ? User.minijobPlan : 0;
+        int plannedHours = (user.getContractType() == ContractType.minijob) ? Settings.minijobMonthlyPlan : 0;
         int doneHours = 0;
         LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
         for (LocalDate date : weekBeginDates) {
@@ -446,5 +456,24 @@ public class Backend {
     //rest
     private static DriverCalendarWeek getDriverCalendarWeekFromDB(String userId, LocalDate beginDateOfWeek) {
         return getDriverCalendarWeekFromDB(getUserById(userId), beginDateOfWeek);
+    }
+    //rest
+    public static ArrayList<User> getActiveDrivers(LocalDate beginDateOfMonth) {
+        ArrayList<User> result = getActiveDrivers();
+        for (User user : result){
+            setDoneHours(user, beginDateOfMonth);
+        }
+        return result;
+    }
+    //rest
+    public static ArrayList<User> getActiveDrivers() {
+        Collection<User> all = getAllUsers();
+        ArrayList<User> result = new ArrayList<User>();
+        for (User user : all){
+            if (!user.isAdmin() && !user.isDeleted()){
+                result.add(user);
+            }
+        }
+        return result;
     }
 }

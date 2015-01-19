@@ -13,10 +13,10 @@ import java.util.HashMap;
  * Created by Emin Guliyev on 29/11/2014.
  */
 public class UtilMethods {
-    public static CalendarViewModel getCalendarViewModel(int calendarMonthsCount) {
+    public static CalendarViewModel getCalendarViewModel(int calendarMonthsCount, LocalDate beginDate) {
         CalendarViewModel calendarViewModel = new CalendarViewModel();
         calendarViewModel.setCalendarMonths(new CalendarMonth[calendarMonthsCount]);
-        LocalDate[] monthBeginDates = UtilMethods.getMonthBeginDatesForCalendar(calendarMonthsCount);
+        LocalDate[] monthBeginDates = UtilMethods.getMonthBeginDatesForCalendar(calendarMonthsCount, beginDate);
         for (int i = 0; i < monthBeginDates.length; i++) {
             LocalDate monthBeginDate = monthBeginDates[i];
             CalendarMonth calendarMonth = getCalendarMonth(monthBeginDate);
@@ -57,13 +57,12 @@ public class UtilMethods {
     }
 
 
-    public static LocalDate[] getMonthBeginDatesForCalendar(int monthCount) {
+    public static LocalDate[] getMonthBeginDatesForCalendar(int monthCount, LocalDate beginDate) {
         ArrayList<LocalDate> list = new ArrayList<LocalDate>();
-        LocalDate monthBeginDate = getBeginDateOfCurrentMonth();
-        list.add(monthBeginDate);
+        list.add(beginDate);
         for (int i = 1; i < monthCount; i++) {
-            monthBeginDate = monthBeginDate.plusMonths(1);
-            list.add(monthBeginDate);
+            beginDate = beginDate.plusMonths(1);
+            list.add(beginDate);
         }
         return list.toArray(new LocalDate[list.size()]);
     }
@@ -82,5 +81,4 @@ public class UtilMethods {
         } while (date.getMonth() == month);
         return list.toArray(new LocalDate[list.size()]);
     }
-
 }

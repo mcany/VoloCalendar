@@ -46,6 +46,8 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/jackson-databind-2.3.3.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/jackson-annotations-2.3.0.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/jackson-datatype-jsr310-2.4.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/commons-io-2.41.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/itextpdf-5.4.3.jar" />
         </element>
       </element>
     </root>

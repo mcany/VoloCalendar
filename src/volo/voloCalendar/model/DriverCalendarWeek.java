@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import volo.voloCalendar.util.Settings;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
@@ -41,7 +42,7 @@ public class DriverCalendarWeek implements Serializable {
         ArrayList<DriverDayStatistics> list = new ArrayList<DriverDayStatistics>();
         do {
             DriverDayStatistics dayStatistics = null;
-            if (LocalDate.now().isBefore(date.minusDays(DriverDayStatistics.getChangeLimit()))) {
+            if (LocalDate.now().isBefore(date.minusDays(Settings.driverRestriction))) {
                 if (driverCalendarWeek != null) {
                     dayStatistics = getDayStatistics(driverCalendarWeek, date);
                 } else {

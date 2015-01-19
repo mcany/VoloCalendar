@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-xs-9">
+        <form name="form" novalidate class="form-horizontal" role="form">
+            <legend>
+                Monthly report
+            </legend>
+            <div>
+                <a ng-disabled="!canSubmit()" class="btn btn-primary" ng-href="/admin/reporting/monthly/{{model.year}}/{{model.month}}" target="_self">
+                    Report
+                </a>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label" for="year">Year</label>
+
+                <div class="col-sm-5">
+                    <input class="form-control" type="number" min="2014" id="year" name="year" ng-model="model.year" required>
+                </div>
+                <span ng-show="showError('year', 'required')"
+                      class="alert alert-danger">This field is required.</span>
+                <span ng-show="showError('year', 'min')"
+                      class="alert alert-danger">This field should be more than 2014.</span>
+            </div>
+            <div class="form-group form-group-sm">
+                <label class="col-sm-2 control-label" for="month">Month</label>
+
+                <div class="col-sm-5">
+                    <input class="form-control" type="number" min="1" max="12" id="month" name="month" ng-model="model.month" required>
+                </div>
+                <span ng-show="showError('month', 'required')"
+                      class="alert alert-danger">This field is required.</span>
+                <span ng-show="showError('month', 'min')"
+                      class="alert alert-danger">This field should be more than 1.</span>
+                <span ng-show="showError('month', 'max')"
+                      class="alert alert-danger">This field should be less than 12.</span>
+            </div>
+        </form>
+    </div>
+    <div class="col-xs-3">
+        <legend>
+            Overview report
+        </legend>
+        <a href="/admin/reporting/overview" class="btn btn-primary" target="_self">
+            Report
+        </a>
+    </div>
+</div>

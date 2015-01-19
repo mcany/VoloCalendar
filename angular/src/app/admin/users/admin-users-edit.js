@@ -14,7 +14,7 @@ angular.module('admin-users-edit', [
         $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
 
         $scope.onSave = function (user) {
-            i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id: user.$id()});
+            //i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id: user.$id()});
             $location.path('/admin/users');
         };
 
@@ -23,7 +23,7 @@ angular.module('admin-users-edit', [
         };
 
         $scope.onRemove = function (user) {
-            i18nNotifications.pushForNextRoute('crud.user.remove.success', 'success', {id: user.$id()});
+            //i18nNotifications.pushForNextRoute('crud.user.remove.success', 'success', {id: user.$id()});
             $location.path('/admin/users');
         };
 

@@ -19,7 +19,7 @@ angular.module('admin-users-list', [
                 $event.stopPropagation();
                 user.deleted = true;
                 user.$saveOrUpdate(null, function () {
-                    i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id: user.$id()});
+                    //i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id: user.$id()});
                 }, null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id: user.$id()});
                 });
@@ -39,7 +39,7 @@ angular.module('admin-users-list', [
                 $event.stopPropagation();
                 user.deleted = false;
                 user.$saveOrUpdate(null, function () {
-                    i18nNotifications.pushForCurrentRoute('crud.user.restore.success', 'success', {id: user.$id()});
+                    //i18nNotifications.pushForCurrentRoute('crud.user.restore.success', 'success', {id: user.$id()});
                 }, null, function () {
                     i18nNotifications.pushForCurrentRoute('crud.user.restore.error', 'error', {id: user.$id()});
                 });

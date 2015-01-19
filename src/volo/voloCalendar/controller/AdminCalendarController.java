@@ -18,11 +18,13 @@ import java.time.LocalDate;
 @Secured({"ROLE_ADMIN"})
 public class AdminCalendarController {
 
-    private static final int calendarMonthsCount = 3;
+    private static final int calendarMonthsCount = 6;
 
     @RequestMapping(value = "/calendar", method = RequestMethod.GET, produces = "application/json")
     public CalendarViewModel calendar() {
-        return UtilMethods.getCalendarViewModel(calendarMonthsCount);
+        LocalDate threeMonthBefore = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
+        threeMonthBefore = threeMonthBefore.minusMonths(3);
+        return UtilMethods.getCalendarViewModel(calendarMonthsCount, threeMonthBefore);
     }
 
     @RequestMapping(value = "/month/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")

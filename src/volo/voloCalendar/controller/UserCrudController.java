@@ -17,12 +17,6 @@ import java.util.UUID;
 @Secured({"ROLE_ADMIN"})
 @RequestMapping("/admin/users")
 public class UserCrudController {
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
-    public User[] getAllUsers() {
-        Collection<User> users = Backend.getAllUsers();
-        User[] userArray = new User[users.size()];
-        return users.toArray(userArray);
-    }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET, produces = "application/json")
     public int getAllUsersCount() {
