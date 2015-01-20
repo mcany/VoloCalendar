@@ -13,9 +13,9 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 22/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CalendarMonth implements Serializable {
-    private LocalDate beginDate;
-    private CalendarWeekLight[] calendarWeekLights;
+public class CalendarMonth implements Serializable { // defines a month
+    private LocalDate beginDate; // begin date of the month
+    private CalendarWeekLight[] calendarWeekLights; // calendarWeekLight objects of the month
 
     public CalendarMonth(LocalDate beginDate) {
         this.beginDate = beginDate;

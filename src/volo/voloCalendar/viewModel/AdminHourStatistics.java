@@ -1,6 +1,7 @@
-package volo.voloCalendar.model;
+package volo.voloCalendar.viewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import volo.voloCalendar.model.HourStatistics;
 
 import java.io.Serializable;
 
@@ -8,9 +9,9 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 07/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AdminHourStatistics extends HourStatistics implements Serializable{
-    private int doneHours;
-    private AdminDayStatistics adminDayStatistics;
+public class AdminHourStatistics extends HourStatistics implements Serializable{ // defines current situation of the day for admin
+    private int doneHours; // count of all drivers who registered for the hour
+    private AdminDayStatistics adminDayStatistics; // parent object that holds all adminHourStatistics(current adminHourStatistics also)
 
     public AdminHourStatistics(){}
 

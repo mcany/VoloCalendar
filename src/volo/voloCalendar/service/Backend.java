@@ -3,10 +3,8 @@ package volo.voloCalendar.service;
 import volo.voloCalendar.model.*;
 import volo.voloCalendar.util.Settings;
 import volo.voloCalendar.util.UtilMethods;
-import volo.voloCalendar.viewModel.MonthStatistics;
-import volo.voloCalendar.viewModel.UserTableViewModel;
+import volo.voloCalendar.viewModel.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
@@ -55,8 +53,7 @@ public class Backend {
         return usersById.get(id);
     }
 
-    //rest
-    public static Collection<User> getAllUsers() {
+    private static Collection<User> getAllUsers() {
         return usersByEmail.values();
     }
 
@@ -90,10 +87,10 @@ public class Backend {
         return userArray;
     }
 
-    public static void setStatistics(User user, LocalDate beginDateOfMonth) {
+    private static void setStatistics(User user, LocalDate beginDateOfMonth) {
         setDoneHours(user, beginDateOfMonth);
         MonthStatistics monthStatistics;
-        monthStatistics = getMonthStatistics(user, beginDateOfMonth.minusMonths(1));
+        monthStatistics = getMonthStatisticsForDriverUser(user, beginDateOfMonth.minusMonths(1));
         if (monthStatistics != null) {
             user.setDiffPrevHours(monthStatistics.getDiffHours());
         } else {
@@ -101,8 +98,8 @@ public class Backend {
         }
     }
 
-    public static void setDoneHours(User user, LocalDate beginDateOfMonth) {
-        MonthStatistics monthStatistics = getMonthStatistics(user, beginDateOfMonth);
+    private static void setDoneHours(User user, LocalDate beginDateOfMonth) {
+        MonthStatistics monthStatistics = getMonthStatisticsForDriverUser(user, beginDateOfMonth);
         if (monthStatistics != null) {
             user.setDoneHours(monthStatistics.getDoneHours());
         } else {
@@ -150,15 +147,16 @@ public class Backend {
         DriverCalendarWeek driverCalendarWeekInDB = getDriverCalendarWeekFromDB(user, beginDate);
         if (driverCalendarWeekInDB == null) {
             driverCalendarWeekInDB = new DriverCalendarWeek(user.getId(), beginDate);
+            driverCalendarWeekInDB.fixPlannedHours(getManualForecasting());
+        }else {
+            driverCalendarWeekInDB = getStatisticsForDriverWeek(driverCalendarWeekInDB);
         }
-
-        driverCalendarWeekInDB = getStatisticsForDriverWeek(driverCalendarWeekInDB);
         return driverCalendarWeekInDB;
     }
 
     //rest
     private static DriverCalendarWeek getStatisticsForDriverWeek(DriverCalendarWeek driverCalendarWeekInDB) {
-        driverCalendarWeekInDB.setRequiredDriverCountStatistics(getManualForecasting());
+        driverCalendarWeekInDB.fixPlannedHours(getManualForecasting());
         for (User userInDb : getAllUsers()) {
             DriverCalendarWeek driverCalendarWeekForDbUser = getDriverCalendarWeekFromDB(userInDb, driverCalendarWeekInDB.getBeginDate());
             if (driverCalendarWeekForDbUser != null) {
@@ -233,7 +231,7 @@ public class Backend {
         return driverCalendarWeek;
     }
 
-    public static void generateNewDriverCalendarWeek(User user, DriverCalendarWeek driverCalendarWeekTemplate, LocalDate newWeekBeginDate) {
+    private static void generateNewDriverCalendarWeek(User user, DriverCalendarWeek driverCalendarWeekTemplate, LocalDate newWeekBeginDate) {
         DriverCalendarWeek nextDriverCalendarWeek = getDriverCalendarWeekFromDB(user, newWeekBeginDate);
         if (nextDriverCalendarWeek == null) {
             nextDriverCalendarWeek = new DriverCalendarWeek(driverCalendarWeekTemplate, newWeekBeginDate);
@@ -241,21 +239,19 @@ public class Backend {
             nextDriverCalendarWeek.fillDayStatisticsArray(driverCalendarWeekTemplate);
         }
         nextDriverCalendarWeek.setUserId(user.getId());
-        //next line only for local backend
-        fixPlannedHours(nextDriverCalendarWeek);
         insertOrUpdateDriverCalendarWeek(nextDriverCalendarWeek);
     }
 
-    public static MonthStatistics getMonthStatistics(String userId, LocalDate monthBeginDate) {
+    public static MonthStatistics getMonthStatisticsForDriverUser(String userId, LocalDate monthBeginDate) {
         User user = getUserById(userId);
         if (user == null) {
             return null;
         }
-        return getMonthStatistics(user, monthBeginDate);
+        return getMonthStatisticsForDriverUser(user, monthBeginDate);
     }
 
     //rest
-    public static MonthStatistics getMonthStatistics(User user, LocalDate monthBeginDate) {
+    public static MonthStatistics getMonthStatisticsForDriverUser(User user, LocalDate monthBeginDate) {
         if (user.isAdmin()) {
             return null;
         }
@@ -271,90 +267,19 @@ public class Backend {
         return new MonthStatistics(plannedHours, doneHours, monthBeginDate);
     }
     //rest
-    public static MonthStatistics getMonthStatistics(LocalDate monthBeginDate) {
-        int doneHours = getDoneHoursForMonth(monthBeginDate);
-        int plannedHours = getPlannedHoursForMonth(monthBeginDate);
-
-        return new MonthStatistics(plannedHours, doneHours, monthBeginDate);
-    }
-
-    private static int getPlannedHoursForMonth(LocalDate monthBeginDate) {
-        int plannedHours = 0;
-        int month = monthBeginDate.getMonthValue();
-        LocalDate date = LocalDate.of(monthBeginDate.getYear(), monthBeginDate.getMonthValue(), monthBeginDate.getDayOfMonth());
-        while(date.getMonthValue() == month){
-            plannedHours += calculatePlannedHours(manualForecasting.getDays()[date.getDayOfWeek().getValue() - 1]);
-            date = date.plusDays(1);
-        }
-        return plannedHours;
-    }
-
-    private static int getDoneHoursForMonth(LocalDate monthBeginDate) {
-        int doneHours = 0;
-        LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
-        for (LocalDate date : weekBeginDates) {
-            for(User user: getAllUsers()){
-                if (user.getDriverCalendarWeekHashMap() != null){
-                    DriverCalendarWeek driverCalendarWeek = user.getDriverCalendarWeekHashMap().get(date);
-                    if (driverCalendarWeek != null) {
-                        doneHours += driverCalendarWeek.getDoneHours();
-                    }
-                }
-            }
-        }
-        return doneHours;
-    }
-
-    private static int calculatePlannedHours(HourForecast[] hourForecasts) {
-        int result = 0;
-        for (HourForecast hourForecast : hourForecasts) {
-            result += hourForecast.getCount();
-        }
-        return result;
+    public static MonthStatistics getMonthStatisticsForAdminUser(LocalDate monthBeginDate) {
+        MonthStatistics monthStatistics = new MonthStatistics(monthBeginDate);
+        monthStatistics.fixDoneHours(getAllUsers());
+        monthStatistics.fixPlannedHours(getManualForecasting());
+        return monthStatistics;
     }
     //rest
     public static AdminCalendarWeek getAdminCalendarWeek(LocalDate beginDate) {
         AdminCalendarWeek adminCalendarWeek = new AdminCalendarWeek(beginDate);
 
-        fixDoneHours(adminCalendarWeek);
-
-        fixPlannedHours(adminCalendarWeek);
+        adminCalendarWeek.fixDoneHours(getAllUsers());
+        adminCalendarWeek.fixPlannedHours(getManualForecasting());
         return adminCalendarWeek;
-    }
-
-    private static void fixPlannedHours(AdminCalendarWeek adminCalendarWeek) {
-        for (int i = 0; i < adminCalendarWeek.getAdminDayStatisticsArray().length; i++) {
-            for (int j = 0; j < adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray().length; j++) {
-                HourForecast hourForecast = manualForecasting.getDays()[adminCalendarWeek.getAdminDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
-                adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseRequiredHours(hourForecast.getCount());
-            }
-        }
-    }
-
-    private static void fixPlannedHours(DriverCalendarWeek driverCalendarWeek) {
-        for (int i = 0; i < driverCalendarWeek.getDayStatisticsArray().length; i++) {
-            for (int j = 0; j < driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray().length; j++) {
-                HourForecast hourForecast = manualForecasting.getDays()[driverCalendarWeek.getDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
-                driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray()[j].increaseRequiredHours(hourForecast.getCount());
-            }
-        }
-    }
-
-    private static void fixDoneHours(AdminCalendarWeek adminCalendarWeek) {
-        for(User user: getAllUsers()){
-            if (user.getDriverCalendarWeekHashMap() != null){
-                DriverCalendarWeek driverCalendarWeek = user.getDriverCalendarWeekHashMap().get(adminCalendarWeek.getBeginDate());
-                if (driverCalendarWeek != null) {
-                    for (int i = 0; i < driverCalendarWeek.getDayStatisticsArray().length; i++){
-                        for (int j = 0; j < driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray().length; j++){
-                            if (driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray()[j].isSelected()){
-                                adminCalendarWeek.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseDoneHours();
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public static DetailedDriverDayStatistics insertDriverDayStatistics(LocalDate date, String userId) {
@@ -369,19 +294,15 @@ public class Backend {
         }
 
         DriverCalendarWeek driverCalendarWeek = getDriverCalendarWeek(userId, beginDateOfProperWeek);
+        DriverDayStatistics driverDayStatistics = driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
+
         if (!driverHasCalendarWeek(user, beginDateOfProperWeek)){
-            //next line only for local backend
-            fixPlannedHours(driverCalendarWeek);
             insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
         }else{
-            DriverDayStatistics driverDayStatistics = driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
             if (driverDayStatistics.isNotEmpty()){
                 return null;
             }
         }
-        DriverDayStatistics driverDayStatistics = driverCalendarWeek.getDayStatisticsArray()[date.getDayOfWeek().getValue() - beginDateOfProperWeek.getDayOfWeek().getValue()];
-        driverDayStatistics.deselectAllHours();
-        insertOrUpdateDriverCalendarWeek(driverCalendarWeek);
         return driverDayStatistics.addDriverInfo(user);
     }
 
@@ -458,10 +379,14 @@ public class Backend {
         return getDriverCalendarWeekFromDB(getUserById(userId), beginDateOfWeek);
     }
     //rest
-    public static ArrayList<User> getActiveDrivers(LocalDate beginDateOfMonth) {
-        ArrayList<User> result = getActiveDrivers();
-        for (User user : result){
-            setDoneHours(user, beginDateOfMonth);
+    public static ArrayList<User> getActiveDriversForMonth(LocalDate beginDateOfMonth) {
+        Collection<User> all = getAllUsers();
+        ArrayList<User> result = new ArrayList<User>();
+        for (User user : all){
+            if (!user.isAdmin() && !user.isDeleted() &&  user.wasActive(beginDateOfMonth)){
+                setDoneHours(user, beginDateOfMonth);
+                result.add(user);
+            }
         }
         return result;
     }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import volo.voloCalendar.util.Settings;
+import volo.voloCalendar.viewModel.DetailedDriverDayStatistics;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,10 +16,10 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 20/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DriverDayStatistics implements Serializable {
-    protected String userId;
-    protected LocalDate date;
-    protected DriverHourStatistics[] hourStatisticsArray;
+public class DriverDayStatistics implements Serializable { // defines current situation of the day for driver
+    protected String userId; // id of driver whom belongs this statistics
+    protected LocalDate date; // date of the day
+    protected DriverHourStatistics[] hourStatisticsArray; //hourStatistics for the day
 
     public DriverDayStatistics() {
         hourStatisticsArray = new DriverHourStatistics[24];
@@ -107,11 +108,4 @@ public class DriverDayStatistics implements Serializable {
         return new DetailedDriverDayStatistics(this, user.getName(), user.getId());
     }
 
-    public void deselectAllHours() {
-        for (DriverHourStatistics driverHourStatistics: getHourStatisticsArray()){
-            driverHourStatistics.setSelected(false);
-            //next line only for local backend
-            driverHourStatistics.increasePlannedHours();
-        }
-    }
 }

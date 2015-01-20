@@ -28,7 +28,7 @@ public class DriverCalendarController {
     @RequestMapping(value = "/month/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public MonthStatistics month(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate monthBeginDate = LocalDate.of(year, month, day);
-        return Backend.getMonthStatistics(userId, monthBeginDate);
+        return Backend.getMonthStatisticsForDriverUser(userId, monthBeginDate);
     }
 
     @RequestMapping(value = "/week/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")

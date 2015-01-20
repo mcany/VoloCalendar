@@ -1,6 +1,5 @@
 package volo.voloCalendar.util;
 import java.io.FileOutputStream;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -71,7 +70,7 @@ public class PdfUtilMethods {
             table.setHeaderRows(1);
 
             LocalDate beginDateOfMonth = LocalDate.of(year, month, 1);
-            ArrayList<User> users = Backend.getActiveDrivers(beginDateOfMonth);
+            ArrayList<User> users = Backend.getActiveDriversForMonth(beginDateOfMonth);
             //just some random data to fill
             for(User user: users){
                 insertCell(table, user.getName(), Element.ALIGN_RIGHT, 1, bf12);

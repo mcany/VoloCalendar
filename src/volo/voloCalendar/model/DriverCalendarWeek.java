@@ -17,10 +17,10 @@ import java.util.ArrayList;
  * Created by Emin Guliyev on 20/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DriverCalendarWeek implements Serializable {
-    private String userId;
-    private LocalDate beginDate;
-    private DriverDayStatistics[] dayStatisticsArray;
+public class DriverCalendarWeek implements Serializable {//defines current situation of the week for driver
+    private String userId; // driver id
+    private LocalDate beginDate; //begin date of the week
+    private DriverDayStatistics[] dayStatisticsArray;// dayStatistics objects for the week
 
     public DriverCalendarWeek() {
     }
@@ -101,7 +101,7 @@ public class DriverCalendarWeek implements Serializable {
         this.dayStatisticsArray = dayStatisticsArray;
     }
 
-    public void setRequiredDriverCountStatistics(ManualForecasting manualForecasting) {
+    public void fixPlannedHours(ManualForecasting manualForecasting) {
         for (DriverDayStatistics dayStatistics : dayStatisticsArray) {
             HourForecast[] forecastForSameDayOfWeek = manualForecasting.getDays()[dayStatistics.getDate().getDayOfWeek().getValue() - 1];
             for (int i = 0; i < 24; i++) {
@@ -162,5 +162,14 @@ public class DriverCalendarWeek implements Serializable {
             }
         }
         return result;
+    }
+    @JsonIgnore
+    public boolean isNotEmpty() {
+        for (DriverDayStatistics driverDayStatistics: dayStatisticsArray){
+            if (driverDayStatistics.isNotEmpty()){
+                return true;
+            }
+        }
+        return false;
     }
 }

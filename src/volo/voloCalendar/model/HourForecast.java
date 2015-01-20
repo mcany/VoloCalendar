@@ -8,8 +8,8 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 15/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HourForecast implements Serializable {
-    private int count;
+public class HourForecast implements Serializable { // defines manual forecasting for an hour
+    private int count; // how many drivers needed for the hour
 
     public HourForecast() {
         count = 5;

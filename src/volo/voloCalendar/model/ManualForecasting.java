@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * Created by Emin Guliyev on 15/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ManualForecasting implements Serializable {
-    private HourForecast[][] days;
+public class ManualForecasting implements Serializable { // defines manual forecasting for all weeks
+    private HourForecast[][] days; // 7*24 array for hour forecasting within week
 
     public ManualForecasting() {
         days = new HourForecast[7][];

@@ -1,4 +1,4 @@
-package volo.voloCalendar.model;
+package volo.voloCalendar.viewModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,9 +14,9 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 07/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AdminDayStatistics implements Serializable {
-    private LocalDate date;
-    private AdminHourStatistics[] adminHourStatisticsArray;
+public class AdminDayStatistics implements Serializable {// defines current situation of the day for admin
+    private LocalDate date;//date of the day
+    private AdminHourStatistics[] adminHourStatisticsArray;//hourStatistics for the day
 
     public AdminDayStatistics() {
         adminHourStatisticsArray = new AdminHourStatistics[24];

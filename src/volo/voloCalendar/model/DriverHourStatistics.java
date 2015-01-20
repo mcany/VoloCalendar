@@ -8,9 +8,9 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 07/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DriverHourStatistics extends HourStatistics implements Serializable {
-    private boolean selected;
-    private DriverDayStatistics dayStatistics;
+public class DriverHourStatistics extends HourStatistics implements Serializable {// defines current situation of the hour for driver
+    private boolean selected; //if the hour selected by the driver whom dayStatistics field belongs
+    private DriverDayStatistics dayStatistics; // parent object that holds all driverHourStatistics(current driverHourStatistics also)
 
     public DriverHourStatistics() {
     }

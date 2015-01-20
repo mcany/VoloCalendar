@@ -8,12 +8,12 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 06/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserTableViewModel implements Serializable {
-    private String sortingField;
-    private boolean reverse;
-    private int beginIndex;
-    private int maxNumber;
-    private String keyword;
+public class UserTableViewModel implements Serializable { //defines all parameters of filtering/sorting/paging/itemsPerPage
+    private String sortingField; //sorting field
+    private boolean reverse;// is sorting in reverse order
+    private String keyword;// keyword for filtering
+    private int beginIndex;// begin index after soring and filtering applied
+    private int maxNumber;// max number of items to fetch
 
     public UserTableViewModel() {
     }

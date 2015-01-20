@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import volo.voloCalendar.model.*;
 import volo.voloCalendar.service.Backend;
 import volo.voloCalendar.util.UtilMethods;
-import volo.voloCalendar.viewModel.CalendarViewModel;
-import volo.voloCalendar.viewModel.MonthStatistics;
+import volo.voloCalendar.viewModel.*;
 
 import java.time.LocalDate;
 
@@ -30,7 +29,7 @@ public class AdminCalendarController {
     @RequestMapping(value = "/month/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public MonthStatistics month(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate monthBeginDate = LocalDate.of(year, month, day);
-        return Backend.getMonthStatistics(monthBeginDate);
+        return Backend.getMonthStatisticsForAdminUser(monthBeginDate);
     }
 
     @RequestMapping(value = "/week/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")

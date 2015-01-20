@@ -15,9 +15,9 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
  * Created by Emin Guliyev on 22/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CalendarWeekLight implements Serializable {
-    private LocalDate beginDate;
-    private LocalDate endDate;
+public class CalendarWeekLight implements Serializable { //defines a week
+    private LocalDate beginDate; // begin date
+    private LocalDate endDate; // end date
 
     public CalendarWeekLight() {
     }
