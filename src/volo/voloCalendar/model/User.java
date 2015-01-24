@@ -336,7 +336,7 @@ public class User implements Serializable {// any user in system: admin or drive
 
     public boolean wasActive(LocalDate beginDateOfMonth) {
         for (LocalDate date: UtilMethods.getWeekBeginDatesForMonth(beginDateOfMonth)){
-            if (driverCalendarWeekHashMap.get(date).isNotEmpty()){
+            if (driverCalendarWeekHashMap.get(date) != null && driverCalendarWeekHashMap.get(date).isNotEmpty()){
                 return  true;
             }
         }

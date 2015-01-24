@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import volo.voloCalendar.service.Backend;
+import volo.voloCalendar.service.Logic;
 import volo.voloCalendar.model.User;
 import volo.voloCalendar.service.LoginService;
 import volo.voloCalendar.util.UtilMethods;
@@ -27,6 +27,8 @@ import java.util.HashMap;
 @RestController
 public class LoginController {
     @Autowired
+    public Logic logic;
+    @Autowired
     LoginService loginService;
 
     //private static String email;
@@ -34,7 +36,7 @@ public class LoginController {
     public HashMap<String, User> currentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
-        return UtilMethods.getHashMap(Backend.getUserByEmail(email));
+        return UtilMethods.getHashMap(logic.getUserByEmail(email));
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
@@ -54,7 +56,7 @@ public class LoginController {
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-            return UtilMethods.getHashMap(Backend.getUserByEmail(user.getEmail()));
+            return UtilMethods.getHashMap(logic.getUserByEmail(user.getEmail()));
         } else {
             return UtilMethods.getHashMap(null);
         }
@@ -75,9 +77,9 @@ public class LoginController {
     public User updateProfile(@RequestBody User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
-        User currentUser = Backend.getUserByEmail(email);
+        User currentUser = logic.getUserByEmail(email);
         if (user != null && user.equals(currentUser)){
-            Backend.insertOrUpdateUser(user);
+            logic.insertOrUpdateUser(user);
             return user;
         }else {
             return null;

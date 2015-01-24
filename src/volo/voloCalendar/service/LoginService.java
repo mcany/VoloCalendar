@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,13 +15,14 @@ import volo.voloCalendar.model.User;
 
 @Component(value = "loginService")
 public class LoginService implements UserDetailsService, Serializable {
-
+    @Autowired
+    public Logic logic;
     private static final long serialVersionUID = 1L;
 
     public UserDetails loadUserByUsername(String userEmail)
             throws UsernameNotFoundException {
         try {
-            User user = Backend.getUserByEmail(userEmail);
+            User user = logic.getUserByEmail(userEmail);
             if (user == null) {
                 return null;
             }
