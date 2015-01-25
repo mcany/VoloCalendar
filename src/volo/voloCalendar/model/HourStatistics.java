@@ -27,7 +27,11 @@ public class HourStatistics implements Serializable { // parent class for AdminH
         plannedHours--;
     }
 
-    public void increaseRequiredHours(int count) {
+    public void decreasePlannedHours(int count) {
+        plannedHours -= count;
+    }
+
+    public void increasePlannedHours(int count) {
         plannedHours += count;
     }
 

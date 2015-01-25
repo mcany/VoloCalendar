@@ -28,12 +28,11 @@ public class AdminHourStatistics extends HourStatistics implements Serializable{
         this.doneHours = doneHours;
     }
 
-    public void increaseDoneHours() {
-        doneHours++;
-    }
-
     public boolean isEnabled() {
         return adminDayStatistics.isActive();
     }
 
+    public void increaseDoneHours(short count) {
+        doneHours+=count;
+    }
 }

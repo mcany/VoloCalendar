@@ -79,22 +79,6 @@ public class MonthStatistics implements Serializable { //defines month statistic
         setPlannedHours(plannedHours);
     }
 
-    public void fixDoneHours(Collection<User> allUsers) {
-        int doneHours = 0;
-        LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(beginDate);
-        for (LocalDate date : weekBeginDates) {
-            for(User user: allUsers){
-                if (user.getDriverCalendarWeekHashMap() != null){
-                    DriverCalendarWeek driverCalendarWeek = user.getDriverCalendarWeekHashMap().get(date);
-                    if (driverCalendarWeek != null) {
-                        doneHours += driverCalendarWeek.getDoneHours();
-                    }
-                }
-            }
-        }
-        setDoneHours(doneHours);
-    }
-
     private int calculatePlannedHours(HourForecast[] hourForecasts) {
         int result = 0;
         for (HourForecast hourForecast : hourForecasts) {

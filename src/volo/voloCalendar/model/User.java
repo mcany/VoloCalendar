@@ -35,7 +35,6 @@ public class User implements Serializable {// any user in system: admin or drive
     private String base64Image; //image binary array in base64 form
     private int doneHours; // computable field , selected hours for current month
     private int diffPrevHours; //computable field, (planned hours(45) - selected hours) for current month if user contract is minijob else =0
-    private HashMap<LocalDate, DriverCalendarWeek> driverCalendarWeekHashMap = new HashMap<LocalDate, DriverCalendarWeek>();
 
     public User() {
     }
@@ -323,23 +322,5 @@ public class User implements Serializable {// any user in system: admin or drive
 
     public void setDiffPrevHours(int diffPrevHours) {
         this.diffPrevHours = diffPrevHours;
-    }
-
-    @JsonIgnore
-    public HashMap<LocalDate, DriverCalendarWeek> getDriverCalendarWeekHashMap() {
-        return driverCalendarWeekHashMap;
-    }
-
-    public void setDriverCalendarWeekHashMap(HashMap<LocalDate, DriverCalendarWeek> driverCalendarWeekHashMap) {
-        this.driverCalendarWeekHashMap = driverCalendarWeekHashMap;
-    }
-
-    public boolean wasActive(LocalDate beginDateOfMonth) {
-        for (LocalDate date: UtilMethods.getWeekBeginDatesForMonth(beginDateOfMonth)){
-            if (driverCalendarWeekHashMap.get(date) != null && driverCalendarWeekHashMap.get(date).isNotEmpty()){
-                return  true;
-            }
-        }
-        return false;
     }
 }

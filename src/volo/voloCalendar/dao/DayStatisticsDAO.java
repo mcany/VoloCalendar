@@ -11,6 +11,11 @@ import java.sql.Date;
 import java.util.List;
 
 public interface DayStatisticsDAO extends CrudRepository<DayStatistics, String>, Serializable{
-    public DayStatistics findById(String id);
+    public DayStatistics getDayByUserIdAndDate(String userId, Date date);
+    public List<DayStatistics> getNotEmptyDayByDate(Date date);
+    public List<String> getActiveDriverIdsByWeekBeginDate(Date weekBeginDate);
     public List<DayStatistics> getWeekByUserIdAndWeekBeginDate(String userId, Date weekBeginDate);
+    public List<DayStatistics> getWeekStatisticsByWeekBeginDate(Date weekBeginDate);
+    public Long getWeekDoneHoursByUserIdAndWeekBeginDate(String userId, Date weekBeginDate);
+    public Long getWeekDoneHoursByWeekBeginDate(Date weekBeginDate);
 }

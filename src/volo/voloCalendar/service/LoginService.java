@@ -11,19 +11,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import volo.voloCalendar.model.User;
+import volo.voloCalendar.util.MyGrantedAuthority;
 
 
 @Component(value = "loginService")
 public class LoginService implements UserDetailsService, Serializable {
     @Autowired
-    public Logic logic;
+    public UserManagementLogic userManagementLogic;
+
     private static final long serialVersionUID = 1L;
 
     public UserDetails loadUserByUsername(String userEmail)
             throws UsernameNotFoundException {
         try {
-            User user = logic.getUserByEmail(userEmail);
-            if (user == null) {
+            User user = userManagementLogic.getUserByEmail(userEmail);
+            if (user == null || user.isDeleted()) {
                 return null;
             }
             List<GrantedAuthority> authorities = addAccordingRoleByUserType(user
@@ -40,14 +42,7 @@ public class LoginService implements UserDetailsService, Serializable {
     private List<GrantedAuthority> addAccordingRoleByUserType(
             final String userType) {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        GrantedAuthority authority = new GrantedAuthority() {
-            private static final long serialVersionUID = 1L;
-
-            public String getAuthority() {
-                return userType;
-            }
-        };
-        authorities.add(authority);
+        authorities.add(new MyGrantedAuthority(userType));
         return authorities;
     }
 

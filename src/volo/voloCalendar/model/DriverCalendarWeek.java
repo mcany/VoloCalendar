@@ -6,21 +6,24 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import volo.voloCalendar.entity.DayStatistics;
 import volo.voloCalendar.util.Settings;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emin Guliyev on 20/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DriverCalendarWeek implements Serializable {//defines current situation of the week for driver
+    private boolean existsInDb;
     private String userId; // driver id
     private LocalDate beginDate; //begin date of the week
-    private DriverDayStatistics[] dayStatisticsArray;// dayStatistics objects for the week
+    private DriverDayStatistics[] dayStatisticsArray;// driverDayStatistics objects for the week
 
     public DriverCalendarWeek() {
     }
@@ -100,6 +103,14 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
     public void setDayStatisticsArray(DriverDayStatistics[] dayStatisticsArray) {
         this.dayStatisticsArray = dayStatisticsArray;
     }
+    @JsonIgnore
+    public boolean getExistsInDb() {
+        return existsInDb;
+    }
+
+    public void setExistsInDb(boolean existsInDb) {
+        this.existsInDb = existsInDb;
+    }
 
     public void fixPlannedHours(ManualForecasting manualForecasting) {
         for (DriverDayStatistics dayStatistics : dayStatisticsArray) {
@@ -111,17 +122,18 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
         }
     }
 
-    public void subtractStatistics(DriverCalendarWeek driverCalendarWeek) {
-        for (DriverDayStatistics dayStatistics : dayStatisticsArray) {
-            DriverDayStatistics sameDayOfWeekStatistics = driverCalendarWeek.getDayStatistics(dayStatistics.getDate().getDayOfWeek());
-            if (sameDayOfWeekStatistics != null) {
-                for (int i = 0; i < 24; i++) {
-                    DriverHourStatistics hourStatistics = dayStatistics.getHourStatisticsArray()[i];
-                    if (sameDayOfWeekStatistics.getHourStatisticsArray()[i].isSelected()) {
-                        hourStatistics.decreasePlannedHours();
-                    }
-                }
+    public void subtractStatistics(List<DayStatistics> dayStatisticsList) {
+        if (dayStatisticsList == null || dayStatisticsList.size() == 0){
+            return;
+        }
+        int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
+        for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
+            int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
+            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()){
+                continue;
             }
+            DayStatistics sameDayOfWeekStatistics = dayStatisticsList.get(indexOfSameDayOfWeek);
+            driverDayStatistics.subtractStatistics(sameDayOfWeekStatistics);
         }
     }
 
@@ -171,5 +183,17 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
             }
         }
         return false;
+    }
+
+    public void fixDoneHours(List<DayStatistics> dayStatisticsList) {
+        int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
+        for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
+            int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
+            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()){
+                continue;
+            }
+            DayStatistics sameDayOfWeekStatistics = dayStatisticsList.get(indexOfSameDayOfWeek);
+            driverDayStatistics.fixHourStatisticsArray(sameDayOfWeekStatistics);
+        }
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import volo.voloCalendar.model.ManualForecasting;
-import volo.voloCalendar.service.Logic;
+import volo.voloCalendar.service.ForecastingLogic;
 
 
 /**
@@ -18,14 +18,14 @@ import volo.voloCalendar.service.Logic;
 @RequestMapping("/admin/forecasting")
 public class ForecastingController {
     @Autowired
-    public Logic logic;
+    public ForecastingLogic forecastingLogic;
     @RequestMapping(value = "/manualForecasting", method = RequestMethod.GET, produces = "application/json")
     public ManualForecasting manualForecasting() {
-        return logic.getManualForecasting();
+        return forecastingLogic.getManualForecasting();
     }
 
     @RequestMapping(value = "/manualForecasting", method = RequestMethod.POST, produces = "application/json")
-    public void createUser(@RequestBody ManualForecasting manualForecasting) {
-        logic.setManualForecasting(manualForecasting);
+    public void manualForecasting(@RequestBody ManualForecasting manualForecasting) {
+        forecastingLogic.setManualForecasting(manualForecasting);
     }
 }

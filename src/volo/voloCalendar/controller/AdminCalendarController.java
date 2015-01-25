@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import volo.voloCalendar.model.*;
-import volo.voloCalendar.service.Logic;
+import volo.voloCalendar.service.CalendarLogic;
 import volo.voloCalendar.util.UtilMethods;
 import volo.voloCalendar.viewModel.*;
 
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class AdminCalendarController {
 
     @Autowired
-    public Logic logic;
+    public CalendarLogic calendarLogic;
 
     private static final int calendarMonthsCount = 6;
 
@@ -33,35 +33,35 @@ public class AdminCalendarController {
     @RequestMapping(value = "/month/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public MonthStatistics month(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate monthBeginDate = LocalDate.of(year, month, day);
-        return logic.getMonthStatisticsForAdminUser(monthBeginDate);
+        return calendarLogic.getMonthStatisticsForAdminUser(monthBeginDate);
     }
 
     @RequestMapping(value = "/week/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public AdminCalendarWeek week(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate monthBeginDate = LocalDate.of(year, month, day);
-        return logic.getAdminCalendarWeek(monthBeginDate);
+        return calendarLogic.getAdminCalendarWeek(monthBeginDate);
     }
 
     @RequestMapping(value = "/day/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public DetailedAdminDayStatistics day(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate date = LocalDate.of(year, month, day);
-        return logic.getDetailedAdminDayStatistics(date);
+        return calendarLogic.getDetailedAdminDayStatistics(date);
     }
 
     @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.POST, produces = "application/json")
     public DetailedDriverDayStatistics addDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate date = LocalDate.of(year, month, day);
-        return logic.insertDriverDayStatistics(date, userId);
+        return calendarLogic.insertDriverDayStatistics(date, userId);
     }
 
     @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.DELETE, produces = "application/json")
     public DriverDayStatistics deleteDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
         LocalDate date = LocalDate.of(year, month, day);
-        return logic.deleteDriverDayStatistics(date, userId);
+        return calendarLogic.deleteDriverDayStatistics(date, userId);
     }
 
     @RequestMapping(value = "/detailedAdminDay", method = RequestMethod.POST, produces = "application/json")
     public DetailedAdminDayStatistics saveDetailedAdminDayStatistics(@RequestBody DetailedAdminDayStatistics detailedAdminDayStatistics) {
-        return logic.insertOrUpdateDetailedAdminDayStatistics(detailedAdminDayStatistics);
+        return calendarLogic.insertOrUpdateDetailedAdminDayStatistics(detailedAdminDayStatistics);
     }
 }

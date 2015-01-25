@@ -3,6 +3,7 @@
 
     <persistence-unit name="persistenceUnit" transaction-type="RESOURCE_LOCAL">
         <class>volo.voloCalendar.entity.DayStatistics</class>
+        <class>volo.voloCalendar.entity.Store</class>
         <properties>
             <property name="eclipselink.logging.level" value="FINE" />
             <property name="eclipselink.weaving" value="false"/>

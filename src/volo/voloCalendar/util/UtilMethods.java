@@ -1,9 +1,11 @@
 package volo.voloCalendar.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import volo.voloCalendar.viewModel.CalendarMonth;
 import volo.voloCalendar.viewModel.CalendarViewModel;
 import volo.voloCalendar.viewModel.CalendarWeekLight;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -80,5 +82,15 @@ public class UtilMethods {
             date = date.plusDays(8 - date.getDayOfWeek().getValue());
         } while (date.getMonth() == month);
         return list.toArray(new LocalDate[list.size()]);
+    }
+
+    public static <T> T convertJsonToObject(Class<T> objectType ,String jsonString) throws IOException {
+        T obj = new ObjectMapper().readValue(jsonString, objectType);
+        return obj;
+    }
+
+    public static String convertObjectToJson(Object object) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
     }
 }

@@ -1530,36 +1530,42 @@
     <table name="DayStatistics" schema="public" catalog="VoloCalendar" type="TABLE">
       <column name="id" sqlType="bpchar" precision="36" scale="0" nullable="false" jdbcType="1"/>
       <column name="userId" sqlType="bpchar" precision="36" scale="0" nullable="true" jdbcType="1"/>
-      <column name="weekBeginDate" sqlType="date" precision="13" scale="0" nullable="true" jdbcType="91"/>
-      <column name="date" sqlType="date" precision="13" scale="0" nullable="true" jdbcType="91"/>
-      <column name="hour0" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour1" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour2" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour3" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour4" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour5" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour6" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour7" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour8" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour9" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour10" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour11" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour12" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour13" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour14" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour15" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour16" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour17" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour18" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour19" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour20" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour21" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour22" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
-      <column name="hour23" sqlType="int2" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="weekBeginDate" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <column name="date" sqlType="date" precision="13" scale="0" nullable="false" jdbcType="91"/>
+      <column name="hour0" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour1" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour2" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour3" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour4" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour5" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour6" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour7" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour8" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour9" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour10" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour11" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour12" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour13" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour14" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour15" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour16" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour17" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour18" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour19" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour20" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour21" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour22" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="hour23" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5" def="MA=="/>
+      <column name="weekDayIndex" sqlType="int2" precision="5" scale="0" nullable="false" jdbcType="5"/>
       <primary-key name="PK_DayStatistics" columns="id"/>
+      <index name="UserIdPlusDate_Unique" unique="true" columns="userId,date"/>
       <index name="date_index" unique="false" columns="date"/>
       <index name="userId_index" unique="false" columns="userId"/>
       <index name="weekBeginDate_index" unique="false" columns="weekBeginDate"/>
+    </table>
+    <table name="Store" schema="public" catalog="VoloCalendar" type="TABLE">
+      <column name="id" sqlType="bpchar" precision="36" scale="0" nullable="true" jdbcType="1"/>
+      <column name="data" sqlType="bpchar" precision="1000" scale="0" nullable="true" jdbcType="1"/>
     </table>
     <procedure name="RI_FKey_cascade_del" schema="pg_catalog" catalog="VoloCalendar" type="2" remarks="cmVmZXJlbnRpYWwgaW50ZWdyaXR5IE9OIERFTEVURSBDQVNDQURF">
       <prototype>

@@ -5,16 +5,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import volo.voloCalendar.model.DriverCalendarWeek;
-import volo.voloCalendar.model.HourForecast;
-import volo.voloCalendar.model.ManualForecasting;
-import volo.voloCalendar.model.User;
+import volo.voloCalendar.entity.DayStatistics;
+import volo.voloCalendar.model.*;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Emin Guliyev on 07/01/2015.
@@ -77,25 +75,23 @@ public class AdminCalendarWeek implements Serializable{//defines current situati
         for (int i = 0; i < this.getAdminDayStatisticsArray().length; i++) {
             for (int j = 0; j < this.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray().length; j++) {
                 HourForecast hourForecast = manualForecasting.getDays()[this.getAdminDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
-                this.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseRequiredHours(hourForecast.getCount());
+                this.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].setPlannedHours(hourForecast.getCount());
             }
         }
     }
 
-    public void fixDoneHours(Collection<User> allUsers) {
-        for(User user: allUsers){
-            if (user.getDriverCalendarWeekHashMap() != null){
-                DriverCalendarWeek driverCalendarWeek = user.getDriverCalendarWeekHashMap().get(this.getBeginDate());
-                if (driverCalendarWeek != null) {
-                    for (int i = 0; i < driverCalendarWeek.getDayStatisticsArray().length; i++){
-                        for (int j = 0; j < driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray().length; j++){
-                            if (driverCalendarWeek.getDayStatisticsArray()[i].getHourStatisticsArray()[j].isSelected()){
-                                this.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].increaseDoneHours();
-                            }
-                        }
-                    }
-                }
+    public void raiseStatistics(List<DayStatistics> dayStatisticsList) {
+        if (dayStatisticsList == null || dayStatisticsList.size() == 0){
+            return;
+        }
+        int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
+        for (AdminDayStatistics adminDayStatistics : adminDayStatisticsArray) {
+            int indexOfSameDayOfWeek = adminDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
+            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()){
+                continue;
             }
+            DayStatistics sameDayOfWeekStatistics = dayStatisticsList.get(indexOfSameDayOfWeek);
+            adminDayStatistics.raiseStatistics(sameDayOfWeekStatistics);
         }
     }
 }

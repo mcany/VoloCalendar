@@ -30,6 +30,11 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
         this.selected = selected;
     }
 
+    public DriverHourStatistics(boolean selected, int index) {
+        this.selected = selected;
+        this.index = index;
+    }
+
     public void init(DriverDayStatistics dayStatistics) {
         this.dayStatistics = dayStatistics;
     }
