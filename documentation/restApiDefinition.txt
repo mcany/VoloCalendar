@@ -1,0 +1,72 @@
+Test server: http://staging.volo.de
+
+Operator Test Account:
+sergei@volo.de
+test1111
+
+Driver Test Account
+stefan@volo.de
+test1111
+
+
+OAuth:
+POST to /auth/token
+Payload: (x-www-form-urlencoded)
+username: [email address]
+password: [password]
+grant_type: password
+
+
+REST calls:
+
+POST /registration
+Exampe payload: (JSON)
+{
+  "type": "Driver",
+  "user_account": {
+    "email": "donald@driver.com",
+    "password": "SECRET",
+    "gender": "male",
+    "name": "Donald Driver"
+  },
+  "user": {
+    "phone": "+491771234567"
+  },
+  "location": {
+    "company": nil,
+    "care_of": "c/o Maier",
+    "street": "Theresienstraße 15",
+    "zip_code": "80333",
+    "city": "München",
+    "country_code": "DE",
+  }
+}
+
+Response:
+{
+  "driver": {
+    "id": 1,
+    "name": "Donald Driver"
+    "phone": "+491771234567"
+    "status": "offline",
+    "account_status": "active",
+    "device_token": nil,
+    "device_os": nil,
+    "has_active_orders": false,
+    "last_went_online_at": nil,
+    "last_went_offline_at": nil,
+    "current_location_id": 8
+  }
+}
+
+
+Getting and updating drivers can be done with GET / PUT /drivers/:id
+If you get a list, responses are paginated. You will find the links to the first, last, previous and next page in the "Link" HTTP Header, the total number of records in the list in the "Total" HTTP Header.
+That's it for now, I will let you know as soon as I have the server deployed.
+
+{
+"access_token": "f7c531f599f867584906566e50de528689a86f82d3bddabe75f4a055fbb08357",
+"token_type": "bearer",
+"expires_in": 8546688,
+"refresh_token": "e7dd8378ff21b9c4e9d5974e1f135691b02548851ea5de81179d074fe8b113cc"
+}

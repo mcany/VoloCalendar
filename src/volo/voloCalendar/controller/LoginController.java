@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import volo.voloCalendar.model.User;
-import volo.voloCalendar.service.LoginService;
+import volo.voloCalendar.service.LoginLogic;
 import volo.voloCalendar.service.UserManagementLogic;
 import volo.voloCalendar.util.UtilMethods;
 
@@ -29,7 +29,7 @@ public class LoginController {
     @Autowired
     public UserManagementLogic userManagementLogic;
     @Autowired
-    LoginService loginService;
+    LoginLogic loginLogic;
 
     //private static String email;
     @RequestMapping(value = "/current-user", method = RequestMethod.GET, produces = "application/json")
@@ -41,7 +41,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public HashMap<String, User> login(@RequestBody User user, HttpServletRequest request) {
-        UserDetails userDetails = loginService.loadUserByUsername(user.getEmail());
+        UserDetails userDetails = loginLogic.loadUserByUsername(user.getEmail());
         if (userDetails != null
                 && (user.getPassword() != null && userDetails.getPassword() != null
                 && user.getPassword().equals(userDetails.getPassword()))) {
