@@ -103,6 +103,10 @@
                                 <input name="transportType" type="radio" ng-model="user.transportType" value="auto"
                                        ng-required="!user.transportType">Auto
                             </label>
+                            <label class="radio-inline">
+                                <input name="transportType" type="radio" ng-model="user.transportType" value="scooter"
+                                       ng-required="!user.transportType">Scooter
+                            </label>
                         </div>
                         <span ng-show="showError('transportType', 'required')"
                               class="alert alert-danger">This field is required.</span>

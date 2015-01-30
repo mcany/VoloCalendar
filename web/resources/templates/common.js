@@ -147,6 +147,10 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "                                <input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"auto\"\n" +
     "                                       ng-required=\"!user.transportType\">Auto\n" +
     "                            </label>\n" +
+    "                            <label class=\"radio-inline\">\n" +
+    "                                <input name=\"transportType\" type=\"radio\" ng-model=\"user.transportType\" value=\"scooter\"\n" +
+    "                                       ng-required=\"!user.transportType\">Scooter\n" +
+    "                            </label>\n" +
     "                        </div>\n" +
     "                        <span ng-show=\"showError('transportType', 'required')\"\n" +
     "                              class=\"alert alert-danger\">This field is required.</span>\n" +

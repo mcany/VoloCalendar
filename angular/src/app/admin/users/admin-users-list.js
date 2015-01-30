@@ -52,18 +52,20 @@ angular.module('admin-users-list', [
 
             $scope.pageChanged = function () {
                 $http.post('/admin/users/pagination'
-                    , {sortingField: $scope.sortingField, reverse: $scope.reverse, beginIndex: (($scope.currentPage - 1) * $scope.itemsPerPage + 1), maxNumber: $scope.itemsPerPage, keyword: $scope.keyword
+                    , {sortingField: $scope.sortingField, reverse: $scope.reverse, currentPage: $scope.currentPage, itemsPerPage: $scope.itemsPerPage, keyword: $scope.keyword
                     }).
                     success(function (data, status, headers, config) {
                         result = [];
-                        for (var i = 0; i < data.length; i++) {
+                        for (var i = 0; i < data.items.length; i++) {
                             var myResource = mongolabResource('users');
-                            result.push(new myResource(data[i]));
+                            result.push(new myResource(data.items[i]));
                         }
                         $scope.users = result;
+                        $scope.totalItems = data.allCount;
                     }).
                     error(function (data, status, headers, config) {
                         $scope.users = null;
+                        $scope.totalItems = 0;
                     });
             };
 
@@ -93,13 +95,6 @@ angular.module('admin-users-list', [
             var cache = utilMethods.get('pagingData');
 
             if (cache == null) {
-                $http.get('/admin/users/count').
-                    success(function (data, status, headers, config) {
-                        $scope.totalItems = data;
-                    }).
-                    error(function (data, status, headers, config) {
-                        $scope.totalItems = 0;
-                    });
                 $scope.currentPage = 1;
                 $scope.sortingField = 'deleted';
                 $scope.reverse = false;
@@ -107,7 +102,6 @@ angular.module('admin-users-list', [
                 $scope.users = null;
                 $scope.keyword = null;
             } else {
-                $scope.totalItems = cache.totalItems;
                 $scope.currentPage = cache.currentPage;
                 $scope.sortingField = cache.sortingField;
                 $scope.reverse = cache.reverse;

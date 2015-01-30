@@ -8,14 +8,22 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 06/12/2014.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserTableViewModel implements Serializable { //defines all parameters of filtering/sorting/paging/itemsPerPage
+public class UserTable implements Serializable { //defines all parameters of filtering/sorting/paging/itemsPerPage
     private String sortingField; //sorting field
     private boolean reverse;// is sorting in reverse order
     private String keyword;// keyword for filtering
-    private int beginIndex;// begin index after soring and filtering applied
-    private int maxNumber;// max number of items to fetch
+    private int currentPage;
+    private int itemsPerPage;// max number of items to fetch
 
-    public UserTableViewModel() {
+    public UserTable() {
+    }
+
+    public UserTable(String sortingField, boolean reverse, String keyword, int currentPage, int itemsPerPage) {
+        this.sortingField = sortingField;
+        this.reverse = reverse;
+        this.keyword = keyword;
+        this.currentPage = currentPage;
+        this.itemsPerPage = itemsPerPage;
     }
 
     public String getSortingField() {
@@ -34,20 +42,20 @@ public class UserTableViewModel implements Serializable { //defines all paramete
         this.reverse = isReverse;
     }
 
-    public int getBeginIndex() {
-        return beginIndex;
+    public int getCurrentPage() {
+        return currentPage;
     }
 
-    public void setBeginIndex(int beginIndex) {
-        this.beginIndex = beginIndex;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 
-    public int getMaxNumber() {
-        return maxNumber;
+    public int getItemsPerPage() {
+        return itemsPerPage;
     }
 
-    public void setMaxNumber(int maxNumber) {
-        this.maxNumber = maxNumber;
+    public void setItemsPerPage(int itemsPerPage) {
+        this.itemsPerPage = itemsPerPage;
     }
 
     public String getKeyword() {

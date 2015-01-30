@@ -10,9 +10,6 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
     </sec:http>
 
     <sec:authentication-manager erase-credentials="true" alias="authenticationManager">
-        <sec:authentication-provider user-service-ref="loginService">
-            <sec:password-encoder hash="sha" />
-        </sec:authentication-provider>
     </sec:authentication-manager>
 </beans>
 

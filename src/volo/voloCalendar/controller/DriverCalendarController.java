@@ -5,7 +5,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import volo.voloCalendar.model.DriverCalendarWeek;
 import volo.voloCalendar.service.CalendarLogic;
-import volo.voloCalendar.util.UtilMethods;
+import volo.voloCalendar.util.CalendarUtilMethods;
 import volo.voloCalendar.viewModel.CalendarViewModel;
 import volo.voloCalendar.viewModel.MonthStatistics;
 
@@ -24,7 +24,7 @@ public class DriverCalendarController {
 
     @RequestMapping(value = "/calendar", method = RequestMethod.GET, produces = "application/json")
     public CalendarViewModel calendar() {
-        return UtilMethods.getCalendarViewModel(calendarMonthsCount, UtilMethods.getBeginDateOfCurrentMonth());
+        return CalendarUtilMethods.getCalendarViewModel(calendarMonthsCount, CalendarUtilMethods.getBeginDateOfCurrentMonth());
     }
 
     @RequestMapping(value = "/month/{userId}/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")

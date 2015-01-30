@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import volo.voloCalendar.dao.DayStatisticsDAO;
 import volo.voloCalendar.entity.DayStatistics;
 import volo.voloCalendar.model.*;
+import volo.voloCalendar.util.CalendarUtilMethods;
 import volo.voloCalendar.util.Settings;
-import volo.voloCalendar.util.UtilMethods;
 import volo.voloCalendar.viewModel.*;
 
 import java.sql.Date;
@@ -24,7 +24,7 @@ public class CalendarLogic {
     @Autowired
     public DayStatisticsDAO dayStatisticsDAO;
     @Autowired
-    public UserManagementLogic userManagementLogic;
+    public UserManagementLocalLogic userManagementLogic;
     @Autowired
     public ForecastingLogic forecastingLogic;
 
@@ -104,15 +104,15 @@ public class CalendarLogic {
         }
     }
 
-    public  User[] getUsers(UserTableViewModel userTableViewModel) {
-        User[] userArray = userManagementLogic.getSortedFilteredPagedUsersWithoutStatistics(userTableViewModel);
+    public  UserTableItems getUsers(UserTable userTable) {
+        UserTableItems userTableItems = userManagementLogic.getSortedFilteredPagedUsersWithoutStatistics(userTable);
 
-        LocalDate beginDateOfCurrentMonth = UtilMethods.getBeginDateOfCurrentMonth();
-        for (User user : userArray) {
+        LocalDate beginDateOfCurrentMonth = CalendarUtilMethods.getBeginDateOfCurrentMonth();
+        for (User user : userTableItems.getItems()) {
             setStatistics(user, beginDateOfCurrentMonth);
         }
 
-        return userArray;
+        return userTableItems;
     }
 
     public  DriverCalendarWeek getDriverCalendarWeek(String userId, LocalDate beginDate) {
@@ -134,7 +134,6 @@ public class CalendarLogic {
         return driverCalendarWeekInDB;
     }
 
-    //rest
     private  DriverCalendarWeek getStatisticsForDriverWeek(DriverCalendarWeek driverCalendarWeekInDB) {
         driverCalendarWeekInDB.fixPlannedHours(forecastingLogic.getManualForecasting());
 
@@ -145,7 +144,6 @@ public class CalendarLogic {
         return driverCalendarWeekInDB;
     }
 
-    //rest
     public  DriverCalendarWeek insertOrUpdateDriverCalendarWeek(DriverCalendarWeek driverCalendarWeek) {
         User user = userManagementLogic.getUserById(driverCalendarWeek.getUserId());
         if (user == null || user.isAdmin()) {
@@ -234,7 +232,6 @@ public class CalendarLogic {
         return getMonthStatisticsForDriverUser(user, monthBeginDate);
     }
 
-    //rest
     public  MonthStatistics getMonthStatisticsForDriverUser(User user, LocalDate monthBeginDate) {
         if (user.isAdmin()) {
             return null;
@@ -242,7 +239,7 @@ public class CalendarLogic {
         int plannedHours = (user.getContractType() == ContractType.minijob) ? Settings.minijobMonthlyPlan : 0;
 
         int doneHours = 0;
-        LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
         for (LocalDate date : weekBeginDates) {
             Long doneHoursInWeek = dayStatisticsDAO.getWeekDoneHoursByUserIdAndWeekBeginDate(user.getId(), Date.valueOf(date));
             doneHours += doneHoursInWeek == null?0:doneHoursInWeek.intValue();
@@ -250,14 +247,14 @@ public class CalendarLogic {
 
         return new MonthStatistics(plannedHours, doneHours, monthBeginDate);
     }
-    //rest
+
     public  MonthStatistics getMonthStatisticsForAdminUser(LocalDate monthBeginDate) {
         MonthStatistics monthStatistics = new MonthStatistics(monthBeginDate);
 
         monthStatistics.fixPlannedHours(forecastingLogic.getManualForecasting());
 
         int doneHours = 0;
-        LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
         for (LocalDate date : weekBeginDates) {
             Long doneHoursInWeek = dayStatisticsDAO.getWeekDoneHoursByWeekBeginDate(Date.valueOf(date));
             doneHours += doneHoursInWeek == null?0:doneHoursInWeek.intValue();
@@ -266,7 +263,7 @@ public class CalendarLogic {
 
         return monthStatistics;
     }
-    //rest
+
     public  AdminCalendarWeek getAdminCalendarWeek(LocalDate beginDate) {
         AdminCalendarWeek adminCalendarWeek = new AdminCalendarWeek(beginDate);
 
@@ -323,7 +320,7 @@ public class CalendarLogic {
         insertOrUpdateDriverCalendarWeek(driverCalendarWeekInDB);
         return driverDayStatistics;
     }
-    //rest
+
     public  DetailedAdminDayStatistics getDetailedAdminDayStatistics(LocalDate date) {
         DetailedAdminDayStatistics detailedAdminDayStatistics = new DetailedAdminDayStatistics(date);
 
@@ -358,7 +355,7 @@ public class CalendarLogic {
         detailedAdminDayStatistics.init();
         return detailedAdminDayStatistics;
     }
-    //rest
+
     private  DriverCalendarWeek getDriverCalendarWeekFromDB(String userId, LocalDate beginDateOfWeek) {
         User user = userManagementLogic.getUserById(userId);
         if (user == null || user.isAdmin()){
@@ -376,15 +373,15 @@ public class CalendarLogic {
         driverCalendarWeek.setExistsInDb(true);
         return driverCalendarWeek;
     }
-    //rest
+
     public  ArrayList<User> getActiveDriversForMonth(LocalDate monthBeginDate) {
         ArrayList<User> result = new ArrayList<User>();
         Set<String> activeUserIds = new HashSet<String>();
 
-        LocalDate[] weekBeginDates = UtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
         for (LocalDate date : weekBeginDates) {
             List<String> activeUserIdsInWeek = dayStatisticsDAO.getActiveDriverIdsByWeekBeginDate(Date.valueOf(date));
-            activeUserIds.addAll(activeUserIds);
+            activeUserIds.addAll(activeUserIdsInWeek);
         }
 
         for (String userId: activeUserIds){

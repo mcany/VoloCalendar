@@ -28,7 +28,7 @@ public class ReportLogic {
     @Autowired
     public CalendarLogic calendarLogic;
     @Autowired
-    public UserManagementLogic userManagementLogic;
+    public UserManagementLocalLogic userManagementLogic;
 
     public  String monthlyReport(int year, int month){
         //file path
@@ -158,7 +158,7 @@ public class ReportLogic {
             insertCell(table, "IBAN", Element.ALIGN_RIGHT, 1, bfBold12);
             table.setHeaderRows(1);
 
-            ArrayList<User> users = userManagementLogic.getActiveDrivers();
+            User[] users = userManagementLogic.getActiveDrivers();
             //just some random data to fill
             for(User user: users){
                 insertCell(table, user.getName(), Element.ALIGN_RIGHT, 1, bf12);

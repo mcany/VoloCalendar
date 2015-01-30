@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import volo.voloCalendar.model.User;
 import volo.voloCalendar.service.LoginLogic;
-import volo.voloCalendar.service.UserManagementLogic;
+import volo.voloCalendar.service.UserManagementLocalLogic;
 import volo.voloCalendar.util.UtilMethods;
 
 import javax.servlet.ServletException;
@@ -27,7 +27,7 @@ import java.util.HashMap;
 @RestController
 public class LoginController {
     @Autowired
-    public UserManagementLogic userManagementLogic;
+    public UserManagementLocalLogic userManagementLogic;
     @Autowired
     LoginLogic loginLogic;
 
@@ -41,10 +41,8 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public HashMap<String, User> login(@RequestBody User user, HttpServletRequest request) {
-        UserDetails userDetails = loginLogic.loadUserByUsername(user.getEmail());
-        if (userDetails != null
-                && (user.getPassword() != null && userDetails.getPassword() != null
-                && user.getPassword().equals(userDetails.getPassword()))) {
+        UserDetails userDetails = loginLogic.loadUser(user.getEmail(), user.getPassword());
+        if (userDetails != null) {
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 

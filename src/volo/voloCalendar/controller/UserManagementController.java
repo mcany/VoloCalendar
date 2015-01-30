@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import volo.voloCalendar.service.CalendarLogic;
-import volo.voloCalendar.service.UserManagementLogic;
-import volo.voloCalendar.viewModel.UserTableViewModel;
+import volo.voloCalendar.service.UserManagementLocalLogic;
+import volo.voloCalendar.viewModel.UserTable;
 import volo.voloCalendar.model.User;
 import volo.voloCalendar.util.UtilMethods;
+import volo.voloCalendar.viewModel.UserTableItems;
 
 import java.util.UUID;
 
@@ -21,17 +22,12 @@ public class UserManagementController {
     @Autowired
     public CalendarLogic calendarLogic;
     @Autowired
-    public UserManagementLogic userManagementLogic;
-
-    @RequestMapping(value = "/count", method = RequestMethod.GET, produces = "application/json")
-    public int getAllUsersCount() {
-        return userManagementLogic.getAllUsersCount();
-    }
+    public UserManagementLocalLogic userManagementLogic;
 
     @RequestMapping(value = "/pagination", method = RequestMethod.POST, produces = "application/json")
-    public User[] getUsers(@RequestBody UserTableViewModel userTableViewModel) {
-        User[] users = calendarLogic.getUsers(userTableViewModel);
-        return users;
+    public UserTableItems getUsers(@RequestBody UserTable userTable) {
+        UserTableItems userTableItems = calendarLogic.getUsers(userTable);
+        return userTableItems;
     }
 
     @RequestMapping(value = "/email/{email}_", method = RequestMethod.GET, produces = "application/json")
@@ -56,8 +52,4 @@ public class UserManagementController {
         return userManagementLogic.insertOrUpdateUser(user);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public User deleteUser(@PathVariable String id) {
-        return userManagementLogic.deleteUser(id);
-    }
 }
