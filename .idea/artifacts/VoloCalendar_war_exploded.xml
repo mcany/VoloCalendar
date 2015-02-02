@@ -62,6 +62,9 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/jakarta-oro-2.0.8.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/commons-dbcp-1.2.2.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/commons-pool-1.5.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/spring-data-jpa-1.7.2.RELEASE.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/spring-data-commons-1.9.2.RELEASE.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/spring-data-commons-core-1.4.1.RELEASE.jar" />
         </element>
       </element>
     </root>

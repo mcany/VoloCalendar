@@ -4,8 +4,9 @@
     <persistence-unit name="persistenceUnit" transaction-type="RESOURCE_LOCAL">
         <class>volo.voloCalendar.entity.DayStatistics</class>
         <class>volo.voloCalendar.entity.Store</class>
+        <class>volo.voloCalendar.entity.User</class>
         <properties>
-            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.logging.level" value="SEVERE" />
             <property name="eclipselink.weaving" value="false"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
             <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/VoloCalendar"/>

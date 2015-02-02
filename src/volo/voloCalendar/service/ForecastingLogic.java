@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import volo.voloCalendar.dao.StoreDAO;
 import volo.voloCalendar.entity.Store;
-import volo.voloCalendar.model.ManualForecasting;
+import volo.voloCalendar.viewModel.forecasting.ManualForecasting;
 import volo.voloCalendar.util.UtilMethods;
 
 import java.io.IOException;

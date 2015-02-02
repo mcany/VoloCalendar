@@ -18,7 +18,7 @@ public class UtilMethods {
     public final static String tokenVariableName = "token";
     //TODO: delete these two lines
     public static String temp;
-    public static boolean isTesting = true;
+    public static boolean isTestingRestApi = true;
 
     public static Object[] getArray(Object obj) {
         Object[] result;
@@ -56,7 +56,7 @@ public class UtilMethods {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         String token;
-        if (!isTesting){
+        if (!isTestingRestApi){
             token = (String) RequestContextHolder.currentRequestAttributes().getAttribute(tokenVariableName, RequestAttributes.SCOPE_SESSION);
         }else {
             token = temp;

@@ -3,10 +3,14 @@ package volo.voloCalendar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import volo.voloCalendar.model.*;
 import volo.voloCalendar.service.CalendarLogic;
 import volo.voloCalendar.util.CalendarUtilMethods;
-import volo.voloCalendar.viewModel.*;
+import volo.voloCalendar.viewModel.admin.AdminCalendarWeek;
+import volo.voloCalendar.viewModel.admin.DetailedAdminDayStatistics;
+import volo.voloCalendar.viewModel.admin.DetailedDriverDayStatistics;
+import volo.voloCalendar.viewModel.common.CalendarViewModel;
+import volo.voloCalendar.viewModel.common.MonthStatistics;
+import volo.voloCalendar.viewModel.driver.DriverDayStatistics;
 
 import java.time.LocalDate;
 

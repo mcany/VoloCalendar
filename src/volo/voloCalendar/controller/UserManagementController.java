@@ -5,10 +5,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import volo.voloCalendar.service.CalendarLogic;
 import volo.voloCalendar.service.UserManagementLocalLogic;
-import volo.voloCalendar.viewModel.UserTable;
-import volo.voloCalendar.model.User;
+import volo.voloCalendar.viewModel.user.UserTable;
+import volo.voloCalendar.entity.User;
 import volo.voloCalendar.util.UtilMethods;
-import volo.voloCalendar.viewModel.UserTableItems;
+import volo.voloCalendar.viewModel.user.UserTableItems;
 
 import java.util.UUID;
 

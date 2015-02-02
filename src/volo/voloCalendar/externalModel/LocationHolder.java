@@ -1,7 +1,6 @@
 package volo.voloCalendar.externalModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import volo.voloCalendar.model.User;
 
 import java.io.Serializable;
 

@@ -5,11 +5,19 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import volo.voloCalendar.dao.DayStatisticsDAO;
+import volo.voloCalendar.entity.ContractType;
 import volo.voloCalendar.entity.DayStatistics;
-import volo.voloCalendar.model.*;
+import volo.voloCalendar.entity.User;
 import volo.voloCalendar.util.CalendarUtilMethods;
 import volo.voloCalendar.util.Settings;
-import volo.voloCalendar.viewModel.*;
+import volo.voloCalendar.viewModel.admin.AdminCalendarWeek;
+import volo.voloCalendar.viewModel.admin.DetailedAdminDayStatistics;
+import volo.voloCalendar.viewModel.admin.DetailedDriverDayStatistics;
+import volo.voloCalendar.viewModel.common.MonthStatistics;
+import volo.voloCalendar.viewModel.driver.DriverCalendarWeek;
+import volo.voloCalendar.viewModel.driver.DriverDayStatistics;
+import volo.voloCalendar.viewModel.user.UserTable;
+import volo.voloCalendar.viewModel.user.UserTableItems;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -104,7 +112,7 @@ public class CalendarLogic {
         }
     }
 
-    public  UserTableItems getUsers(UserTable userTable) {
+    public UserTableItems getUsers(UserTable userTable) {
         UserTableItems userTableItems = userManagementLogic.getSortedFilteredPagedUsersWithoutStatistics(userTable);
 
         LocalDate beginDateOfCurrentMonth = CalendarUtilMethods.getBeginDateOfCurrentMonth();
@@ -115,7 +123,7 @@ public class CalendarLogic {
         return userTableItems;
     }
 
-    public  DriverCalendarWeek getDriverCalendarWeek(String userId, LocalDate beginDate) {
+    public DriverCalendarWeek getDriverCalendarWeek(String userId, LocalDate beginDate) {
         User user = userManagementLogic.getUserById(userId);
         return getDriverCalendarWeek(user, beginDate);
     }
@@ -264,7 +272,7 @@ public class CalendarLogic {
         return monthStatistics;
     }
 
-    public  AdminCalendarWeek getAdminCalendarWeek(LocalDate beginDate) {
+    public AdminCalendarWeek getAdminCalendarWeek(LocalDate beginDate) {
         AdminCalendarWeek adminCalendarWeek = new AdminCalendarWeek(beginDate);
 
         adminCalendarWeek.fixPlannedHours(forecastingLogic.getManualForecasting());
@@ -275,7 +283,7 @@ public class CalendarLogic {
         return adminCalendarWeek;
     }
 
-    public  DetailedDriverDayStatistics insertDriverDayStatistics(LocalDate date, String userId) {
+    public DetailedDriverDayStatistics insertDriverDayStatistics(LocalDate date, String userId) {
         User user = userManagementLogic.getUserById(userId);
         if (user == null || user.isDeleted() || user.isAdmin()){
             return null;
@@ -321,7 +329,7 @@ public class CalendarLogic {
         return driverDayStatistics;
     }
 
-    public  DetailedAdminDayStatistics getDetailedAdminDayStatistics(LocalDate date) {
+    public DetailedAdminDayStatistics getDetailedAdminDayStatistics(LocalDate date) {
         DetailedAdminDayStatistics detailedAdminDayStatistics = new DetailedAdminDayStatistics(date);
 
         ArrayList<DetailedDriverDayStatistics> detailedDriverDayStatisticsArrayList = new ArrayList<DetailedDriverDayStatistics>();

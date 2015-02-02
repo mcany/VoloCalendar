@@ -2,6 +2,7 @@ package volo.voloCalendar.service;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.itextpdf.text.BaseColor;
@@ -18,7 +19,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import volo.voloCalendar.model.User;
+import volo.voloCalendar.entity.User;
 
 /**
  * Created by Emin Guliyev on 19/01/2015.
@@ -158,7 +159,7 @@ public class ReportLogic {
             insertCell(table, "IBAN", Element.ALIGN_RIGHT, 1, bfBold12);
             table.setHeaderRows(1);
 
-            User[] users = userManagementLogic.getActiveDrivers();
+            List<User> users = userManagementLogic.getActiveDrivers();
             //just some random data to fill
             for(User user: users){
                 insertCell(table, user.getName(), Element.ALIGN_RIGHT, 1, bf12);

@@ -1,6 +1,6 @@
 package volo.voloCalendar.entity;
 
-import volo.voloCalendar.model.DriverDayStatistics;
+import volo.voloCalendar.viewModel.driver.DriverDayStatistics;
 
 import javax.persistence.*;
 

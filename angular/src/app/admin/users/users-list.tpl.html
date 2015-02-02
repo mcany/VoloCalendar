@@ -10,7 +10,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" ng-model="keyword">
                       <span class="input-group-btn">
-                        <button type="button" class="btn btn-primary" ng-click="search()" ng-disabled="!canSearch()">
+                        <button type="button" class="btn btn-primary" ng-click="search()">
                             <span class="glyphicon glyphicon-search"></span> Search
                         </button>
                       </span>
@@ -46,7 +46,7 @@
             reverse="{{reverse}}" sort="sort(field)"></th>
         <th column-header="E-mail" column-field="email" sorting-field="{{sortingField}}" reverse="{{reverse}}"
             sort="sort(field)"></th>
-        <th column-header="Contract" column-field="contractType" sorting-field="{{sortingField}}" reverse="{{reverse}}"
+        <th column-header="Contract" column-field="contractTypeShort" sorting-field="{{sortingField}}" reverse="{{reverse}}"
             sort="sort(field)"></th>
         <th column-header="Status" column-field="deleted" sorting-field="{{sortingField}}" reverse="{{reverse}}"
             sort="sort(field)"></th>

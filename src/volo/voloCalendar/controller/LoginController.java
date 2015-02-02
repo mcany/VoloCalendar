@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import volo.voloCalendar.model.User;
+import volo.voloCalendar.entity.User;
 import volo.voloCalendar.service.LoginLogic;
 import volo.voloCalendar.service.UserManagementLocalLogic;
 import volo.voloCalendar.util.UtilMethods;

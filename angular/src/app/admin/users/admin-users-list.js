@@ -81,14 +81,8 @@ angular.module('admin-users-list', [
             };
 
             $scope.search = function () {
-                if ($scope.canSearch()) {
-                    $scope.currentPage = 1;
-                    $scope.pageChanged();
-                }
-            };
-
-            $scope.canSearch = function () {
-                return $scope.keyword;
+                $scope.currentPage = 1;
+                $scope.pageChanged();
             };
 
             $scope.maxSize = 5;

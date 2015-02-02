@@ -1,8 +1,8 @@
 package volo.voloCalendar.util;
 
-import volo.voloCalendar.viewModel.CalendarMonth;
-import volo.voloCalendar.viewModel.CalendarViewModel;
-import volo.voloCalendar.viewModel.CalendarWeekLight;
+import volo.voloCalendar.viewModel.common.CalendarMonth;
+import volo.voloCalendar.viewModel.common.CalendarViewModel;
+import volo.voloCalendar.viewModel.common.CalendarWeekLight;
 
 import java.time.LocalDate;
 import java.time.Month;

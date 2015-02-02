@@ -71,12 +71,12 @@ angular.module('forecasting', [
                             newValue = 0;
                         } else if (event.keyCode == 8) {
                             newValue = Math.floor(oldValue / 10);
-                        } else if (48 < event.keyCode && event.keyCode < 58) {
+                        } else if (47 < event.keyCode && event.keyCode < 58) {
                             newValue = parseInt('' + oldValue + (event.keyCode - 48))
                             if (newValue > utilMethods.maxAllowed) {
                                 newValue = utilMethods.maxAllowed;
                             }
-                        } else if (96 < event.keyCode && event.keyCode < 106) {
+                        } else if (95 < event.keyCode && event.keyCode < 106) {
                             newValue = parseInt('' + oldValue + (event.keyCode - 96))
                             if (newValue > utilMethods.maxAllowed) {
                                 newValue = utilMethods.maxAllowed;

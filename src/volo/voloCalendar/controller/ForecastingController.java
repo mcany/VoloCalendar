@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import volo.voloCalendar.model.ManualForecasting;
+import volo.voloCalendar.viewModel.forecasting.ManualForecasting;
 import volo.voloCalendar.service.ForecastingLogic;
 
 

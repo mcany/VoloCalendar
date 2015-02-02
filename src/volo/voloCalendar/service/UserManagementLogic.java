@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import volo.voloCalendar.externalModel.*;
-import volo.voloCalendar.model.User;
+import volo.voloCalendar.entity.User;
 import volo.voloCalendar.util.UtilMethods;
-import volo.voloCalendar.viewModel.UserTable;
-import volo.voloCalendar.viewModel.UserTableItems;
+import volo.voloCalendar.viewModel.user.UserTable;
+import volo.voloCalendar.viewModel.user.UserTableItems;
 
 import java.util.Arrays;
 
@@ -41,11 +41,12 @@ public class UserManagementLogic {
                 requestEntity, AuthenticationResponse.class);
         AuthenticationResponse result = entity.getBody();
 
-        if (!UtilMethods.isTesting){
-            RequestContextHolder.currentRequestAttributes().setAttribute(UtilMethods.tokenVariableName, "Bearer " + result.getAccess_token() , RequestAttributes.SCOPE_SESSION);
-        }else{
+        if (UtilMethods.isTestingRestApi){
             UtilMethods.temp = "Bearer " + result.getAccess_token();
+        }else{
+            RequestContextHolder.currentRequestAttributes().setAttribute(UtilMethods.tokenVariableName, "Bearer " + result.getAccess_token() , RequestAttributes.SCOPE_SESSION);
         }
+
         boolean isAdmin;
         try {
             //TODO: implement it
