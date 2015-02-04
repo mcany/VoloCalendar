@@ -1,6 +1,9 @@
-1.complete rest api calls
+1.complete rest api calls(todo)
 2.server side validation
 3.ui restrictions as maxLength,required,pattern
 4.custom error pages
 5.refresh button
 6.admin parameters setting page(numbers for restriction, visible hours in the table, 45)
+7.get user, copy existing properties, update it in rest api
+8.performance tuning
+9.forecasting

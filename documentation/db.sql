@@ -158,3 +158,62 @@ INSERT INTO "User"(
 VALUES ('1', null, true, null, null, null, false, 'eminguliyev1987@gmail.com',
         null, 'Emin Guliyev', '1', null, null, null, null,
         null);
+
+-- Table: "OrderDayStatistics"
+
+-- DROP TABLE "OrderDayStatistics";
+
+CREATE TABLE "OrderDayStatistics"
+(
+  id bigint NOT NULL,
+  date date NOT NULL,
+  hour0 smallint NOT NULL DEFAULT 0,
+  hour1 smallint NOT NULL DEFAULT 0,
+  hour2 smallint NOT NULL DEFAULT 0,
+  hour3 smallint NOT NULL DEFAULT 0,
+  hour4 smallint NOT NULL DEFAULT 0,
+  hour5 smallint NOT NULL DEFAULT 0,
+  hour6 smallint NOT NULL DEFAULT 0,
+  hour7 smallint NOT NULL DEFAULT 0,
+  hour8 smallint NOT NULL DEFAULT 0,
+  hour9 smallint NOT NULL DEFAULT 0,
+  hour10 smallint NOT NULL DEFAULT 0,
+  hour11 smallint NOT NULL DEFAULT 0,
+  hour12 smallint NOT NULL DEFAULT 0,
+  hour13 smallint NOT NULL DEFAULT 0,
+  hour14 smallint NOT NULL DEFAULT 0,
+  hour15 smallint NOT NULL DEFAULT 0,
+  hour16 smallint NOT NULL DEFAULT 0,
+  hour17 smallint NOT NULL DEFAULT 0,
+  hour18 smallint NOT NULL DEFAULT 0,
+  hour19 smallint NOT NULL DEFAULT 0,
+  hour20 smallint NOT NULL DEFAULT 0,
+  hour21 smallint NOT NULL DEFAULT 0,
+  hour22 smallint NOT NULL DEFAULT 0,
+  hour23 smallint NOT NULL DEFAULT 0,
+  "weekDayIndex" smallint NOT NULL,
+  CONSTRAINT "PK_OrderDayStatistics" PRIMARY KEY (id)
+)
+WITH (
+OIDS=FALSE
+);
+ALTER TABLE "OrderDayStatistics"
+OWNER TO postgres;
+
+-- Index: order_date_index
+
+-- DROP INDEX order_date_index;
+
+CREATE INDEX order_date_index
+ON "OrderDayStatistics"
+USING btree
+(date);
+
+-- Index: "order_weekDayIndex_index"
+
+-- DROP INDEX "order_weekDayIndex_index";
+
+CREATE INDEX "order_weekDayIndex_index"
+ON "OrderDayStatistics"
+USING btree
+("weekDayIndex");
