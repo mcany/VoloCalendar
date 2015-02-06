@@ -165,7 +165,7 @@ VALUES ('1', null, true, null, null, null, false, 'eminguliyev1987@gmail.com',
 
 CREATE TABLE "OrderDayStatistics"
 (
-  id bigint NOT NULL,
+  id character(36) NOT NULL,
   date date NOT NULL,
   hour0 smallint NOT NULL DEFAULT 0,
   hour1 smallint NOT NULL DEFAULT 0,

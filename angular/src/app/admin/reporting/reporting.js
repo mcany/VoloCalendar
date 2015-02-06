@@ -15,16 +15,6 @@ angular.module('reporting', [
             var now = new Date();
             $scope.model = {'year':now.getUTCFullYear(), 'month':(now.getUTCMonth() + 1)};
 
-            $scope.monthlyReport = function () {
-                var url = '/admin/reporting/monthly/' + $scope.model.year + '/' + $scope.model.month;
-                $http.get(url);
-            };
-
-            $scope.overviewReport = function () {
-                var url = '/admin/reporting/overview';
-                $http.get(url);
-            };
-
             $scope.showError = function (fieldName, error) {
                 return $scope.form[fieldName].$error[error];
             };

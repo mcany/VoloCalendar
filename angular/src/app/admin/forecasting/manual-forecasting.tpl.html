@@ -1,63 +1,141 @@
-<legend>
-    Manual forecasting
-</legend>
-<table class="table-bordered" align="center">
-    <thead>
-    <tr>
-        <th></th>
-        <th class="text-center" ng-repeat="hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
-            {{hour}}
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Monday</td>
-        <td ng-repeat="forecast in manualForecasting.days[0] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    <tr>
-        <td>Tuesday</td>
-        <td ng-repeat="forecast in manualForecasting.days[1] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    <tr>
-        <td>Wednesday</td>
-        <td ng-repeat="forecast in manualForecasting.days[2] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    <tr>
-        <td>Thursday</td>
-        <td ng-repeat="forecast in manualForecasting.days[3] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    <tr>
-        <td>Friday</td>
-        <td ng-repeat="forecast in manualForecasting.days[4] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    <tr>
-        <td>Saturday</td>
-        <td ng-repeat="forecast in manualForecasting.days[5] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    <tr>
-        <td>Sunday</td>
-        <td ng-repeat="forecast in manualForecasting.days[6] track by $index">
-            <font color="red"><button class="fill-button" volo-counter="forecast.count"></button></font>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<hr/>
-<div>
-    <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="save()">Save</button>
-    <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert changes
-    </button>
+<div class="row">
+    <legend>
+        Manual forecasting
+    </legend>
+    <table class="table-bordered" align="center">
+        <thead>
+        <tr>
+            <th></th>
+            <th class="text-center" ng-repeat="hour in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]">
+                {{hour}}
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Monday</td>
+            <td ng-repeat="forecast in manualForecasting.days[0] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td>Tuesday</td>
+            <td ng-repeat="forecast in manualForecasting.days[1] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td>Wednesday</td>
+            <td ng-repeat="forecast in manualForecasting.days[2] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td>Thursday</td>
+            <td ng-repeat="forecast in manualForecasting.days[3] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td>Friday</td>
+            <td ng-repeat="forecast in manualForecasting.days[4] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td>Saturday</td>
+            <td ng-repeat="forecast in manualForecasting.days[5] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td>Sunday</td>
+            <td ng-repeat="forecast in manualForecasting.days[6] track by $index">
+                <font color="red">
+                    <button class="fill-button" volo-counter="forecast.count"></button>
+                </font>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr/>
+    <div>
+        <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="save()">Save</button>
+        <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert
+            changes
+        </button>
+    </div>
+</div>
+<br/>
+<br/>
+<div class="row">
+    <form name="statisticalForecastingForm" novalidate class="form-horizontal" role="form">
+        <legend>
+            Statistical forecasting
+        </legend>
+        <div>
+            <button type="button" class="btn btn-primary" ng-disabled="!canStatisticallyForecast()" ng-click="updateDatabase()">Update DB</button>
+            <button type="button" class="btn btn-primary" ng-disabled="!canStatisticallyForecast()" ng-click="filterDatabase()">Filter DB</button>
+            <button type="button" class="btn btn-primary" ng-disabled="!canStatisticallyForecast()" ng-click="forecast()">Forecast</button>
+        </div>
+        <br/>
+        <br/>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label" for="year">Year</label>
+
+            <div class="col-sm-5">
+                <input class="form-control" type="number" min="2014" id="year" name="year" ng-model="model.year"
+                       required>
+            </div>
+                <span ng-show="showError('year', 'required')"
+                      class="alert alert-danger">This field is required.</span>
+                <span ng-show="showError('year', 'min')"
+                      class="alert alert-danger">This field should be more than 2014.</span>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label" for="month">Month</label>
+
+            <div class="col-sm-5">
+                <input class="form-control" type="number" min="1" max="12" id="month" name="month"
+                       ng-model="model.month" required>
+            </div>
+                <span ng-show="showError('month', 'required')"
+                      class="alert alert-danger">This field is required.</span>
+                <span ng-show="showError('month', 'min')"
+                      class="alert alert-danger">This field should be more than 1.</span>
+                <span ng-show="showError('month', 'max')"
+                      class="alert alert-danger">This field should be less than 12.</span>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label" for="year">Sigma</label>
+
+            <div class="col-sm-5">
+                <input class="form-control" type="number" min="2" id="sigma" name="sigma" ng-model="model.sigma"
+                       required>
+            </div>
+                <span ng-show="showError('sigma', 'required')"
+                      class="alert alert-danger">This field is required.</span>
+                <span ng-show="showError('sigma', 'min')"
+                      class="alert alert-danger">This field should be more than 2.</span>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label" for="result">Result </label>
+
+            <div class="col-sm-5">
+                <span class="form-control" id="result">{{model.result}}</span>
+            </div>
+        </div>
+    </form>
 </div>

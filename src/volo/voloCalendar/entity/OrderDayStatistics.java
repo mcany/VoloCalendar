@@ -1,33 +1,27 @@
 package volo.voloCalendar.entity;
 
+import org.springframework.data.jpa.repository.Modifying;
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Calendar;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by Emin Guliyev on 04/02/2015.
  */
 @Entity
 @Table(name = "\"OrderDayStatistics\"")
-@NamedQueries(
-        {
-                @NamedQuery(name = "OrderDayStatistics.getWeekForecastingByDateLowerBound",
-                        query = "SELECT day.weekDayIndex, avg(day.hour0), avg(day.hour1), avg(day.hour2), avg(day.hour3)" +
-                                ", avg(day.hour4), avg(day.hour5), avg(day.hour6), avg(day.hour7), avg(day.hour8)" +
-                                ", avg(day.hour9), avg(day.hour10), avg(day.hour11), avg(day.hour12), avg(day.hour13)" +
-                                ", avg(day.hour14), avg(day.hour15), avg(day.hour16), avg(day.hour17), avg(day.hour18)" +
-                                ", avg(day.hour19), avg(day.hour20), avg(day.hour21), avg(day.hour22), avg(day.hour23)" +
-                                " FROM OrderDayStatistics day WHERE  day.date >= ?1 GROUP BY day.weekDayIndex ORDER BY day.weekDayIndex"),
-                @NamedQuery(name="OrderDayStatistics.deleteOutlierDays", query="DELETE FROM OrderDayStatistics day WHERE (day.weekDayIndex = ?49)" +
-                        " AND (abs((day.hour0 - ?1)/?2) > 2 OR abs((day.hour1 - ?3)/?4) > 2 OR abs((day.hour2 - ?5)/?6) > 2 OR abs((day.hour3 - ?7)/?8) > 2" +
-                        " OR abs((day.hour4 - ?9)/?10) > 2 OR abs((day.hour5 - ?11)/?12) > 2 OR abs((day.hour6 - ?13)/?14) > 2 OR abs((day.hour7 - ?15)/?16) > 2" +
-                        " OR abs((day.hour8 - ?17)/?18) > 2 OR abs((day.hour9 - ?19)/?20) > 2 OR abs((day.hour10 - ?21)/?22) > 2 OR abs((day.hour11 - ?23)/?24) > 2" +
-                        " OR abs((day.hour12 - ?25)/?26) > 2 OR abs((day.hour13 - ?27)/?28) > 2 OR abs((day.hour14 - ?29)/?30) > 2 OR abs((day.hour15 - ?31)/?32) > 2" +
-                        " OR abs((day.hour16 - ?33)/?34) > 2 OR abs((day.hour17 - ?35)/?36) > 2 OR abs((day.hour18 - ?37)/?38) > 2 OR abs((day.hour19 - ?39)/?40) > 2" +
-                        " OR abs((day.hour20 - ?41)/?42) > 2 OR abs((day.hour21 - ?43)/?44) > 2 OR abs((day.hour22 - ?45)/?46) > 2 OR abs((day.hour23 - ?47)/?48) > 2)")
-                }
-)
+@NamedQuery(name = "OrderDayStatistics.getWeekForecastingByDateLowerBound",
+        query = "SELECT day.weekDayIndex, avg(day.hour0), avg(day.hour1), avg(day.hour2), avg(day.hour3)" +
+                ", avg(day.hour4), avg(day.hour5), avg(day.hour6), avg(day.hour7), avg(day.hour8)" +
+                ", avg(day.hour9), avg(day.hour10), avg(day.hour11), avg(day.hour12), avg(day.hour13)" +
+                ", avg(day.hour14), avg(day.hour15), avg(day.hour16), avg(day.hour17), avg(day.hour18)" +
+                ", avg(day.hour19), avg(day.hour20), avg(day.hour21), avg(day.hour22), avg(day.hour23)" +
+                " FROM OrderDayStatistics day WHERE  day.date >= ?1 GROUP BY day.weekDayIndex ORDER BY day.weekDayIndex")
 @NamedNativeQuery(name = "OrderDayStatistics.getAverageAndStandardDeviationsWeek",
-        query = "SELECT day.weekDayIndex, avg(day.hour0), stddev_samp(day.hour0), avg(day.hour1), stddev_samp(day.hour1)" +
+        query = "SELECT day.\"weekDayIndex\", avg(day.hour0), stddev_samp(day.hour0), avg(day.hour1), stddev_samp(day.hour1)" +
                 ", avg(day.hour2), stddev_samp(day.hour2), avg(day.hour3), stddev_samp(day.hour3)" +
                 ", avg(day.hour4), stddev_samp(day.hour4), avg(day.hour5), stddev_samp(day.hour5)" +
                 ", avg(day.hour6), stddev_samp(day.hour6), avg(day.hour7), stddev_samp(day.hour7)" +
@@ -39,21 +33,30 @@ import java.sql.Date;
                 ", avg(day.hour18), stddev_samp(day.hour18), avg(day.hour19), stddev_samp(day.hour19)" +
                 ", avg(day.hour20), stddev_samp(day.hour20), avg(day.hour21), stddev_samp(day.hour21)" +
                 ", avg(day.hour22), stddev_samp(day.hour22), avg(day.hour23), stddev_samp(day.hour23)" +
-                " FROM OrderDayStatistics day WHERE  day.date >= ?1 GROUP BY day.weekDayIndex ORDER BY day.weekDayIndex")
+                " FROM \"OrderDayStatistics\" day WHERE  day.date >= ?1 GROUP BY day.\"weekDayIndex\" ORDER BY day.\"weekDayIndex\"")
 public class OrderDayStatistics {
-    private Long id;
+    private String id;
+    private static Calendar calendar = Calendar.getInstance();
 
     public OrderDayStatistics() {
 
     }
 
+    public OrderDayStatistics(java.util.Date date) {
+        this.id = UUID.randomUUID().toString();
+        setDate(new Date(date.getYear(), date.getMonth(), date.getDay()));
+        calendar.setTime(date);
+        short dayOfWeek = (short) calendar.get(Calendar.DAY_OF_WEEK);
+        setWeekDayIndex(dayOfWeek);
+    }
+
     @Id
     @Column(name = "\"id\"")
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -68,6 +71,7 @@ public class OrderDayStatistics {
     public void setDate(Date date) {
         this.date = date;
     }
+
     //from 1 to 7
     private short weekDayIndex;
 
@@ -377,15 +381,119 @@ public class OrderDayStatistics {
         OrderDayStatistics that = (OrderDayStatistics) o;
 
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        if (id != that.id) return false;
+        if (!id.equals(that.id)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = (int)(long) id;
+        int result = (int) id.hashCode();
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
+    }
+
+    public void addStatistics(java.util.Date date) {
+        int hour = date.getHours();
+        if (hour == 0) {
+            hour0++;
+        }
+        if (hour == 1) {
+            hour1++;
+        }
+        if (hour == 2) {
+            hour2++;
+        }
+        if (hour == 3) {
+            hour3++;
+        }
+        if (hour == 4) {
+            hour4++;
+        }
+        if (hour == 5) {
+            hour5++;
+        }
+        if (hour == 6) {
+            hour6++;
+        }
+        if (hour == 7) {
+            hour7++;
+        }
+        if (hour == 8) {
+            hour8++;
+        }
+        if (hour == 9) {
+            hour9++;
+        }
+        if (hour == 10) {
+            hour10++;
+        }
+        if (hour == 11) {
+            hour11++;
+        }
+        if (hour == 12) {
+            hour12++;
+        }
+        if (hour == 13) {
+            hour13++;
+        }
+        if (hour == 14) {
+            hour14++;
+        }
+        if (hour == 15) {
+            hour15++;
+        }
+        if (hour == 16) {
+            hour16++;
+        }
+        if (hour == 17) {
+            hour17++;
+        }
+        if (hour == 18) {
+            hour18++;
+        }
+        if (hour == 19) {
+            hour19++;
+        }
+        if (hour == 20) {
+            hour20++;
+        }
+        if (hour == 21) {
+            hour21++;
+        }
+        if (hour == 22) {
+            hour22++;
+        }
+        if (hour == 23) {
+            hour23++;
+        }
+    }
+
+    public void randomize() {
+        Random random = new Random();
+        hour0 = (short) random.nextInt(5);
+        hour1 = (short) random.nextInt(5);
+        hour2 = (short) random.nextInt(5);
+        hour3 = (short) random.nextInt(5);
+        hour4 = (short) random.nextInt(5);
+        hour5 = (short) random.nextInt(5);
+        hour6 = (short) random.nextInt(5);
+        hour7 = (short) random.nextInt(5);
+        hour8 = (short) random.nextInt(5);
+        hour9 = (short) random.nextInt(5);
+        hour10 = (short) random.nextInt(5);
+        hour11 = (short) random.nextInt(5);
+        hour12 = (short) random.nextInt(5);
+        hour13 = (short) random.nextInt(5);
+        hour14 = (short) random.nextInt(5);
+        hour15 = (short) random.nextInt(5);
+        hour16 = (short) random.nextInt(5);
+        hour17 = (short) random.nextInt(5);
+        hour18 = (short) random.nextInt(5);
+        hour19 = (short) random.nextInt(5);
+        hour20 = (short) random.nextInt(5);
+        hour21 = (short) random.nextInt(5);
+        hour22 = (short) random.nextInt(5);
+        hour23 = (short) random.nextInt(5);
     }
 }

@@ -1,0 +1,6 @@
+\r\n\([^\r\n]+,NULL,NULL,NULL,E -- evvelleri silir
+',NULL,E'[^\r\n]+\) -- sonlari silir
+,[^\r\n]+ -- qaliqlari silir
+'[.0-9]{4,5}' -- qaliqlari silir
+\r\n\r\n -- bosh setirleri silir
+

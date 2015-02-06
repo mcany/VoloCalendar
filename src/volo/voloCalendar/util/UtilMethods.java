@@ -9,6 +9,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -63,5 +64,10 @@ public class UtilMethods {
         }
         headers.set("Authorization", token);
         return new HttpEntity<T>(body, headers);
+    }
+
+
+    public static java.sql.Date getSqlDate(Date date) {
+        return new java.sql.Date(date.getYear(), date.getMonth(), date.getDay());
     }
 }

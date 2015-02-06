@@ -12,7 +12,7 @@ public class HourForecast implements Serializable { // defines manual forecastin
     private int count; // how many drivers needed for the hour
 
     public HourForecast() {
-        count = 5;
+        count = 0;
     }
 
     public int getCount() {

@@ -18,6 +18,13 @@ angular.module('forecasting', [
     }])
     .controller('ManualForecastingCtrl', ['$http', 'manualForecasting', '$scope', '$route', 'i18nNotifications', 'utilMethods',
         function ($http, manualForecasting, $scope, $route, i18nNotifications, utilMethods) {
+            var cache = utilMethods.get('forecastingModel');
+            if (cache == null) {
+                var now = new Date();
+                $scope.model = {'year': (now.getUTCFullYear() - 1), 'month': (now.getUTCMonth() + 1), sigma: 2, result: ''};
+            }else{
+                $scope.model = cache;
+            }
             $scope.original = angular.copy(manualForecasting);
             $scope.manualForecasting = manualForecasting;
             $scope.save = function () {
@@ -37,6 +44,44 @@ angular.module('forecasting', [
             $scope.setColor = function (element, hourCount) {
                 var greenColorShade = utilMethods.getGreenColorShade(hourCount);
                 element.css('backgroundColor', greenColorShade);
+            };
+
+            $scope.canStatisticallyForecast = function () {
+                return $scope.statisticalForecastingForm.$valid;
+            };
+
+            $scope.updateDatabase = function () {
+                $scope.model.result = 'Processing...';
+                var url = '/admin/forecasting/updateDatabase/' + $scope.model.year + '/' + $scope.model.month;
+                $http.get(url).then(function(result){
+                    if (result.data){
+                        $scope.model.result = 'Database updated.';
+                    }else{
+                        $scope.model.result = 'Problem occurred.';
+                    }
+                });
+            };
+
+            $scope.filterDatabase = function () {
+                $scope.model.result = 'Processing...';
+                var url = '/admin/forecasting/deleteOutliers/' + $scope.model.year + '/' + $scope.model.month;
+                $http.post(url, $scope.model.sigma).then(function(result){
+                    $scope.model.result = result.data + ' dirty days removed.';
+                });
+            };
+
+            $scope.forecast = function () {
+                $scope.model.result = 'Processing...';
+                var url = '/admin/forecasting/calculateForecasting/' + $scope.model.year + '/' + $scope.model.month;
+                $http.get(url).then(function(result){
+                    if (result.data){
+                        $scope.model.result = 'Forecasting is done.';
+                        utilMethods.save('forecastingModel', $scope.model);
+                        $route.reload();
+                    }else{
+                        $scope.model.result = 'Problem occurred.';
+                    }
+                });
             };
         }])
     .directive('voloCounter', ['$parse', 'utilMethods', function ($parse, utilMethods) {
