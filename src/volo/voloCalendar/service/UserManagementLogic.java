@@ -3,7 +3,6 @@ package volo.voloCalendar.service;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.*;
-import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,12 +16,14 @@ import volo.voloCalendar.viewModel.user.UserTable;
 import volo.voloCalendar.viewModel.user.UserTableItems;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Emin Guliyev on 28/01/2015.
  */
-@Service
-public class UserManagementLogic {
+//TODO:uncomment next line
+//@Service
+public class UserManagementLogic implements UserManagement{
 
     public boolean authenticate(String email, String password) throws HttpClientErrorException {
         MultiValueMap<String, String> bodyMap = new LinkedMultiValueMap<String, String>();
@@ -84,14 +85,20 @@ public class UserManagementLogic {
     }
 
     private void setMailLocationDetails(User user) {
+        int locationId = user.getLocationId();
+        Location location = getLocationById(locationId);
+        user.setMailLocationDetails(location);
+    }
+
+    private Location getLocationById(int locationId) {
         Location location = null;
         HttpEntity<Object> httpEntity = UtilMethods.getAuthenticatedObjectHttpEntity(null);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<LocationHolder> locationEntity = restTemplate.exchange(
-                "http://staging.volo.de/locations/" + user.getLocationId(), HttpMethod.GET,
+                "http://staging.volo.de/locations/" + locationId, HttpMethod.GET,
                 httpEntity, LocationHolder.class);
         location = locationEntity.getBody().getLocation();
-        user.setMailLocationDetails(location);
+        return location;
     }
 
     //TODO: implement it
@@ -101,14 +108,19 @@ public class UserManagementLogic {
 
     //rest
     public  User getUserById(String id) {
+        Driver driver = getDriverById(id);
+        User user = driver.convertToUser();
+        setMailLocationDetails(user);
+        return user;
+    }
+
+    private Driver getDriverById(String id) {
         HttpEntity<Object> httpEntity = UtilMethods.getAuthenticatedObjectHttpEntity(null);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<DriverHolder> entity = restTemplate.exchange(
                 "http://staging.volo.de/drivers/" + id, HttpMethod.GET,
                 httpEntity, DriverHolder.class);
-        User user = entity.getBody().getDriver().convertToUser();
-        setMailLocationDetails(user);
-        return user;
+        return entity.getBody().getDriver();
     }
 
     //rest
@@ -121,10 +133,10 @@ public class UserManagementLogic {
 
     //rest
     //TODO: filtering
-    public User[] getActiveDrivers() {
+    public List<User> getActiveDrivers() {
         UserTable userTable = new UserTable("created_at", false, "status = active", 1, Integer.MAX_VALUE);
         UserTableItems userTableItems = getSortedFilteredPagedUsersWithoutStatistics(userTable);
-        return userTableItems.getItems();
+        return Arrays.asList(userTableItems.getItems());
     }
 
     //rest
@@ -140,8 +152,10 @@ public class UserManagementLogic {
     private void updateUser(User user) {
         updateUserAccount(user.convertToUserAccount());
         if (!user.isAdmin()){
-            updateDriver(user.convertToDriver());
-            updateLocation(user.convertToLocation());
+            Driver driver = getDriverById(user.getId());
+            updateDriver(user.convertToDriver(driver));
+            Location location = getLocationById(user.getLocationId());
+            updateLocation(user.convertToLocation(location));
         }
     }
 

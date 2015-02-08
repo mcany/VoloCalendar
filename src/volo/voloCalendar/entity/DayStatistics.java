@@ -31,7 +31,7 @@ import java.time.LocalDate;
                                 " + sum(day.hour9) + sum(day.hour10) + sum(day.hour11) + sum(day.hour12) + sum(day.hour13)" +
                                 " + sum(day.hour14) + sum(day.hour15) + sum(day.hour16) + sum(day.hour17) + sum(day.hour18)" +
                                 " + sum(day.hour19) + sum(day.hour20) + sum(day.hour21) + sum(day.hour22) + sum(day.hour23)" +
-                                " FROM DayStatistics day WHERE  day.userId = ?1 AND day.weekBeginDate = ?2"),
+                                " FROM DayStatistics day WHERE  day.userId = ?1 AND day.weekBeginDate in ?2"),
                 @NamedQuery(name = "DayStatistics.getWeekDoneHoursByWeekBeginDate",
                         query = "SELECT sum(day.hour0) + sum(day.hour1) + sum(day.hour2) + sum(day.hour3)" +
                                 " + sum(day.hour4) + sum(day.hour5) + sum(day.hour6) + sum(day.hour7) + sum(day.hour8)" +

@@ -83,4 +83,13 @@ public class Location implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+    //TODO:DE is ok?
+    public Location copy(int id, String street, String zip_code, String city) {
+        this.id = id;
+        this.street = street;
+        this.zip_code = zip_code;
+        this.city = city;
+        this.country_code = "DE";
+        return this;
+    }
 }

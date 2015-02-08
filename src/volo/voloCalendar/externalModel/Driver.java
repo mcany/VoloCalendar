@@ -31,12 +31,12 @@ public class Driver implements Serializable{
     public Driver() {
     }
 
-    //TODO: mail location fix
     public Driver(int id, String name, String phone, String account_status, int mail_location_id) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.account_status = account_status;
+        //TODO: uncomment after adding mail_location_id to Driver class by Stefan
         //this.mail_location_id = mail_location_id;
     }
 
@@ -128,4 +128,13 @@ public class Driver implements Serializable{
         this.current_location_id = current_location_id;
     }
 
+    public Driver copy(int id, String name, String phone, String account_status, int mail_location_id) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.account_status = account_status;
+        //TODO: uncomment after adding mail_location_id to Driver class by Stefan
+        //this.mail_location_id = mail_location_id;
+        return this;
+    }
 }

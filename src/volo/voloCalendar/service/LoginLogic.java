@@ -15,7 +15,7 @@ import volo.voloCalendar.util.MyGrantedAuthority;
 @Component(value = "loginService")
 public class LoginLogic implements Serializable {
     @Autowired
-    public UserManagementLocalLogic userManagementLogic;
+    public UserManagement userManagementLogic;
 
     private static final long serialVersionUID = 1L;
 

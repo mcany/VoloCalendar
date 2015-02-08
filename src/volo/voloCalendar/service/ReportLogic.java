@@ -29,7 +29,7 @@ public class ReportLogic {
     @Autowired
     public CalendarLogic calendarLogic;
     @Autowired
-    public UserManagementLocalLogic userManagementLogic;
+    public UserManagement userManagementLogic;
 
     public  String monthlyReport(int year, int month){
         //file path

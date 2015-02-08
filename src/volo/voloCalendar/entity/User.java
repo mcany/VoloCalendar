@@ -393,13 +393,15 @@ public class User implements Serializable {// any user in system: admin or drive
     public UserAccount convertToUserAccount() {
         return new UserAccount(email, password, null, name);
     }
-    //TODO: fix statics
+
     public Driver convertToDriver() {
-        return new Driver(Integer.parseInt(id), name, telephoneNumber, deleted?"banned":"active", 2);
+        Driver driver = new Driver();
+        return convertToDriver(driver);
     }
 
     public Location convertToLocation() {
-        return new Location(locationId, address, plz, city);
+        Location location = new Location();
+        return convertToLocation(location);
     }
 
     public RegistrationRequest convertToRegistrationRequest() {
@@ -408,5 +410,13 @@ public class User implements Serializable {// any user in system: admin or drive
 
     private volo.voloCalendar.externalModel.User convertToUser() {
         return new volo.voloCalendar.externalModel.User(name);
+    }
+
+    public Driver convertToDriver(Driver driver) {
+        return driver.copy(Integer.parseInt(id), name, telephoneNumber, deleted ? "banned" : "active", locationId);
+    }
+
+    public Location convertToLocation(Location location) {
+        return location.copy(locationId, address, plz, city);
     }
 }

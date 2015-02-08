@@ -8,6 +8,8 @@ import volo.voloCalendar.entity.DayStatistics;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public interface DayStatisticsDAO extends CrudRepository<DayStatistics, String>, Serializable{
@@ -16,6 +18,6 @@ public interface DayStatisticsDAO extends CrudRepository<DayStatistics, String>,
     public List<String> getActiveDriverIdsByWeekBeginDate(Date weekBeginDate);
     public List<DayStatistics> getWeekByUserIdAndWeekBeginDate(String userId, Date weekBeginDate);
     public List<DayStatistics> getWeekStatisticsByWeekBeginDate(Date weekBeginDate);
-    public Long getWeekDoneHoursByUserIdAndWeekBeginDate(String userId, Date weekBeginDate);
+    public Long getWeekDoneHoursByUserIdAndWeekBeginDate(String userId, Collection<Date> weekBeginDate);
     public Long getWeekDoneHoursByWeekBeginDate(Date weekBeginDate);
 }

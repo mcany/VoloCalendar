@@ -5,6 +5,6 @@ package volo.voloCalendar.util;
  */
 public class Settings {
     public static int driverRestriction = 3;
-    public static int adminRestriction = 1;
+    public static int adminRestriction = -2;
     public static int minijobMonthlyPlan = 45;
 }

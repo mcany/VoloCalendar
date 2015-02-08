@@ -32,7 +32,7 @@ public class CalendarLogic {
     @Autowired
     public DayStatisticsDAO dayStatisticsDAO;
     @Autowired
-    public UserManagementLocalLogic userManagementLogic;
+    public UserManagement userManagementLogic;
     @Autowired
     public ForecastingLogic forecastingLogic;
 
@@ -115,7 +115,7 @@ public class CalendarLogic {
     public UserTableItems getUsers(UserTable userTable) {
         UserTableItems userTableItems = userManagementLogic.getSortedFilteredPagedUsersWithoutStatistics(userTable);
 
-        LocalDate beginDateOfCurrentMonth = CalendarUtilMethods.getBeginDateOfCurrentMonth();
+        LocalDate beginDateOfCurrentMonth = CalendarUtilMethods.getBeginLocalDateOfCurrentMonth();
         for (User user : userTableItems.getItems()) {
             setStatistics(user, beginDateOfCurrentMonth);
         }
@@ -247,11 +247,9 @@ public class CalendarLogic {
         int plannedHours = (user.getContractType() == ContractType.minijob) ? Settings.minijobMonthlyPlan : 0;
 
         int doneHours = 0;
-        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
-        for (LocalDate date : weekBeginDates) {
-            Long doneHoursInWeek = dayStatisticsDAO.getWeekDoneHoursByUserIdAndWeekBeginDate(user.getId(), Date.valueOf(date));
-            doneHours += doneHoursInWeek == null?0:doneHoursInWeek.intValue();
-        }
+        Collection<Date> weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        Long doneHoursInMonth = dayStatisticsDAO.getWeekDoneHoursByUserIdAndWeekBeginDate(user.getId(), weekBeginDates);
+        doneHours += doneHoursInMonth == null ? 0 : doneHoursInMonth.intValue();
 
         return new MonthStatistics(plannedHours, doneHours, monthBeginDate);
     }
@@ -262,7 +260,7 @@ public class CalendarLogic {
         monthStatistics.fixPlannedHours(forecastingLogic.getManualForecasting());
 
         int doneHours = 0;
-        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginLocalDatesForMonth(monthBeginDate);
         for (LocalDate date : weekBeginDates) {
             Long doneHoursInWeek = dayStatisticsDAO.getWeekDoneHoursByWeekBeginDate(Date.valueOf(date));
             doneHours += doneHoursInWeek == null?0:doneHoursInWeek.intValue();
@@ -386,7 +384,7 @@ public class CalendarLogic {
         ArrayList<User> result = new ArrayList<User>();
         Set<String> activeUserIds = new HashSet<String>();
 
-        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginDatesForMonth(monthBeginDate);
+        LocalDate[] weekBeginDates = CalendarUtilMethods.getWeekBeginLocalDatesForMonth(monthBeginDate);
         for (LocalDate date : weekBeginDates) {
             List<String> activeUserIdsInWeek = dayStatisticsDAO.getActiveDriverIdsByWeekBeginDate(Date.valueOf(date));
             activeUserIds.addAll(activeUserIdsInWeek);

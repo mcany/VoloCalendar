@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import volo.voloCalendar.entity.User;
 import volo.voloCalendar.service.LoginLogic;
+import volo.voloCalendar.service.UserManagement;
 import volo.voloCalendar.service.UserManagementLocalLogic;
 import volo.voloCalendar.util.UtilMethods;
 
@@ -27,7 +28,7 @@ import java.util.HashMap;
 @RestController
 public class LoginController {
     @Autowired
-    public UserManagementLocalLogic userManagementLogic;
+    public UserManagement userManagementLogic;
     @Autowired
     LoginLogic loginLogic;
 

@@ -230,7 +230,7 @@ angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", fun
     "        <a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b\n" +
     "                class=\"caret\"></b></a>\n" +
     "        <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
-    "            <li><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
+    "            <li ng-show=\"!isAdmin()\"><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
     "            <li>\n" +
     "                <a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">\n" +
     "                    <span class=\"glyphicon glyphicon-log-out\"></span> Logout\n" +

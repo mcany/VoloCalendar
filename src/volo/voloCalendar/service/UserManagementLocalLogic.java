@@ -17,8 +17,9 @@ import java.util.*;
 /**
  * Created by Emin Guliyev on 25/01/2015.
  */
+//TODO:comment next line
 @Service
-public class UserManagementLocalLogic {
+public class UserManagementLocalLogic implements UserManagement{
     @Autowired
     public UserDAO userDAO;
 

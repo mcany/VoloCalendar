@@ -50,6 +50,11 @@ angular.module('admin-users-list', [
                 $scope.edit(id);
             };
 
+            $scope.addUser = function (id) {
+                utilMethods.save('pagingData', $scope);
+                $scope.new();
+            };
+
             $scope.pageChanged = function () {
                 $http.post('/admin/users/pagination'
                     , {sortingField: $scope.sortingField, reverse: $scope.reverse, currentPage: $scope.currentPage, itemsPerPage: $scope.itemsPerPage, keyword: $scope.keyword
