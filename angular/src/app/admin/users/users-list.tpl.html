@@ -2,13 +2,13 @@
     <div class="col-md-3">
         <dl class="dl-horizontal">
             <dt>Users in database</dt>
-            <dd>{{totalItems}}</dd>
+            <dd>{{params.totalItems}}</dd>
         </dl>
     </div>
     <div class="col-md-3">
         <form class="form-search" ng-submit="search()">
             <div class="input-group">
-                <input type="text" class="form-control" ng-model="keyword">
+                <input type="text" class="form-control" ng-model="params.keyword">
                       <span class="input-group-btn">
                         <button type="button" class="btn btn-primary" ng-click="search()">
                             <span class="glyphicon glyphicon-search"></span> Search
@@ -22,10 +22,10 @@
             <dt>Users per page</dt>
             <dd>
                 <select class="input-mini" ng-model="itemsPerPageStr" ng-change="changePageVolume()">
-                    <option value="5" ng-selected="itemsPerPage==5">5</option>
-                    <option value="10" ng-selected="itemsPerPage==10">10</option>
-                    <option value="20" ng-selected="itemsPerPage==20">20</option>
-                    <option value="50" ng-selected="itemsPerPage==50">50</option>
+                    <option value="5" ng-selected="params.itemsPerPage==5">5</option>
+                    <option value="10" ng-selected="params.itemsPerPage==10">10</option>
+                    <option value="20" ng-selected="params.itemsPerPage==20">20</option>
+                    <option value="50" ng-selected="params.itemsPerPage==50">50</option>
                 </select>
             </dd>
         </dl>
@@ -34,21 +34,26 @@
         <button class="btn" ng-click="addUser()">New User</button>
     </div>
 </div>
-<pagination ng-change="pageChanged()" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"
-            max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
+<pagination ng-change="pageChanged()" items-per-page="params.itemsPerPage" total-items="params.totalItems"
+            ng-model="params.currentPage"
+            max-size="params.maxSize" class="pagination-sm" boundary-links="true"></pagination>
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
         <th></th>
-        <th column-header="Name" column-field="name" sorting-field="{{sortingField}}" reverse="{{reverse}}"
+        <th column-header="Name" column-field="name" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
-        <th column-header="Telephone" column-field="telephoneNumber" sorting-field="{{sortingField}}"
-            reverse="{{reverse}}" sort="sort(field)"></th>
-        <th column-header="E-mail" column-field="email" sorting-field="{{sortingField}}" reverse="{{reverse}}"
+        <th column-header="Telephone" column-field="telephoneNumber" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}" sort="sort(field)"></th>
+        <th column-header="E-mail" column-field="email" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
-        <th column-header="Contract" column-field="contractTypeShort" sorting-field="{{sortingField}}" reverse="{{reverse}}"
+        <th column-header="Contract" column-field="contractTypeShort" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
-        <th column-header="Status" column-field="deleted" sorting-field="{{sortingField}}" reverse="{{reverse}}"
+        <th column-header="Status" column-field="deleted" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
         <th>Planned</th>
         <th>Done</th>
@@ -58,7 +63,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users" ng-click="editUser(user.$id())">
+    <tr ng-repeat="user in params.users" ng-click="editUser(user.$id())">
         <td><img width="50" height="50" ng-src="{{user.base64Image}}" class="img-polaroid"/></td>
         <td>{{user.name}}</td>
         <td>{{user.telephoneNumber}}</td>
@@ -91,5 +96,6 @@
     </tr>
     </tbody>
 </table>
-<pagination ng-change="pageChanged()" items-per-page="itemsPerPage" total-items="totalItems" ng-model="currentPage"
-            max-size="maxSize" class="pagination-sm" boundary-links="true"></pagination>
+<pagination ng-change="pageChanged()" items-per-page="params.itemsPerPage" total-items="params.totalItems"
+            ng-model="params.currentPage"
+            max-size="params.maxSize" class="pagination-sm" boundary-links="true"></pagination>

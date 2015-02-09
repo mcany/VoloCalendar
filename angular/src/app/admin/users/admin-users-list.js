@@ -9,7 +9,7 @@ angular.module('admin-users-list', [
             angular.extend($scope, crudListMethods('/admin/users'));
 
             $scope.changePageVolume = function () {
-                $scope.itemsPerPage = parseInt($scope.itemsPerPageStr, 10);
+                $scope.params.itemsPerPage = parseInt($scope.itemsPerPageStr, 10);
                 $scope.pageChanged();
             }
 
@@ -46,66 +46,72 @@ angular.module('admin-users-list', [
             };
 
             $scope.editUser = function (id) {
-                utilMethods.save('pagingData', $scope);
+                utilMethods.save('pagingData', $scope.params);
                 $scope.edit(id);
             };
 
             $scope.addUser = function (id) {
-                utilMethods.save('pagingData', $scope);
+                utilMethods.save('pagingData', $scope.params);
                 $scope.new();
             };
 
             $scope.pageChanged = function () {
                 $http.post('/admin/users/pagination'
-                    , {sortingField: $scope.sortingField, reverse: $scope.reverse, currentPage: $scope.currentPage, itemsPerPage: $scope.itemsPerPage, keyword: $scope.keyword
+                    , {sortingField: $scope.params.sortingField, reverse: $scope.params.reverse
+                        , currentPage: $scope.params.currentPage, itemsPerPage: $scope.params.itemsPerPage
+                        , keyword: $scope.params.keyword
                     }).
                     success(function (data, status, headers, config) {
-                        result = [];
+                        var result = [];
                         for (var i = 0; i < data.items.length; i++) {
                             var myResource = mongolabResource('users');
                             result.push(new myResource(data.items[i]));
                         }
-                        $scope.users = result;
-                        $scope.totalItems = data.allCount;
+                        $scope.params.users = result;
+                        $scope.params.totalItems = data.allCount;
                     }).
                     error(function (data, status, headers, config) {
-                        $scope.users = null;
-                        $scope.totalItems = 0;
+                        $scope.params.users = null;
+                        $scope.params.totalItems = 0;
                     });
             };
 
             $scope.sort = function (sortingField) {
-                if ($scope.sortingField != sortingField) {
-                    $scope.sortingField = sortingField;
-                    $scope.reverse = false;
+                if ($scope.params.sortingField != sortingField) {
+                    $scope.params.sortingField = sortingField;
+                    $scope.params.reverse = false;
                 } else {
-                    $scope.reverse = !$scope.reverse;
+                    $scope.params.reverse = !$scope.params.reverse;
                 }
-                $scope.currentPage = 1;
+                $scope.params.currentPage = 1;
                 $scope.pageChanged();
             };
 
             $scope.search = function () {
-                $scope.currentPage = 1;
+                $scope.params.currentPage = 1;
                 $scope.pageChanged();
             };
 
-            $scope.maxSize = 5;
+            $scope.params = {};
+            $scope.params.maxSize = 5;
             var cache = utilMethods.get('pagingData');
 
             if (cache == null) {
-                $scope.currentPage = 1;
-                $scope.sortingField = 'deleted';
-                $scope.reverse = false;
-                $scope.itemsPerPage = 5;
-                $scope.users = null;
-                $scope.keyword = null;
+                $scope.params.totalItems = 0;
+                $scope.params.currentPage = 1;
+                $scope.params.sortingField = 'deleted';
+                $scope.params.reverse = false;
+                $scope.params.itemsPerPage = 5;
+                $scope.params.keyword = null;
+                $scope.params.users = null;
             } else {
-                $scope.currentPage = cache.currentPage;
-                $scope.sortingField = cache.sortingField;
-                $scope.reverse = cache.reverse;
-                $scope.itemsPerPage = cache.itemsPerPage;
-                $scope.keyword = cache.keyword;
+                $scope.params.totalItems = cache.totalItems;
+                $scope.params.currentPage = cache.currentPage;
+                $scope.params.sortingField = cache.sortingField;
+                $scope.params.reverse = cache.reverse;
+                $scope.params.itemsPerPage = cache.itemsPerPage;
+                $scope.params.keyword = cache.keyword;
+                $scope.params.users = null;
             }
             $scope.pageChanged();
         }])

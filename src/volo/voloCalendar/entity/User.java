@@ -264,6 +264,9 @@ public class User implements Serializable {// any user in system: admin or drive
     }
     @Transient
     public TransportType getTransportType() {
+        if (transportTypeShort == 0){
+            return null;
+        }
         return TransportType.values()[transportTypeShort];
     }
 
@@ -276,6 +279,10 @@ public class User implements Serializable {// any user in system: admin or drive
     }
     @Transient
     public TelephoneType getTelephoneType() {
+        if (telephoneTypeShort == 0){
+            return null;
+        }
+
         return TelephoneType.values()[telephoneTypeShort];
     }
 

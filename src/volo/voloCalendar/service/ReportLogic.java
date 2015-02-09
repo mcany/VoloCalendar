@@ -201,13 +201,13 @@ public class ReportLogic {
     private void insertCell(PdfPTable table, String text, int align, int colspan, Font font){
 
         //create a new cell with the specified Text and Font
-        PdfPCell cell = new PdfPCell(new Phrase(text.trim(), font));
+        PdfPCell cell = new PdfPCell(new Phrase(text==null?"":text.trim(), font));
         //set the cell alignment
         cell.setHorizontalAlignment(align);
         //set the cell column span in case you want to merge two or more cells
         cell.setColspan(colspan);
         //in case there is no text and you wan to create an empty row
-        if(text.trim().equalsIgnoreCase("")){
+        if((text==null?"":text.trim()).equalsIgnoreCase("")){
             cell.setMinimumHeight(10f);
         }
         //add the call to the table

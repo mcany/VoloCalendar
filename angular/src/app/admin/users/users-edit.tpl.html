@@ -14,10 +14,8 @@
                     <label class="col-sm-2 control-label" for="name">Name</label>
 
                     <div class="col-sm-5">
-                        <input class="form-control" type="text" id="name" name="name" ng-model="user.name" required>
+                        <input class="form-control" type="text" id="name" name="name" ng-model="user.name" />
                     </div>
-                    <span ng-show="showError('name', 'required')"
-                          class="alert alert-danger">This field is required.</span>
                 </div>
                 <div class="form-group form-group-sm">
                     <label class="col-sm-2 control-label" for="password">Password</label>
@@ -51,10 +49,8 @@
                         <label class="col-sm-2 control-label" for="street">Street</label>
 
                         <div class="col-sm-5">
-                            <input class="form-control" type="text" id="street" name="street" ng-model="user.street"
-                                   required>
+                            <input class="form-control" type="text" id="street" name="street" ng-model="user.street"/>
                         </div>
-                        <span ng-show="showError('street', 'required')" class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="address">Address</label>
@@ -67,83 +63,64 @@
                         <label class="col-sm-2 control-label" for="plz">PLZ</label>
 
                         <div class="col-sm-5">
-                            <input class="form-control" type="text" id="plz" name="plz" ng-model="user.plz" required>
+                            <input class="form-control" type="text" id="plz" name="plz" ng-model="user.plz" />
                         </div>
-                        <span ng-show="showError('plz', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="city">City</label>
 
                         <div class="col-sm-5">
-                            <input class="form-control" type="text" id="city" name="city" ng-model="user.city" required>
+                            <input class="form-control" type="text" id="city" name="city" ng-model="user.city" />
                         </div>
-                        <span ng-show="showError('city', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="telephoneNumber">Telephone number</label>
 
                         <div class="col-sm-5">
                             <input class="form-control" type="text" id="telephoneNumber" name="telephoneNumber"
-                                   ng-model="user.telephoneNumber" required>
+                                   ng-model="user.telephoneNumber" />
                         </div>
-                        <span ng-show="showError('telephoneNumber', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label">Transport type</label>
 
                         <div class="col-sm-5">
                             <label class="radio-inline">
-                                <input name="transportType" type="radio" ng-model="user.transportType" value="bicycle"
-                                       ng-required="!user.transportType">Bicycle
+                                <input name="transportType" type="radio" ng-model="user.transportType" value="bicycle"/>Bicycle
                             </label>
                             <label class="radio-inline">
-                                <input name="transportType" type="radio" ng-model="user.transportType" value="auto"
-                                       ng-required="!user.transportType">Auto
+                                <input name="transportType" type="radio" ng-model="user.transportType" value="auto"/>Auto
                             </label>
                             <label class="radio-inline">
-                                <input name="transportType" type="radio" ng-model="user.transportType" value="scooter"
-                                       ng-required="!user.transportType">Scooter
+                                <input name="transportType" type="radio" ng-model="user.transportType" value="scooter"/>Scooter
                             </label>
                         </div>
-                        <span ng-show="showError('transportType', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label">Telephone type</label>
 
                         <div class="col-sm-5">
                             <label class="radio-inline">
-                                <input name="telephoneType" type="radio" ng-model="user.telephoneType" value="ios"
-                                       ng-required="!user.telephoneType">IOS
+                                <input name="telephoneType" type="radio" ng-model="user.telephoneType" value="ios"/>IOS
                             </label>
                             <label class="radio-inline">
-                                <input name="telephoneType" type="radio" ng-model="user.telephoneType" value="android"
-                                       ng-required="!user.telephoneType">Android
+                                <input name="telephoneType" type="radio" ng-model="user.telephoneType" value="android"/>Android
                             </label>
                         </div>
-                        <span ng-show="showError('telephoneType', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="iban">IBAN</label>
 
                         <div class="col-sm-5">
-                            <input class="form-control" type="text" id="iban" name="iban" ng-model="user.iban" required>
+                            <input class="form-control" type="text" id="iban" name="iban" ng-model="user.iban" />
                         </div>
-                        <span ng-show="showError('iban', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label" for="bic">BIC</label>
 
                         <div class="col-sm-5">
-                            <input class="form-control" type="text" id="bic" name="bic" ng-model="user.bic" required>
+                            <input class="form-control" type="text" id="bic" name="bic" ng-model="user.bic" />
                         </div>
-                        <span ng-show="showError('bic', 'required')"
-                              class="alert alert-danger">This field is required.</span>
                     </div>
                     <div class="form-group form-group-sm">
                         <label class="col-sm-2 control-label">Contract type</label>
