@@ -101,7 +101,6 @@ public class User implements Serializable {// any user in system: admin or drive
         this.name = name;
         this.telephoneNumber = phone;
         this.locationId = locationId;
-        //TODO: convert otherFields
     }
 
     @Override
@@ -120,6 +119,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
     @Basic
     @Column(name = "\"password\"")
     public String getPassword() {
@@ -129,6 +129,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setPassword(String password) {
         this.password = password;
     }
+
     @Basic
     @Column(name = "\"email\"")
     public String getEmail() {
@@ -138,6 +139,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setEmail(String email) {
         this.email = email;
     }
+
     @Id
     @Column(name = "\"id\"")
     public String getId() {
@@ -147,6 +149,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setId(String id) {
         this.id = id;
     }
+
     @Basic
     @Column(name = "\"name\"")
     public String getName() {
@@ -156,6 +159,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setName(String name) {
         this.name = name;
     }
+
     @Transient
     public String getBase64Image() {
         return base64Image;
@@ -164,6 +168,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setBase64Image(String base64Image) {
         this.base64Image = base64Image;
     }
+
     @Basic
     @Column(name = "\"admin\"")
     public boolean isAdmin() {
@@ -176,6 +181,7 @@ public class User implements Serializable {// any user in system: admin or drive
             setNullNonAdminProperties();
         }
     }
+
     @Basic
     @Column(name = "\"deleted\"")
     public boolean isDeleted() {
@@ -198,6 +204,7 @@ public class User implements Serializable {// any user in system: admin or drive
         this.bic = null;
         this.contractTypeShort = 0;
     }
+
     @Basic
     @Column(name = "\"street\"")
     public String getStreet() {
@@ -223,6 +230,7 @@ public class User implements Serializable {// any user in system: admin or drive
         }
         this.address = address;
     }
+
     @Basic
     @Column(name = "\"plz\"")
     public String getPlz() {
@@ -236,6 +244,7 @@ public class User implements Serializable {// any user in system: admin or drive
         }
         this.plz = plz;
     }
+
     @Basic
     @Column(name = "\"city\"")
     public String getCity() {
@@ -249,6 +258,7 @@ public class User implements Serializable {// any user in system: admin or drive
         }
         this.city = city;
     }
+
     @Basic
     @Column(name = "\"telephoneNumber\"")
     public String getTelephoneNumber() {
@@ -262,9 +272,10 @@ public class User implements Serializable {// any user in system: admin or drive
         }
         this.telephoneNumber = telephoneNumber;
     }
+
     @Transient
     public TransportType getTransportType() {
-        if (transportTypeShort == 0){
+        if (transportTypeShort == 0) {
             return null;
         }
         return TransportType.values()[transportTypeShort];
@@ -275,11 +286,15 @@ public class User implements Serializable {// any user in system: admin or drive
             this.transportTypeShort = 0;
             return;
         }
-        this.transportTypeShort = (short)transportType.ordinal();
+        if (transportType == null){
+            transportType = TransportType.notSet;
+        }
+        this.transportTypeShort = (short) transportType.ordinal();
     }
+
     @Transient
     public TelephoneType getTelephoneType() {
-        if (telephoneTypeShort == 0){
+        if (telephoneTypeShort == 0) {
             return null;
         }
 
@@ -291,8 +306,12 @@ public class User implements Serializable {// any user in system: admin or drive
             this.telephoneTypeShort = 0;
             return;
         }
-        this.telephoneTypeShort = (short)telephoneType.ordinal();
+        if (telephoneType == null){
+            telephoneType = TelephoneType.notSet;
+        }
+        this.telephoneTypeShort = (short) telephoneType.ordinal();
     }
+
     @Basic
     @Column(name = "\"iban\"")
     public String getIban() {
@@ -306,6 +325,7 @@ public class User implements Serializable {// any user in system: admin or drive
         }
         this.iban = iban;
     }
+
     @Basic
     @Column(name = "\"bic\"")
     public String getBic() {
@@ -319,6 +339,7 @@ public class User implements Serializable {// any user in system: admin or drive
         }
         this.bic = bic;
     }
+
     @Transient
     public ContractType getContractType() {
         return ContractType.values()[contractTypeShort];
@@ -329,16 +350,19 @@ public class User implements Serializable {// any user in system: admin or drive
             this.contractTypeShort = 0;
             return;
         }
-        this.contractTypeShort = (short)contractType.ordinal();
+        this.contractTypeShort = (short) contractType.ordinal();
     }
+
     @Transient
     public int getPlannedHours() {
         return (contractTypeShort == ContractType.minijob.ordinal()) ? Settings.minijobMonthlyPlan : 0;
     }
+
     @Transient
     public int getDiffHours() {
         return (contractTypeShort == ContractType.minijob.ordinal()) ? (getPlannedHours() - getDoneHours()) : 0;
     }
+
     @Transient
     public int getDoneHours() {
         return doneHours;
@@ -347,6 +371,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setDoneHours(int doneHours) {
         this.doneHours = doneHours;
     }
+
     @Transient
     public int getDiffPrevHours() {
         return diffPrevHours;
@@ -355,6 +380,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setDiffPrevHours(int diffPrevHours) {
         this.diffPrevHours = diffPrevHours;
     }
+
     @Transient
     public int getLocationId() {
         return locationId;
@@ -363,6 +389,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setLocationId(int locationId) {
         this.locationId = locationId;
     }
+
     @Basic
     @Column(name = "\"telephoneType\"")
     public short getTelephoneTypeShort() {
@@ -372,6 +399,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setTelephoneTypeShort(short telephoneTypeShort) {
         this.telephoneTypeShort = telephoneTypeShort;
     }
+
     @Basic
     @Column(name = "\"contractType\"")
     public short getContractTypeShort() {
@@ -381,6 +409,7 @@ public class User implements Serializable {// any user in system: admin or drive
     public void setContractTypeShort(short contractTypeShort) {
         this.contractTypeShort = contractTypeShort;
     }
+
     @Basic
     @Column(name = "\"transportType\"")
     public short getTransportTypeShort() {

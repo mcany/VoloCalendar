@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 28/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class User implements Serializable{
+public class User implements Serializable {
     private String phone;
 
     public User() {

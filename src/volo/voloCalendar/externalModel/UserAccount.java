@@ -9,7 +9,6 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserAccount implements Serializable {
-    //TODO: do we need id field for update or email is as id?
     private String email;
     private String password;
     private String gender;

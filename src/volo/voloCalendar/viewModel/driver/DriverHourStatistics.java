@@ -21,7 +21,7 @@ public class DriverHourStatistics extends HourStatistics implements Serializable
         this.index = index;
     }
 
-    public DriverHourStatistics( DriverDayStatistics dayStatistics, int plannedHours, int index) {
+    public DriverHourStatistics(DriverDayStatistics dayStatistics, int plannedHours, int index) {
         this(dayStatistics, index);
         this.plannedHours = plannedHours;
     }

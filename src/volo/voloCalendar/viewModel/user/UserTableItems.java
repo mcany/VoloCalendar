@@ -12,7 +12,7 @@ import java.util.Arrays;
  * Created by Emin Guliyev on 30/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserTableItems implements Serializable{
+public class UserTableItems implements Serializable {
     private int allCount;
     private User[] items;
 
@@ -28,13 +28,13 @@ public class UserTableItems implements Serializable{
         this.allCount = (int) users.getTotalElements();
         this.items = new User[users.getSize()];
         int i = 0;
-        for (User user:  users){
-            if (user == null){
+        for (User user : users) {
+            if (user == null) {
                 break;
             }
             this.items[i++] = user;
         }
-        this.items = Arrays.copyOfRange(this.items,0,i);
+        this.items = Arrays.copyOfRange(this.items, 0, i);
     }
 
     public int getAllCount() {

@@ -66,8 +66,9 @@ public class UserTable implements Serializable { //defines all parameters of fil
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
+
     @JsonIgnore
     public String getKeywordLike() {
-        return keyword == null?"%":"%" + keyword.trim() + "%";
+        return keyword == null ? "%" : "%" + keyword.trim() + "%";
     }
 }

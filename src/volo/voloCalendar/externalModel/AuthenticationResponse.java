@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 28/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthenticationResponse implements Serializable{
+public class AuthenticationResponse implements Serializable {
     private String access_token;
     private String token_type;
     private long expires_in;

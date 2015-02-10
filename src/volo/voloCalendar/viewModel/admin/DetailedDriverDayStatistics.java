@@ -14,18 +14,18 @@ import java.time.LocalDate;
  * Created by Emin Guliyev on 08/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DetailedDriverDayStatistics extends DriverDayStatistics implements Serializable{ // defines driverDayStatistics + driverInfo string for driver whom the object belongs, used in admin's main page(calendar view)
+public class DetailedDriverDayStatistics extends DriverDayStatistics implements Serializable { // defines driverDayStatistics + driverInfo string for driver whom the object belongs, used in admin's main page(calendar view)
     private String driverInfo; //driver info(name of driver)
 
     public DetailedDriverDayStatistics() {
     }
 
-    public DetailedDriverDayStatistics(DriverDayStatistics driverDayStatistics, String driverInfo, String driverId){
+    public DetailedDriverDayStatistics(DriverDayStatistics driverDayStatistics, String driverInfo, String driverId) {
         this.date = driverDayStatistics.getDate();
         this.driverInfo = driverInfo;
         this.userId = driverId;
         this.hourStatisticsArray = new DriverHourStatistics[driverDayStatistics.getHourStatisticsArray().length];
-        for(int i = 0; i < driverDayStatistics.getHourStatisticsArray().length; i++){
+        for (int i = 0; i < driverDayStatistics.getHourStatisticsArray().length; i++) {
             DriverHourStatistics hourStatistics = driverDayStatistics.getHourStatisticsArray()[i].copy();
             hourStatistics.setDayStatistics(this);
             this.hourStatisticsArray[i] = hourStatistics;
@@ -119,7 +119,7 @@ public class DetailedDriverDayStatistics extends DriverDayStatistics implements 
         this.driverInfo = driverInfo;
     }
 
-    public void init(){
+    public void init() {
         init(userId);
     }
 

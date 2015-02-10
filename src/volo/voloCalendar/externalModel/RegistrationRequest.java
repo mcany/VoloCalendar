@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 28/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RegistrationRequest implements Serializable{
+public class RegistrationRequest implements Serializable {
     private String type;
     private UserAccount user_account;
     private User user;
@@ -21,7 +21,7 @@ public class RegistrationRequest implements Serializable{
         this.user = user;
         this.location = location;
         this.user_account = userAccount;
-        this.type = admin?"operator":"driver";
+        this.type = admin ? "operator" : "driver";
     }
 
     public String getType() {

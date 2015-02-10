@@ -68,7 +68,7 @@ public class MonthStatistics implements Serializable { //defines month statistic
         int plannedHours = 0;
         int month = beginDate.getMonthValue();
         LocalDate date = LocalDate.of(beginDate.getYear(), beginDate.getMonthValue(), beginDate.getDayOfMonth());
-        while(date.getMonthValue() == month){
+        while (date.getMonthValue() == month) {
             plannedHours += calculatePlannedHours(manualForecasting.getDays()[date.getDayOfWeek().getValue() - 1]);
             date = date.plusDays(1);
         }

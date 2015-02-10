@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by Emin Guliyev on 05/02/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Order  implements Comparable<Order>{
+public class Order implements Comparable<Order> {
     private Date dispatched_at;
 
     public Order() {
@@ -24,10 +24,10 @@ public class Order  implements Comparable<Order>{
 
     @Override
     public int compareTo(Order obj) {
-        if (obj == null || obj.getDispatched_at() == null){
+        if (obj == null || obj.getDispatched_at() == null) {
             return 1;
         }
-        if (this.getDispatched_at() == null){
+        if (this.getDispatched_at() == null) {
             return -1;
         }
         return this.getDispatched_at().compareTo(obj.getDispatched_at());

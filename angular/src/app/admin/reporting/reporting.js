@@ -13,7 +13,7 @@ angular.module('reporting', [
     .controller('ReportingCtrl', ['$http', '$scope', '$route', 'i18nNotifications', 'utilMethods',
         function ($http, $scope, $route, i18nNotifications, utilMethods) {
             var now = new Date();
-            $scope.model = {'year':now.getUTCFullYear(), 'month':(now.getUTCMonth() + 1)};
+            $scope.model = {'year': now.getUTCFullYear(), 'month': (now.getUTCMonth() + 1)};
 
             $scope.showError = function (fieldName, error) {
                 return $scope.form[fieldName].$error[error];

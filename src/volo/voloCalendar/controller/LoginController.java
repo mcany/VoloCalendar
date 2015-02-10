@@ -72,15 +72,15 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/updateProfile", method = RequestMethod.POST, produces = "application/json")
-    @Secured({"ROLE_ADMIN", "ROLE_DRIVER"})
+    @Secured({"ROLE_DRIVER"})
     public User updateProfile(@RequestBody User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User currentUser = userManagementLogic.getUserByEmail(email);
-        if (user != null && user.equals(currentUser)){
+        if (user != null && user.equals(currentUser)) {
             userManagementLogic.insertOrUpdateUser(user);
             return user;
-        }else {
+        } else {
             return null;
         }
 

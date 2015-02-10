@@ -3,6 +3,7 @@ package volo.voloCalendar.dao;
 /**
  * Created by Emin Guliyev on 04/08/2014.
  */
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,8 +15,9 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
-public interface OrderDayStatisticsDAO extends CrudRepository<OrderDayStatistics, String>, Serializable{
+public interface OrderDayStatisticsDAO extends CrudRepository<OrderDayStatistics, String>, Serializable {
     public List<Object[]> getWeekForecastingByDateLowerBound(Date lowerBoundDate);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM OrderDayStatistics day WHERE  (day.date >= ?51) AND (day.weekDayIndex = ?49)" +
@@ -32,5 +34,6 @@ public interface OrderDayStatisticsDAO extends CrudRepository<OrderDayStatistics
             , double stddev14, double avg15, double stddev15, double avg16, double stddev16, double avg17, double stddev17
             , double avg18, double stddev18, double avg19, double stddev19, double avg20, double stddev20, double avg21
             , double stddev21, double avg22, double stddev22, double avg23, double stddev23, short weekDayIndex, double sigma, Date lowerBound);
+
     public List<Object[]> getAverageAndStandardDeviationsWeek(Date lowerBoundDate);
 }

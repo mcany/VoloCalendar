@@ -100,31 +100,31 @@ public class DayStatistics {
         this.userId = userId;
         this.date = Date.valueOf(driverDayStatistics.getDate());
         this.weekBeginDate = Date.valueOf(weekBeginDate);
-        this.weekDayIndex = (short)driverDayStatistics.getDate().getDayOfWeek().getValue();
-        this.hour0 = (short) (driverDayStatistics.getHourStatisticsArray()[0].isSelected()?1:0);
-        this.hour1 = (short) (driverDayStatistics.getHourStatisticsArray()[1].isSelected()?1:0);
-        this.hour2 = (short) (driverDayStatistics.getHourStatisticsArray()[2].isSelected()?1:0);
-        this.hour3 = (short) (driverDayStatistics.getHourStatisticsArray()[3].isSelected()?1:0);
-        this.hour4 = (short) (driverDayStatistics.getHourStatisticsArray()[4].isSelected()?1:0);
-        this.hour5 = (short) (driverDayStatistics.getHourStatisticsArray()[5].isSelected()?1:0);
-        this.hour6 = (short) (driverDayStatistics.getHourStatisticsArray()[6].isSelected()?1:0);
-        this.hour7 = (short) (driverDayStatistics.getHourStatisticsArray()[7].isSelected()?1:0);
-        this.hour8 = (short) (driverDayStatistics.getHourStatisticsArray()[8].isSelected()?1:0);
-        this.hour9 = (short) (driverDayStatistics.getHourStatisticsArray()[9].isSelected()?1:0);
-        this.hour10 = (short) (driverDayStatistics.getHourStatisticsArray()[10].isSelected()?1:0);
-        this.hour11 = (short) (driverDayStatistics.getHourStatisticsArray()[11].isSelected()?1:0);
-        this.hour12 = (short) (driverDayStatistics.getHourStatisticsArray()[12].isSelected()?1:0);
-        this.hour13 = (short) (driverDayStatistics.getHourStatisticsArray()[13].isSelected()?1:0);
-        this.hour14 = (short) (driverDayStatistics.getHourStatisticsArray()[14].isSelected()?1:0);
-        this.hour15 = (short) (driverDayStatistics.getHourStatisticsArray()[15].isSelected()?1:0);
-        this.hour16 = (short) (driverDayStatistics.getHourStatisticsArray()[16].isSelected()?1:0);
-        this.hour17 = (short) (driverDayStatistics.getHourStatisticsArray()[17].isSelected()?1:0);
-        this.hour18 = (short) (driverDayStatistics.getHourStatisticsArray()[18].isSelected()?1:0);
-        this.hour19 = (short) (driverDayStatistics.getHourStatisticsArray()[19].isSelected()?1:0);
-        this.hour20 = (short) (driverDayStatistics.getHourStatisticsArray()[20].isSelected()?1:0);
-        this.hour21 = (short) (driverDayStatistics.getHourStatisticsArray()[21].isSelected()?1:0);
-        this.hour22 = (short) (driverDayStatistics.getHourStatisticsArray()[22].isSelected()?1:0);
-        this.hour23 = (short) (driverDayStatistics.getHourStatisticsArray()[23].isSelected()?1:0);
+        this.weekDayIndex = (short) driverDayStatistics.getDate().getDayOfWeek().getValue();
+        this.hour0 = (short) (driverDayStatistics.getHourStatisticsArray()[0].isSelected() ? 1 : 0);
+        this.hour1 = (short) (driverDayStatistics.getHourStatisticsArray()[1].isSelected() ? 1 : 0);
+        this.hour2 = (short) (driverDayStatistics.getHourStatisticsArray()[2].isSelected() ? 1 : 0);
+        this.hour3 = (short) (driverDayStatistics.getHourStatisticsArray()[3].isSelected() ? 1 : 0);
+        this.hour4 = (short) (driverDayStatistics.getHourStatisticsArray()[4].isSelected() ? 1 : 0);
+        this.hour5 = (short) (driverDayStatistics.getHourStatisticsArray()[5].isSelected() ? 1 : 0);
+        this.hour6 = (short) (driverDayStatistics.getHourStatisticsArray()[6].isSelected() ? 1 : 0);
+        this.hour7 = (short) (driverDayStatistics.getHourStatisticsArray()[7].isSelected() ? 1 : 0);
+        this.hour8 = (short) (driverDayStatistics.getHourStatisticsArray()[8].isSelected() ? 1 : 0);
+        this.hour9 = (short) (driverDayStatistics.getHourStatisticsArray()[9].isSelected() ? 1 : 0);
+        this.hour10 = (short) (driverDayStatistics.getHourStatisticsArray()[10].isSelected() ? 1 : 0);
+        this.hour11 = (short) (driverDayStatistics.getHourStatisticsArray()[11].isSelected() ? 1 : 0);
+        this.hour12 = (short) (driverDayStatistics.getHourStatisticsArray()[12].isSelected() ? 1 : 0);
+        this.hour13 = (short) (driverDayStatistics.getHourStatisticsArray()[13].isSelected() ? 1 : 0);
+        this.hour14 = (short) (driverDayStatistics.getHourStatisticsArray()[14].isSelected() ? 1 : 0);
+        this.hour15 = (short) (driverDayStatistics.getHourStatisticsArray()[15].isSelected() ? 1 : 0);
+        this.hour16 = (short) (driverDayStatistics.getHourStatisticsArray()[16].isSelected() ? 1 : 0);
+        this.hour17 = (short) (driverDayStatistics.getHourStatisticsArray()[17].isSelected() ? 1 : 0);
+        this.hour18 = (short) (driverDayStatistics.getHourStatisticsArray()[18].isSelected() ? 1 : 0);
+        this.hour19 = (short) (driverDayStatistics.getHourStatisticsArray()[19].isSelected() ? 1 : 0);
+        this.hour20 = (short) (driverDayStatistics.getHourStatisticsArray()[20].isSelected() ? 1 : 0);
+        this.hour21 = (short) (driverDayStatistics.getHourStatisticsArray()[21].isSelected() ? 1 : 0);
+        this.hour22 = (short) (driverDayStatistics.getHourStatisticsArray()[22].isSelected() ? 1 : 0);
+        this.hour23 = (short) (driverDayStatistics.getHourStatisticsArray()[23].isSelected() ? 1 : 0);
     }
 
     @Id
@@ -172,6 +172,7 @@ public class DayStatistics {
     public void setDate(Date date) {
         this.date = date;
     }
+
     //from 1 to 7
     private short weekDayIndex;
 

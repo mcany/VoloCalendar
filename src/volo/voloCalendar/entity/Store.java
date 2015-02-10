@@ -11,7 +11,8 @@ public class Store {
     private String id;
     private String data;
 
-    public Store(){}
+    public Store() {
+    }
 
     public Store(String id, String data) {
         this.id = id;

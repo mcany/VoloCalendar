@@ -21,6 +21,7 @@ import java.util.Locale;
 public class ForecastingController {
     @Autowired
     public ForecastingLogic forecastingLogic;
+
     @RequestMapping(value = "/manualForecasting", method = RequestMethod.GET, produces = "application/json")
     public ManualForecasting manualForecasting() {
         return forecastingLogic.getManualForecasting();
@@ -32,19 +33,19 @@ public class ForecastingController {
     }
 
     @RequestMapping(value = "/updateDatabase/{year}/{month}", method = RequestMethod.GET, produces = "application/json")
-    public boolean updateDatabase(@PathVariable int year,@PathVariable int month) {
+    public boolean updateDatabase(@PathVariable int year, @PathVariable int month) {
         java.util.Date date = new java.util.Date(year, month, 1);
         return forecastingLogic.updateDatabase(date);
     }
 
     @RequestMapping(value = "/deleteOutliers/{year}/{month}", method = RequestMethod.POST)
-    public int deleteOutliers(@PathVariable int year,@PathVariable int month, @RequestBody double sigma) throws IOException {
+    public int deleteOutliers(@PathVariable int year, @PathVariable int month, @RequestBody double sigma) throws IOException {
         Date date = new Date(year - 1900, month, 1);
         return forecastingLogic.deleteOutliers(sigma, date);
     }
 
     @RequestMapping(value = "/calculateForecasting/{year}/{month}", method = RequestMethod.GET, produces = "application/json")
-    public boolean calculateForecasting(@PathVariable int year,@PathVariable int month) {
+    public boolean calculateForecasting(@PathVariable int year, @PathVariable int month) {
         Date date = new Date(year - 1900, month, 1);
         forecastingLogic.calculateForecasting(date);
         return true;

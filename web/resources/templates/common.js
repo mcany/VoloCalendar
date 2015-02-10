@@ -194,11 +194,13 @@ angular.module("security/login/profile-edit.tpl.html", []).run(["$templateCache"
     "\n" +
     "                        <div class=\"col-sm-5\">\n" +
     "                            <label class=\"radio-inline\">\n" +
-    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\" disabled\n" +
+    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"minijob\"\n" +
+    "                                       disabled\n" +
     "                                       ng-required=\"!user.contractType\">Minijob\n" +
     "                            </label>\n" +
     "                            <label class=\"radio-inline\">\n" +
-    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\" disabled\n" +
+    "                                <input name=\"contractType\" type=\"radio\" ng-model=\"user.contractType\" value=\"flexible\"\n" +
+    "                                       disabled\n" +
     "                                       ng-required=\"!user.contractType\">Flexible\n" +
     "                            </label>\n" +
     "                        </div>\n" +
@@ -230,7 +232,8 @@ angular.module("security/login/toolbar.tpl.html", []).run(["$templateCache", fun
     "        <a id=\"profilemenu\" role=\"button\" class=\"dropdown-toggle\" ng-click=\"isProfileOpen=!isProfileOpen\">{{currentUser.name}}<b\n" +
     "                class=\"caret\"></b></a>\n" +
     "        <ul class=\"dropdown-menu\" role=\"menu\" aria-labelledby=\"profilemenu\">\n" +
-    "            <li ng-show=\"!isAdmin()\"><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a></li>\n" +
+    "            <li ng-show=\"!isAdmin()\"><a tabindex=\"-1\" href=\"/profile\" ng-click=\"isProfileOpen=false\">Edit profile</a>\n" +
+    "            </li>\n" +
     "            <li>\n" +
     "                <a href=\"#\" tabindex=\"-1\" ng-click=\"logout();isProfileOpen=false;\">\n" +
     "                    <span class=\"glyphicon glyphicon-log-out\"></span> Logout\n" +

@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
-import volo.voloCalendar.util.MyGrantedAuthority;
+import volo.voloCalendar.util.UserGrantedAuthority;
 
 
 @Component(value = "loginService")
@@ -24,7 +24,7 @@ public class LoginLogic implements Serializable {
         boolean isAdmin;
         try {
             isAdmin = userManagementLogic.authenticate(email, password);
-        }catch (HttpClientErrorException ex){
+        } catch (HttpClientErrorException ex) {
             return null;
         }
 
@@ -37,7 +37,7 @@ public class LoginLogic implements Serializable {
     private List<GrantedAuthority> addAccordingRoleByUserType(
             final String userType) {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new MyGrantedAuthority(userType));
+        authorities.add(new UserGrantedAuthority(userType));
         return authorities;
     }
 

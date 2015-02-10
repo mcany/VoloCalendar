@@ -1,5 +1,4 @@
 angular.module('admin-users-edit', [
-    'services.crud',
     'services.i18nNotifications',
     'admin-users-edit-uniqueEmail',
     'admin-users-edit-validateEquals',

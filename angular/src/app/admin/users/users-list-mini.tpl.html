@@ -31,21 +31,26 @@
         </dl>
     </div>
 </div>
-<pagination ng-change="pageChanged()" items-per-page="params.itemsPerPage" total-items="params.totalItems" ng-model="params.currentPage"
+<pagination ng-change="pageChanged()" items-per-page="params.itemsPerPage" total-items="params.totalItems"
+            ng-model="params.currentPage"
             max-size="params.maxSize" class="pagination-sm" boundary-links="true"></pagination>
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
         <th></th>
-        <th column-header="Name" column-field="name" sorting-field="{{params.sortingField}}" reverse="{{params.reverse}}"
+        <th column-header="Name" column-field="name" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
         <th column-header="Telephone" column-field="telephoneNumber" sorting-field="{{params.sortingField}}"
             reverse="{{params.reverse}}" sort="sort(field)"></th>
-        <th column-header="E-mail" column-field="email" sorting-field="{{params.sortingField}}" reverse="{{params.reverse}}"
+        <th column-header="E-mail" column-field="email" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
-        <th column-header="Contract" column-field="contractType" sorting-field="{{params.sortingField}}" reverse="{{params.reverse}}"
+        <th column-header="Contract" column-field="contractType" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
-        <th column-header="Status" column-field="deleted" sorting-field="{{params.sortingField}}" reverse="{{params.reverse}}"
+        <th column-header="Status" column-field="deleted" sorting-field="{{params.sortingField}}"
+            reverse="{{params.reverse}}"
             sort="sort(field)"></th>
         <th></th>
     </tr>
@@ -80,5 +85,6 @@
     </tr>
     </tbody>
 </table>
-<pagination ng-change="pageChanged()" items-per-page="params.itemsPerPage" total-items="params.totalItems" ng-model="params.currentPage"
+<pagination ng-change="pageChanged()" items-per-page="params.itemsPerPage" total-items="params.totalItems"
+            ng-model="params.currentPage"
             max-size="params.maxSize" class="pagination-sm" boundary-links="true"></pagination>

@@ -57,9 +57,7 @@ angular.module('admin-users-list', [
 
             $scope.pageChanged = function () {
                 $http.post('/admin/users/pagination'
-                    , {sortingField: $scope.params.sortingField, reverse: $scope.params.reverse
-                        , currentPage: $scope.params.currentPage, itemsPerPage: $scope.params.itemsPerPage
-                        , keyword: $scope.params.keyword
+                    , {sortingField: $scope.params.sortingField, reverse: $scope.params.reverse, currentPage: $scope.params.currentPage, itemsPerPage: $scope.params.itemsPerPage, keyword: $scope.params.keyword
                     }).
                     success(function (data, status, headers, config) {
                         var result = [];
@@ -113,6 +111,7 @@ angular.module('admin-users-list', [
                 $scope.params.keyword = cache.keyword;
                 $scope.params.users = null;
             }
+
             $scope.pageChanged();
         }])
     .directive('columnHeader', function () {

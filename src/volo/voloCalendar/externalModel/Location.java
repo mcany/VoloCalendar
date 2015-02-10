@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Location implements Serializable {
+    //TODO 2: DE is ok?
+    private static final String defaultCountry = "DE";
     private int id;
     private String company;
     private String care_of;
@@ -19,13 +21,13 @@ public class Location implements Serializable {
 
     public Location() {
     }
-    //TODO: DE is ok?
+
     public Location(int id, String street, String zip_code, String city) {
         this.id = id;
         this.street = street;
         this.zip_code = zip_code;
         this.city = city;
-        this.country_code = "DE";
+        this.country_code = defaultCountry;
     }
 
     public String getCompany() {
@@ -83,13 +85,13 @@ public class Location implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    //TODO:DE is ok?
+
     public Location copy(int id, String street, String zip_code, String city) {
         this.id = id;
         this.street = street;
         this.zip_code = zip_code;
         this.city = city;
-        this.country_code = "DE";
+        this.country_code = defaultCountry;
         return this;
     }
 }

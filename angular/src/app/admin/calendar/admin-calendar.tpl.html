@@ -36,12 +36,15 @@ Planned hours: {{selectedMonth.plannedHours}} Set: {{selectedMonth.doneHours}} D
                                 </td>
                                 <td ng-repeat="hour in day.adminHourStatisticsArray track by $index">
                                     <font size="2">
-                                        <button class="fill-button-37" disabled ng-style="getBackgroundColorStyle(hour)">{{hour.doneHours + '/' + hour.plannedHours}}
+                                        <button class="fill-button-37" disabled
+                                                ng-style="getBackgroundColorStyle(hour)">{{hour.doneHours + '/' +
+                                            hour.plannedHours}}
                                         </button>
                                     </font>
                                 </td>
                             </tr>
-                            <tr ng-if="isSelectedDay(day)" ng-repeat="driverDay in selectedDay.detailedDriverDayStatisticsArray">
+                            <tr ng-if="isSelectedDay(day)"
+                                ng-repeat="driverDay in selectedDay.detailedDriverDayStatisticsArray">
                                 <td>
                                     <a ng-show="day.active" ng-click="deleteDriverDay(driverDay)">
                                         <span class="glyphicon glyphicon-remove"></span>
@@ -54,7 +57,7 @@ Planned hours: {{selectedMonth.plannedHours}} Set: {{selectedMonth.doneHours}} D
                             </tr>
                             <tr ng-if="isSelectedDay(day)">
                                 <td>
-                                    <button  ng-show="day.active" ng-click="addDriverDay()">
+                                    <button ng-show="day.active" ng-click="addDriverDay()">
                                         <span class="glyphicon glyphicon-plus"></span> Add
                                     </button>
                                 </td>

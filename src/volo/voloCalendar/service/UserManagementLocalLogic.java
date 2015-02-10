@@ -17,9 +17,9 @@ import java.util.*;
 /**
  * Created by Emin Guliyev on 25/01/2015.
  */
-//TODO:comment next line
+//TODO 7:comment next line
 @Service
-public class UserManagementLocalLogic implements UserManagement{
+public class UserManagementLocalLogic implements UserManagement {
     @Autowired
     public UserDAO userDAO;
 
@@ -31,20 +31,20 @@ public class UserManagementLocalLogic implements UserManagement{
         return user.isAdmin();
     }
 
-    public  User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         return userDAO.findByEmail(email);
     }
 
-    public  User getUserById(String id) {
+    public User getUserById(String id) {
         return userDAO.findById(id);
     }
 
-    public  User insertOrUpdateUser(User user) {
+    public User insertOrUpdateUser(User user) {
         user = userDAO.save(user);
         return user;
     }
 
-    public UserTableItems getSortedFilteredPagedUsersWithoutStatistics(UserTable userTable) {
+    public UserTableItems getSortedFilteredPagedUsersWithoutStatistics(UserTable userTable, boolean isKeywordGlobal) {
         Page<User> users = userDAO.search(userTable.getKeywordLike(), new PageRequest(userTable.getCurrentPage() - 1, userTable.getItemsPerPage(), new Sort(userTable.isReverse() ? Sort.Direction.DESC : Sort.Direction.ASC, userTable.getSortingField())));
         return new UserTableItems(users);
     }

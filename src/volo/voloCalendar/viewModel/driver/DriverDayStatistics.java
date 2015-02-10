@@ -38,7 +38,7 @@ public class DriverDayStatistics implements Serializable { // defines current si
     public DriverDayStatistics(DriverDayStatistics dayStatistics) {
         this();
         this.date = dayStatistics.date;
-        for (int i = 0; i < this.hourStatisticsArray.length; i++){
+        for (int i = 0; i < this.hourStatisticsArray.length; i++) {
             this.hourStatisticsArray[i].setSelected(dayStatistics.hourStatisticsArray[i].isSelected());
         }
     }
@@ -96,6 +96,7 @@ public class DriverDayStatistics implements Serializable { // defines current si
             hourStatistics.setSelected(false);
         }
     }
+
     @JsonIgnore
     public boolean isNotEmpty() {
         for (DriverHourStatistics hourStatistics : hourStatisticsArray) {

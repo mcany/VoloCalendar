@@ -17,7 +17,9 @@ public class DetailedAdminDayStatistics implements Serializable { //defines day 
     private LocalDate date; // date of the day
     private DetailedDriverDayStatistics[] detailedDriverDayStatisticsArray; //detailedDriverDayStatistics objects for the day
 
-    public DetailedAdminDayStatistics(){}
+    public DetailedAdminDayStatistics() {
+    }
+
     public DetailedAdminDayStatistics(LocalDate date) {
         this.date = date;
     }
@@ -25,6 +27,7 @@ public class DetailedAdminDayStatistics implements Serializable { //defines day 
     public LocalDate getDate() {
         return date;
     }
+
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     public void setDate(LocalDate date) {
@@ -40,7 +43,7 @@ public class DetailedAdminDayStatistics implements Serializable { //defines day 
     }
 
     public void init() {
-        for (DetailedDriverDayStatistics detailedDriverDayStatistics: detailedDriverDayStatisticsArray){
+        for (DetailedDriverDayStatistics detailedDriverDayStatistics : detailedDriverDayStatisticsArray) {
             detailedDriverDayStatistics.init();
         }
     }

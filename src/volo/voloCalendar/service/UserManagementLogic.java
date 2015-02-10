@@ -21,9 +21,9 @@ import java.util.List;
 /**
  * Created by Emin Guliyev on 28/01/2015.
  */
-//TODO:uncomment next line
+//TODO 8:uncomment next line
 //@Service
-public class UserManagementLogic implements UserManagement{
+public class UserManagementLogic implements UserManagement {
 
     public boolean authenticate(String email, String password) throws HttpClientErrorException {
         MultiValueMap<String, String> bodyMap = new LinkedMultiValueMap<String, String>();
@@ -42,32 +42,34 @@ public class UserManagementLogic implements UserManagement{
                 requestEntity, AuthenticationResponse.class);
         AuthenticationResponse result = entity.getBody();
 
-        if (UtilMethods.isTestingRestApi){
+        if (UtilMethods.isTestingRestApi) {
             UtilMethods.temp = "Bearer " + result.getAccess_token();
-        }else{
-            RequestContextHolder.currentRequestAttributes().setAttribute(UtilMethods.tokenVariableName, "Bearer " + result.getAccess_token() , RequestAttributes.SCOPE_SESSION);
+        } else {
+            RequestContextHolder.currentRequestAttributes().setAttribute(UtilMethods.tokenVariableName, "Bearer " + result.getAccess_token(), RequestAttributes.SCOPE_SESSION);
         }
 
         boolean isAdmin;
         try {
-            //TODO: implement it
+            //TODO 9: implement it, we need to get user role on authentication, for example by "isAdmin" boolean header as shown
             String isAdminString = entity.getHeaders().get("isAdmin").get(0);
             isAdmin = isAdminString.equals("true");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             isAdmin = false;
         }
         return isAdmin;
     }
 
     //rest
-    //TODO: filtering
-    public UserTableItems getSortedFilteredPagedUsersWithoutStatistics(UserTable userTable) {
-        userTable.setKeyword("email like %" + userTable.getKeyword() + "%" + " || " + "name like %" + userTable.getKeyword() + "%"
-                + " || " + "phone like %" + userTable.getKeyword() + "%");
+    //TODO 10.1: filtering, filtering should be done by email, name and phone fields, fix after and according server side is done
+    public UserTableItems getSortedFilteredPagedUsersWithoutStatistics(UserTable userTable, boolean isKeywordGlobal) {
+        if (isKeywordGlobal) {
+            userTable.setKeyword("email like %" + userTable.getKeyword() + "%" + " || " + "name like %" + userTable.getKeyword() + "%"
+                    + " || " + "phone like %" + userTable.getKeyword() + "%");
+        }
         HttpEntity<Object> httpEntity = UtilMethods.getAuthenticatedObjectHttpEntity(null);
         RestTemplate restTemplate = new RestTemplate();
 
-        String sortOrder = userTable.isReverse()?"-":"+";
+        String sortOrder = userTable.isReverse() ? "-" : "+";
         String created_at = convertFieldName(userTable.getSortingField());
         int itemsPerPage = userTable.getItemsPerPage();
         int pageNumber = userTable.getCurrentPage();
@@ -78,7 +80,7 @@ public class UserManagementLogic implements UserManagement{
         Drivers drivers = entity.getBody();
         User[] users = drivers.convertToUserArray();
 
-        for (User user: users){
+        for (User user : users) {
             setMailLocationDetails(user);
         }
         return new UserTableItems(allCount, users);
@@ -101,13 +103,13 @@ public class UserManagementLogic implements UserManagement{
         return location;
     }
 
-    //TODO: implement it
+    //TODO 11: implement it, mapping between local field name and server side sort parameter desired value
     private String convertFieldName(String sortingField) {
         return sortingField;
     }
 
     //rest
-    public  User getUserById(String id) {
+    public User getUserById(String id) {
         Driver driver = getDriverById(id);
         User user = driver.convertToUser();
         setMailLocationDetails(user);
@@ -124,26 +126,26 @@ public class UserManagementLogic implements UserManagement{
     }
 
     //rest
-    //TODO: filtering
-    public  User getUserByEmail(String email) {
-        UserTable userTable = new UserTable("created_at", false, "email like %" + email + "%", 1, 1);
-        UserTableItems userTableItems = getSortedFilteredPagedUsersWithoutStatistics(userTable);
+    //TODO 10.2: filtering, filtering should be done by email
+    public User getUserByEmail(String email) {
+        UserTable userTable = new UserTable("created_at", false, "email = " + email, 1, 1);
+        UserTableItems userTableItems = getSortedFilteredPagedUsersWithoutStatistics(userTable, false);
         return userTableItems.getItems().length == 0 ? null : userTableItems.getItems()[0];
     }
 
     //rest
-    //TODO: filtering
+    //TODO 10.3: filtering, filtering should be done by status
     public List<User> getActiveDrivers() {
         UserTable userTable = new UserTable("created_at", false, "status = active", 1, Integer.MAX_VALUE);
-        UserTableItems userTableItems = getSortedFilteredPagedUsersWithoutStatistics(userTable);
+        UserTableItems userTableItems = getSortedFilteredPagedUsersWithoutStatistics(userTable, false);
         return Arrays.asList(userTableItems.getItems());
     }
 
     //rest
-    public  User insertOrUpdateUser(User user){
-        if (user.getId() != null && !user.getId().isEmpty()){
+    public User insertOrUpdateUser(User user) {
+        if (user.getId() != null && !user.getId().isEmpty()) {
             updateUser(user);
-        }else{
+        } else {
             user = insertUser(user);
         }
         return user;
@@ -151,7 +153,7 @@ public class UserManagementLogic implements UserManagement{
 
     private void updateUser(User user) {
         updateUserAccount(user.convertToUserAccount());
-        if (!user.isAdmin()){
+        if (!user.isAdmin()) {
             Driver driver = getDriverById(user.getId());
             updateDriver(user.convertToDriver(driver));
             Location location = getLocationById(user.getLocationId());
@@ -178,7 +180,8 @@ public class UserManagementLogic implements UserManagement{
         Driver updatedDriver = entity.getBody().getDriver();
         return updatedDriver;
     }
-    //TODO: implement
+
+    //TODO 12: implement, somehow you should provide api to change password of driver or you can add password directly to Driver object in put request(update of whole driver)
     private void updateUserAccount(UserAccount userAccount) {
 
     }

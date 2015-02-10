@@ -9,11 +9,12 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 07/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AdminHourStatistics extends HourStatistics implements Serializable{ // defines current situation of the day for admin
+public class AdminHourStatistics extends HourStatistics implements Serializable { // defines current situation of the day for admin
     private int doneHours; // count of all drivers who registered for the hour
     private AdminDayStatistics adminDayStatistics; // parent object that holds all adminHourStatistics(current adminHourStatistics also)
 
-    public AdminHourStatistics(){}
+    public AdminHourStatistics() {
+    }
 
     public AdminHourStatistics(AdminDayStatistics adminDayStatistics, int index) {
         this.adminDayStatistics = adminDayStatistics;
@@ -33,6 +34,6 @@ public class AdminHourStatistics extends HourStatistics implements Serializable{
     }
 
     public void increaseDoneHours(short count) {
-        doneHours+=count;
+        doneHours += count;
     }
 }

@@ -14,6 +14,7 @@ import volo.voloCalendar.dao.StoreDAO;
 import volo.voloCalendar.entity.OrderDayStatistics;
 import volo.voloCalendar.entity.Store;
 import volo.voloCalendar.externalModel.Orders;
+import volo.voloCalendar.util.Settings;
 import volo.voloCalendar.viewModel.forecasting.ManualForecasting;
 import volo.voloCalendar.util.UtilMethods;
 
@@ -36,6 +37,7 @@ public class ForecastingLogic {
     public StoreDAO storeDAO;
     @Autowired
     public OrderDayStatisticsDAO orderDayStatisticsDAO;
+
     public static void main(String[] args) {
         final AbstractApplicationContext context = new ClassPathXmlApplicationContext("file:D:/projects/VoloCalendar/web/WEB-INF/config/applicationContext.xml");
         ForecastingLogic forecastingLogic = context.getBean(ForecastingLogic.class);
@@ -46,10 +48,11 @@ public class ForecastingLogic {
         System.out.println("Deleted: " + all);
         forecastingLogic.calculateForecasting(lowerBound);
     }
+
     //rest
-    public  ManualForecasting getManualForecasting() {
+    public ManualForecasting getManualForecasting() {
         Store store = storeDAO.findById("manualForecasting");
-        if (store == null){
+        if (store == null) {
             return new ManualForecasting();
         }
         String manualForecastingString = store.getData();
@@ -64,7 +67,7 @@ public class ForecastingLogic {
     }
 
     //rest
-    public  void setManualForecasting(ManualForecasting manualForecasting) {
+    public void setManualForecasting(ManualForecasting manualForecasting) {
         try {
             String manualForecastingString = UtilMethods.convertObjectToJson(manualForecasting);
             Store store = new Store("manualForecasting", manualForecastingString);
@@ -74,13 +77,13 @@ public class ForecastingLogic {
         }
     }
 
-    public boolean updateDatabase(java.util.Date lowerBound){
+    public boolean updateDatabase(java.util.Date lowerBound) {
         Date[] dateArray;
         try {
-            //TODO: comment next uncomment after next
+            //TODO 5: comment next uncomment after next
             dateArray = getOrderDatesFromFile();
             //dateArray = getOrderDatesByRest(lowerBound);
-        }catch (RestClientException ex){
+        } catch (RestClientException ex) {
             ex.printStackTrace();
             return false;
         }
@@ -90,7 +93,7 @@ public class ForecastingLogic {
         if (dateArray.length > 0) {
             OrderDayStatistics orderDayStatistics = new OrderDayStatistics(dateArray[0]);
             for (Date date : dateArray) {
-                if (!UtilMethods.getSqlDate(date).equals(orderDayStatistics.getDate())){
+                if (!UtilMethods.getSqlDate(date).equals(orderDayStatistics.getDate())) {
                     orderDayStatisticsDAO.save(orderDayStatistics);
                     orderDayStatistics = new OrderDayStatistics(date);
                 }
@@ -105,7 +108,7 @@ public class ForecastingLogic {
     private Date[] getOrderDatesFromFile() {
         try {
             ArrayList<Date> dates = new ArrayList<Date>();
-            FileReader fr = new FileReader("D:\\temp\\testData.json");
+            FileReader fr = new FileReader(Settings.testDataFilePath);
             BufferedReader br = new BufferedReader(fr);
             String sCurrentLine;
             while ((sCurrentLine = br.readLine()) != null) {
@@ -119,23 +122,25 @@ public class ForecastingLogic {
             return null;
         }
     }
-    //TODO:get only orders up to lowerBound
-    private Date[] getOrderDatesByRest(Date lowerBound) throws RestClientException{
-        Date[] dateArray;HttpEntity<Object> httpEntity = UtilMethods.getAuthenticatedObjectHttpEntity(null);
+
+    //TODO 6: Order filtering, get only orders up to lowerBound
+    private Date[] getOrderDatesByRest(Date lowerBound) throws RestClientException {
+        Date[] dateArray;
+        HttpEntity<Object> httpEntity = UtilMethods.getAuthenticatedObjectHttpEntity(null);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Orders> entity = restTemplate.exchange(
-                    "http://staging.volo.de/orders", HttpMethod.GET,
-                    httpEntity, Orders.class);
+                "http://staging.volo.de/orders", HttpMethod.GET,
+                httpEntity, Orders.class);
         dateArray = entity.getBody().convertToSortedDateArray();
         return dateArray;
     }
 
-    public int deleteOutliers(double sigma, java.sql.Date lowerBound){
+    public int deleteOutliers(double sigma, java.sql.Date lowerBound) {
         int deletedOutliers = 0;
 
         List<Object[]> avgAndStddevsList = orderDayStatisticsDAO.getAverageAndStandardDeviationsWeek(lowerBound);
 
-        for (Object[] avgAndStddevs : avgAndStddevsList){
+        for (Object[] avgAndStddevs : avgAndStddevsList) {
             int count = orderDayStatisticsDAO.deleteOutlierDays(((BigDecimal) avgAndStddevs[1]).doubleValue()
                     , ((BigDecimal) avgAndStddevs[2]).doubleValue(), ((BigDecimal) avgAndStddevs[3]).doubleValue()
                     , ((BigDecimal) avgAndStddevs[4]).doubleValue(), ((BigDecimal) avgAndStddevs[5]).doubleValue()
@@ -160,18 +165,18 @@ public class ForecastingLogic {
                     , ((BigDecimal) avgAndStddevs[42]).doubleValue(), ((BigDecimal) avgAndStddevs[43]).doubleValue()
                     , ((BigDecimal) avgAndStddevs[44]).doubleValue(), ((BigDecimal) avgAndStddevs[45]).doubleValue()
                     , ((BigDecimal) avgAndStddevs[46]).doubleValue(), ((BigDecimal) avgAndStddevs[47]).doubleValue()
-                    , ((BigDecimal) avgAndStddevs[48]).doubleValue(), (short)(int)(Integer) avgAndStddevs[0], sigma, lowerBound);
-            deletedOutliers+=count;
+                    , ((BigDecimal) avgAndStddevs[48]).doubleValue(), (short) (int) (Integer) avgAndStddevs[0], sigma, lowerBound);
+            deletedOutliers += count;
         }
         return deletedOutliers;
     }
 
-    public void calculateForecasting(java.sql.Date lowerBound){
+    public void calculateForecasting(java.sql.Date lowerBound) {
         ManualForecasting manualForecasting = new ManualForecasting();
         List<Object[]> averagesList = orderDayStatisticsDAO.getWeekForecastingByDateLowerBound(lowerBound);
-        for (Object[] averages : averagesList){
-            for (int i = 0; i < 24; i++){
-                manualForecasting.getDays()[((short)(Short)averages[0]) - 1][i].setCount((int) Math.round((double) (Double) averages[i + 1]));
+        for (Object[] averages : averagesList) {
+            for (int i = 0; i < 24; i++) {
+                manualForecasting.getDays()[((short) (Short) averages[0]) - 1][i].setCount((int) Math.round((double) (Double) averages[i + 1]));
             }
         }
         setManualForecasting(manualForecasting);

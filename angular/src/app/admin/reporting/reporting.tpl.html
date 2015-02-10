@@ -5,7 +5,8 @@
                 Monthly report
             </legend>
             <div>
-                <a ng-disabled="!canSubmit()" class="btn btn-primary" ng-href="/admin/reporting/monthly/{{model.year}}/{{model.month}}" target="_self">
+                <a ng-disabled="!canSubmit()" class="btn btn-primary"
+                   ng-href="/admin/reporting/monthly/{{model.year}}/{{model.month}}" target="_self">
                     Report
                 </a>
             </div>
@@ -13,7 +14,8 @@
                 <label class="col-sm-2 control-label" for="year">Year</label>
 
                 <div class="col-sm-5">
-                    <input class="form-control" type="number" min="2014" id="year" name="year" ng-model="model.year" required>
+                    <input class="form-control" type="number" min="2014" id="year" name="year" ng-model="model.year"
+                           required>
                 </div>
                 <span ng-show="showError('year', 'required')"
                       class="alert alert-danger">This field is required.</span>
@@ -24,7 +26,8 @@
                 <label class="col-sm-2 control-label" for="month">Month</label>
 
                 <div class="col-sm-5">
-                    <input class="form-control" type="number" min="1" max="12" id="month" name="month" ng-model="model.month" required>
+                    <input class="form-control" type="number" min="1" max="12" id="month" name="month"
+                           ng-model="model.month" required>
                 </div>
                 <span ng-show="showError('month', 'required')"
                       class="alert alert-danger">This field is required.</span>

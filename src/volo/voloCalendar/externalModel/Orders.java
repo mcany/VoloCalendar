@@ -26,11 +26,11 @@ public class Orders implements Serializable {
     }
 
     public Date[] convertToSortedDateArray() {
-        if (orders == null){
+        if (orders == null) {
             return new Date[0];
         }
         ArrayList<Date> result = new ArrayList<Date>();
-        for (int i=0; i < orders.length; i++){
+        for (int i = 0; i < orders.length; i++) {
             Order order = orders[i];
             if (order.getDispatched_at() != null) {
                 result.add(order.getDispatched_at());

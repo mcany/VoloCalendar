@@ -1,4 +1,4 @@
-angular.module('mongolabResource', []).factory('mongolabResource', [ '$http', '$q', function ( $http, $q) {
+angular.module('mongolabResource', []).factory('mongolabResource', [ '$http', '$q', function ($http, $q) {
 
     function MongolabResourceFactory(collectionName) {
 

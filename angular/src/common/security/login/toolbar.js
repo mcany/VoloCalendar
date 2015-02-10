@@ -18,7 +18,7 @@ angular.module('security.login.toolbar', [])
         $scope.fileChanged = utilMethods.fileInputOfUserViewChanged($scope);
 
         $scope.save = function (user) {
-            $http.post('/updateProfile', $scope.user).then(function(user){
+            $http.post('/updateProfile', $scope.user).then(function (user) {
                 security.currentUser = user.data;
                 $location.path('/');
             });

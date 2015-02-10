@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class UtilMethods {
     public final static String tokenVariableName = "token";
-    //TODO: delete these two lines
+    //TODO 4: delete these two lines and usages
     public static String temp;
     public static boolean isTestingRestApi = true;
 
@@ -42,7 +42,7 @@ public class UtilMethods {
         return result;
     }
 
-    public static <T> T convertJsonToObject(Class<T> objectType ,String jsonString) throws IOException {
+    public static <T> T convertJsonToObject(Class<T> objectType, String jsonString) throws IOException {
         T obj = new ObjectMapper().readValue(jsonString, objectType);
         return obj;
     }
@@ -57,9 +57,9 @@ public class UtilMethods {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         String token;
-        if (!isTestingRestApi){
+        if (!isTestingRestApi) {
             token = (String) RequestContextHolder.currentRequestAttributes().getAttribute(tokenVariableName, RequestAttributes.SCOPE_SESSION);
-        }else {
+        } else {
             token = temp;
         }
         headers.set("Authorization", token);

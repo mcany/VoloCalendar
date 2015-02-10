@@ -12,10 +12,15 @@ import java.util.List;
  */
 public interface UserManagement {
     public boolean authenticate(String email, String password) throws HttpClientErrorException;
-    public UserTableItems getSortedFilteredPagedUsersWithoutStatistics(UserTable userTable);
+
+    public UserTableItems getSortedFilteredPagedUsersWithoutStatistics(UserTable userTable, boolean isKeywordGlobal);
+
     public User getUserById(String id);
-    public  User getUserByEmail(String email);
+
+    public User getUserByEmail(String email);
+
     public List<User> getActiveDrivers();
-    public  User insertOrUpdateUser(User user);
+
+    public User insertOrUpdateUser(User user);
 
 }

@@ -21,7 +21,7 @@ public class AdminDayStatistics implements Serializable {// defines current situ
 
     public AdminDayStatistics() {
         adminHourStatisticsArray = new AdminHourStatistics[24];
-        for (int i = 0; i < adminHourStatisticsArray.length; i++){
+        for (int i = 0; i < adminHourStatisticsArray.length; i++) {
             adminHourStatisticsArray[i] = new AdminHourStatistics(this, i);
         }
     }
@@ -34,6 +34,7 @@ public class AdminDayStatistics implements Serializable {// defines current situ
     public LocalDate getDate() {
         return date;
     }
+
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     public void setDate(LocalDate date) {
@@ -53,17 +54,17 @@ public class AdminDayStatistics implements Serializable {// defines current situ
         return result;
     }
 
-    public int getDoneHours(){
+    public int getDoneHours() {
         int result = 0;
-        for (AdminHourStatistics adminHourStatistics: adminHourStatisticsArray){
+        for (AdminHourStatistics adminHourStatistics : adminHourStatisticsArray) {
             result += adminHourStatistics.getDoneHours();
         }
         return result;
     }
 
-    public int getPlannedHours(){
+    public int getPlannedHours() {
         int result = 0;
-        for (AdminHourStatistics adminHourStatistics: adminHourStatisticsArray){
+        for (AdminHourStatistics adminHourStatistics : adminHourStatisticsArray) {
             result += adminHourStatistics.getPlannedHours();
         }
         return result;

@@ -105,6 +105,7 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
     public void setDayStatisticsArray(DriverDayStatistics[] dayStatisticsArray) {
         this.dayStatisticsArray = dayStatisticsArray;
     }
+
     @JsonIgnore
     public boolean getExistsInDb() {
         return existsInDb;
@@ -125,13 +126,13 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
     }
 
     public void subtractStatistics(List<DayStatistics> dayStatisticsList) {
-        if (dayStatisticsList == null || dayStatisticsList.size() == 0){
+        if (dayStatisticsList == null || dayStatisticsList.size() == 0) {
             return;
         }
         int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
         for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
             int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
-            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()){
+            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()) {
                 continue;
             }
             DayStatistics sameDayOfWeekStatistics = dayStatisticsList.get(indexOfSameDayOfWeek);
@@ -177,10 +178,11 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
         }
         return result;
     }
+
     @JsonIgnore
     public boolean isNotEmpty() {
-        for (DriverDayStatistics driverDayStatistics: dayStatisticsArray){
-            if (driverDayStatistics.isNotEmpty()){
+        for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
+            if (driverDayStatistics.isNotEmpty()) {
                 return true;
             }
         }
@@ -191,7 +193,7 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
         int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
         for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
             int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
-            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()){
+            if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()) {
                 continue;
             }
             DayStatistics sameDayOfWeekStatistics = dayStatisticsList.get(indexOfSameDayOfWeek);

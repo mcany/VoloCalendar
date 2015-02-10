@@ -22,7 +22,7 @@ angular.module('forecasting', [
             if (cache == null) {
                 var now = new Date();
                 $scope.model = {'year': (now.getUTCFullYear() - 1), 'month': (now.getUTCMonth() + 1), sigma: 2, result: ''};
-            }else{
+            } else {
                 $scope.model = cache;
             }
             $scope.original = angular.copy(manualForecasting);
@@ -53,10 +53,10 @@ angular.module('forecasting', [
             $scope.updateDatabase = function () {
                 $scope.model.result = 'Processing...';
                 var url = '/admin/forecasting/updateDatabase/' + $scope.model.year + '/' + $scope.model.month;
-                $http.get(url).then(function(result){
-                    if (result.data){
+                $http.get(url).then(function (result) {
+                    if (result.data) {
                         $scope.model.result = 'Database updated.';
-                    }else{
+                    } else {
                         $scope.model.result = 'Problem occurred.';
                     }
                 });
@@ -65,7 +65,7 @@ angular.module('forecasting', [
             $scope.filterDatabase = function () {
                 $scope.model.result = 'Processing...';
                 var url = '/admin/forecasting/deleteOutliers/' + $scope.model.year + '/' + $scope.model.month;
-                $http.post(url, $scope.model.sigma).then(function(result){
+                $http.post(url, $scope.model.sigma).then(function (result) {
                     $scope.model.result = result.data + ' dirty days removed.';
                 });
             };
@@ -73,12 +73,12 @@ angular.module('forecasting', [
             $scope.forecast = function () {
                 $scope.model.result = 'Processing...';
                 var url = '/admin/forecasting/calculateForecasting/' + $scope.model.year + '/' + $scope.model.month;
-                $http.get(url).then(function(result){
-                    if (result.data){
+                $http.get(url).then(function (result) {
+                    if (result.data) {
                         $scope.model.result = 'Forecasting is done.';
                         utilMethods.save('forecastingModel', $scope.model);
                         $route.reload();
-                    }else{
+                    } else {
                         $scope.model.result = 'Problem occurred.';
                     }
                 });
@@ -117,12 +117,12 @@ angular.module('forecasting', [
                         } else if (event.keyCode == 8) {
                             newValue = Math.floor(oldValue / 10);
                         } else if (47 < event.keyCode && event.keyCode < 58) {
-                            newValue = parseInt('' + oldValue + (event.keyCode - 48))
+                            newValue = parseInt('' + oldValue + (event.keyCode - 48));
                             if (newValue > utilMethods.maxAllowed) {
                                 newValue = utilMethods.maxAllowed;
                             }
                         } else if (95 < event.keyCode && event.keyCode < 106) {
-                            newValue = parseInt('' + oldValue + (event.keyCode - 96))
+                            newValue = parseInt('' + oldValue + (event.keyCode - 96));
                             if (newValue > utilMethods.maxAllowed) {
                                 newValue = utilMethods.maxAllowed;
                             }

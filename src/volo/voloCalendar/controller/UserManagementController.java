@@ -3,9 +3,8 @@ package volo.voloCalendar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import volo.voloCalendar.service.CalendarLogic;
+import volo.voloCalendar.service.AdminCalendarLogic;
 import volo.voloCalendar.service.UserManagement;
-import volo.voloCalendar.service.UserManagementLocalLogic;
 import volo.voloCalendar.viewModel.user.UserTable;
 import volo.voloCalendar.entity.User;
 import volo.voloCalendar.util.UtilMethods;
@@ -21,13 +20,13 @@ import java.util.UUID;
 @RequestMapping("/admin/users")
 public class UserManagementController {
     @Autowired
-    public CalendarLogic calendarLogic;
+    public AdminCalendarLogic adminCalendarLogic;
     @Autowired
     public UserManagement userManagementLogic;
 
     @RequestMapping(value = "/pagination", method = RequestMethod.POST, produces = "application/json")
     public UserTableItems getUsers(@RequestBody UserTable userTable) {
-        UserTableItems userTableItems = calendarLogic.getUsers(userTable);
+        UserTableItems userTableItems = adminCalendarLogic.getUsers(userTable);
         return userTableItems;
     }
 

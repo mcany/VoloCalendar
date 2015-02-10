@@ -48,7 +48,7 @@ angular.module('services.utilMethods').factory('utilMethods', [function () {
     }
 
     var getGreenColorShadePrivate = function (actualValue, max) {
-        if (max < actualValue){
+        if (max < actualValue) {
             return 'white';
         }
         var r = Math.floor(124 * (1 - actualValue / (2 * max)));
@@ -61,7 +61,7 @@ angular.module('services.utilMethods').factory('utilMethods', [function () {
     utilMethodsService.maxAllowed = 15;
     utilMethodsService.getGreenColorShade = function (actualValue) {
         var result;
-        if (actualValue == 0) {
+        if (actualValue <= 0) {
             result = 'white';
         } else {
             result = getGreenColorShadePrivate(actualValue, utilMethodsService.maxAllowed);
@@ -71,7 +71,7 @@ angular.module('services.utilMethods').factory('utilMethods', [function () {
 
     utilMethodsService.getGreenColorShadeWithMaxDefined = function (actualValue, max) {
         var result;
-        if (actualValue == 0) {
+        if (actualValue <= 0) {
             result = 'white';
         } else {
             result = getGreenColorShadePrivate(actualValue, max);

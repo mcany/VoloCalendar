@@ -26,16 +26,17 @@ import java.util.Locale;
 public class ReportsController {
     @Autowired
     public ReportLogic reportLogic;
+
     @RequestMapping(value = "/monthly/{year}/{month}", method = RequestMethod.GET)
-    public void monthlyReport(@PathVariable int year,@PathVariable int month, Locale locale
-            ,HttpServletResponse response) throws IOException {
+    public void monthlyReport(@PathVariable int year, @PathVariable int month, Locale locale
+            , HttpServletResponse response) throws IOException {
         String path = reportLogic.monthlyReport(year, month);
         returnFile(response, path, "monthlyReport.pdf");
     }
 
     @RequestMapping(value = "/overview", method = RequestMethod.GET)
     public void overviewReport(Locale locale
-            ,HttpServletResponse response) throws IOException {
+            , HttpServletResponse response) throws IOException {
         String path = reportLogic.overviewReport();
         returnFile(response, path, "overviewReport.pdf");
     }
@@ -43,11 +44,11 @@ public class ReportsController {
     private void returnFile(HttpServletResponse response, String path, String fileName) throws IOException {
         File file = new File(path);
         final ServletOutputStream outputStream = response.getOutputStream();
-        if (file.exists()){
+        if (file.exists()) {
             try {
                 response.setContentType("application/octet-stream");
-                response.addHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
-                response.setContentLength((int)file.length());
+                response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+                response.setContentLength((int) file.length());
                 final FileInputStream inputStream = new FileInputStream(file);
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.flush();
@@ -60,7 +61,7 @@ public class ReportsController {
                 FileUtils.forceDelete(file);
             }
 
-        }else{
+        } else {
             throw new RuntimeException();
         }
     }

@@ -24,11 +24,11 @@ public class Drivers implements Serializable {
     }
 
     public User[] convertToUserArray() {
-        if (drivers == null){
+        if (drivers == null) {
             return new User[0];
         }
         User[] result = new User[drivers.length];
-        for (int i=0; i < drivers.length; i++){
+        for (int i = 0; i < drivers.length; i++) {
             Driver driver = drivers[i];
             result[i] = driver.convertToUser();
         }

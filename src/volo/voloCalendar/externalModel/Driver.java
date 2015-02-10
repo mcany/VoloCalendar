@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Emin Guliyev on 28/01/2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Driver implements Serializable{
+public class Driver implements Serializable {
     private int id;
     private String name;
     private String phone;
@@ -36,7 +36,7 @@ public class Driver implements Serializable{
         this.name = name;
         this.phone = phone;
         this.account_status = account_status;
-        //TODO: uncomment after adding mail_location_id to Driver class by Stefan
+        //TODO 1.1: uncomment after adding mail_location_id to Driver class by Stefan
         //this.mail_location_id = mail_location_id;
     }
 
@@ -133,7 +133,7 @@ public class Driver implements Serializable{
         this.name = name;
         this.phone = phone;
         this.account_status = account_status;
-        //TODO: uncomment after adding mail_location_id to Driver class by Stefan
+        //TODO 1.2: uncomment after adding mail_location_id to Driver class by Stefan
         //this.mail_location_id = mail_location_id;
         return this;
     }
