@@ -4,16 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
+import org.joda.time.LocalDate;
 import volo.voloCalendar.entity.DayStatistics;
 import volo.voloCalendar.util.Settings;
 import volo.voloCalendar.viewModel.forecasting.HourForecast;
 import volo.voloCalendar.viewModel.forecasting.ManualForecasting;
 
 import java.io.Serializable;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
     }
 
     public void fillDayStatisticsArray(DriverCalendarWeek driverCalendarWeek) {
-        LocalDate date = LocalDate.of(this.beginDate.getYear(), this.beginDate.getMonth(), this.beginDate.getDayOfMonth());
+        LocalDate date = new LocalDate(this.beginDate.getYear(), this.beginDate.getMonthOfYear(), this.beginDate.getDayOfMonth());
         ArrayList<DriverDayStatistics> list = new ArrayList<DriverDayStatistics>();
         do {
             DriverDayStatistics dayStatistics = null;
@@ -62,14 +61,14 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
             }
             list.add(dayStatistics);
             date = date.plusDays(1);
-        } while (date.getDayOfWeek() != DayOfWeek.MONDAY && date.getMonth() == this.beginDate.getMonth());
+        } while (date.getDayOfWeek() != 1 && date.getMonthOfYear() == this.beginDate.getMonthOfYear());
         dayStatisticsArray = list.toArray(new DriverDayStatistics[list.size()]);
     }
 
     public DriverDayStatistics getDayStatistics(DriverCalendarWeek driverCalendarWeekTemplate, LocalDate date) {
         DriverDayStatistics dayStatistics;
-        int numberOfFirstDayInTemplateWeek = driverCalendarWeekTemplate.dayStatisticsArray[0].getDate().getDayOfWeek().getValue();
-        int indexOfProperDayInTemplateWeek = date.getDayOfWeek().getValue() - numberOfFirstDayInTemplateWeek;
+        int numberOfFirstDayInTemplateWeek = driverCalendarWeekTemplate.dayStatisticsArray[0].getDate().getDayOfWeek();
+        int indexOfProperDayInTemplateWeek = date.getDayOfWeek() - numberOfFirstDayInTemplateWeek;
         if (indexOfProperDayInTemplateWeek > -1 && driverCalendarWeekTemplate.dayStatisticsArray.length > indexOfProperDayInTemplateWeek) {
             dayStatistics = new DriverDayStatistics(driverCalendarWeekTemplate.dayStatisticsArray[indexOfProperDayInTemplateWeek]);
             dayStatistics.setDate(date);
@@ -117,7 +116,7 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
 
     public void fixPlannedHours(ManualForecasting manualForecasting) {
         for (DriverDayStatistics dayStatistics : dayStatisticsArray) {
-            HourForecast[] forecastForSameDayOfWeek = manualForecasting.getDays()[dayStatistics.getDate().getDayOfWeek().getValue() - 1];
+            HourForecast[] forecastForSameDayOfWeek = manualForecasting.getDays()[dayStatistics.getDate().getDayOfWeek() - 1];
             for (int i = 0; i < 24; i++) {
                 DriverHourStatistics hourStatistics = dayStatistics.getHourStatisticsArray()[i];
                 hourStatistics.setPlannedHours(forecastForSameDayOfWeek[i].getCount());
@@ -131,7 +130,7 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
         }
         int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
         for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
-            int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
+            int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek() - dayOfWeekForFirstDay;
             if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()) {
                 continue;
             }
@@ -140,12 +139,12 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
         }
     }
 
-    private DriverDayStatistics getDayStatistics(DayOfWeek dayOfWeek) {
+    private DriverDayStatistics getDayStatistics(int dayOfWeek) {
         for (DriverDayStatistics dayStatistics : dayStatisticsArray) {
             if (dayStatistics.getDate().getDayOfWeek() == dayOfWeek) {
                 return dayStatistics;
             }
-            if (dayStatistics.getDate().getDayOfWeek().getValue() > dayOfWeek.getValue()) {
+            if (dayStatistics.getDate().getDayOfWeek() > dayOfWeek) {
                 break;
             }
         }
@@ -192,7 +191,7 @@ public class DriverCalendarWeek implements Serializable {//defines current situa
     public void fixDoneHours(List<DayStatistics> dayStatisticsList) {
         int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
         for (DriverDayStatistics driverDayStatistics : dayStatisticsArray) {
-            int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
+            int indexOfSameDayOfWeek = driverDayStatistics.getDate().getDayOfWeek() - dayOfWeekForFirstDay;
             if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()) {
                 continue;
             }

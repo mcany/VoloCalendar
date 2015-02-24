@@ -1,5 +1,6 @@
 package volo.voloCalendar.service;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -20,8 +21,6 @@ import volo.voloCalendar.viewModel.user.UserTable;
 import volo.voloCalendar.viewModel.user.UserTableItems;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 
 /**
@@ -67,7 +66,8 @@ public class CalendarLogic {
     private DriverCalendarWeek getStatisticsForDriverWeek(DriverCalendarWeek driverCalendarWeekInDB) {
         driverCalendarWeekInDB.fixPlannedHours(forecastingLogic.getManualForecasting());
 
-        Date sqlDate = Date.valueOf(driverCalendarWeekInDB.getBeginDate());
+        LocalDate localDate = driverCalendarWeekInDB.getBeginDate();
+        Date sqlDate = new Date(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth());
         List<DayStatistics> dayStatisticsList = dayStatisticsDAO.getWeekStatisticsByWeekBeginDate(sqlDate);
         driverCalendarWeekInDB.subtractStatistics(dayStatisticsList);
 
@@ -81,7 +81,8 @@ public class CalendarLogic {
         }
 
         for (DriverDayStatistics driverDayStatistics : driverCalendarWeek.getDayStatisticsArray()) {
-            DayStatistics dayStatistics = dayStatisticsDAO.getDayByUserIdAndDate(driverCalendarWeek.getUserId(), Date.valueOf(driverDayStatistics.getDate()));
+            LocalDate localDate = driverDayStatistics.getDate();
+            DayStatistics dayStatistics = dayStatisticsDAO.getDayByUserIdAndDate(driverCalendarWeek.getUserId(), new Date(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth()));
             DayStatistics newDayStatistics = new DayStatistics(driverCalendarWeek.getUserId(), driverCalendarWeek.getBeginDate(), driverDayStatistics);
             if (dayStatistics != null) {
                 newDayStatistics.setId(dayStatistics.getId());
@@ -112,8 +113,8 @@ public class CalendarLogic {
         if (user == null || user.isAdmin()) {
             return null;
         }
-
-        List<DayStatistics> dayStatisticsList = dayStatisticsDAO.getWeekByUserIdAndWeekBeginDate(userId, Date.valueOf(beginDateOfWeek));
+        LocalDate localDate = beginDateOfWeek;
+        List<DayStatistics> dayStatisticsList = dayStatisticsDAO.getWeekByUserIdAndWeekBeginDate(userId, new Date(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth()));
         if (dayStatisticsList == null || dayStatisticsList.size() == 0) {
             return null;
         }

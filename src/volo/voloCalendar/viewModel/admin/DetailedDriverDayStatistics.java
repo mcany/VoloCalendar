@@ -8,8 +8,7 @@ import volo.voloCalendar.viewModel.driver.DriverDayStatistics;
 import volo.voloCalendar.viewModel.driver.DriverHourStatistics;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-
+import org.joda.time.LocalDate;
 /**
  * Created by Emin Guliyev on 08/01/2015.
  */
@@ -33,7 +32,7 @@ public class DetailedDriverDayStatistics extends DriverDayStatistics implements 
     }
 
     public DetailedDriverDayStatistics(DayStatistics dayStatistics, User user) {
-        this.date = dayStatistics.getDate().toLocalDate();
+        this.date = new LocalDate(dayStatistics.getDate().getYear(), dayStatistics.getDate().getMonth() + 1, dayStatistics.getDate().getDate());
         this.driverInfo = user.getName();
         this.userId = user.getId();
         this.hourStatisticsArray = new DriverHourStatistics[24];

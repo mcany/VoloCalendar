@@ -3,12 +3,11 @@ package volo.voloCalendar.viewModel.common;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-
+import org.joda.time.LocalDate;
 /**
  * Created by Emin Guliyev on 22/12/2014.
  */

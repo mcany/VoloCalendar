@@ -5,8 +5,7 @@ import volo.voloCalendar.viewModel.driver.DriverDayStatistics;
 import javax.persistence.*;
 
 import java.sql.Date;
-import java.time.LocalDate;
-
+import org.joda.time.LocalDate;
 /**
  * Created by Emin Guliyev on 24/01/2015.
  */
@@ -98,9 +97,11 @@ public class DayStatistics {
 
     public DayStatistics(String userId, LocalDate weekBeginDate, DriverDayStatistics driverDayStatistics) {
         this.userId = userId;
-        this.date = Date.valueOf(driverDayStatistics.getDate());
-        this.weekBeginDate = Date.valueOf(weekBeginDate);
-        this.weekDayIndex = (short) driverDayStatistics.getDate().getDayOfWeek().getValue();
+        LocalDate localDate = driverDayStatistics.getDate();
+        this.date = new Date(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth());
+        localDate = weekBeginDate;
+        this.weekBeginDate = new Date(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth());
+        this.weekDayIndex = (short) driverDayStatistics.getDate().getDayOfWeek();
         this.hour0 = (short) (driverDayStatistics.getHourStatisticsArray()[0].isSelected() ? 1 : 0);
         this.hour1 = (short) (driverDayStatistics.getHourStatisticsArray()[1].isSelected() ? 1 : 0);
         this.hour2 = (short) (driverDayStatistics.getHourStatisticsArray()[2].isSelected() ? 1 : 0);

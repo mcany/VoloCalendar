@@ -3,14 +3,13 @@ package volo.voloCalendar.viewModel.common;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
 import volo.voloCalendar.viewModel.forecasting.HourForecast;
 import volo.voloCalendar.viewModel.forecasting.ManualForecasting;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-
+import org.joda.time.LocalDate;
 /**
  * Created by Emin Guliyev on 21/12/2014.
  */
@@ -66,10 +65,10 @@ public class MonthStatistics implements Serializable { //defines month statistic
 
     public void fixPlannedHours(ManualForecasting manualForecasting) {
         int plannedHours = 0;
-        int month = beginDate.getMonthValue();
-        LocalDate date = LocalDate.of(beginDate.getYear(), beginDate.getMonthValue(), beginDate.getDayOfMonth());
-        while (date.getMonthValue() == month) {
-            plannedHours += calculatePlannedHours(manualForecasting.getDays()[date.getDayOfWeek().getValue() - 1]);
+        int month = beginDate.getMonthOfYear();
+        LocalDate date = new LocalDate(beginDate.getYear(), beginDate.getMonthOfYear(), beginDate.getDayOfMonth());
+        while (date.getMonthOfYear() == month) {
+            plannedHours += calculatePlannedHours(manualForecasting.getDays()[date.getDayOfWeek() - 1]);
             date = date.plusDays(1);
         }
         setPlannedHours(plannedHours);

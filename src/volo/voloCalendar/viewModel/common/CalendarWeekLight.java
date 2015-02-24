@@ -3,13 +3,15 @@ package volo.voloCalendar.viewModel.common;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
+import java.util.Calendar;
+import java.util.Date;
 
-import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+import org.joda.time.LocalDate;
+import volo.voloCalendar.util.UtilMethods;
 
 /**
  * Created by Emin Guliyev on 22/12/2014.
@@ -22,13 +24,16 @@ public class CalendarWeekLight implements Serializable { //defines a week
     public CalendarWeekLight() {
     }
 
+
+
     public CalendarWeekLight(LocalDate beginDate) {
         this.beginDate = beginDate;
-        LocalDate date = beginDate.plusDays(7 - beginDate.getDayOfWeek().getValue());
-        if (date.getMonth() != beginDate.getMonth()) {
-            date = beginDate.with(lastDayOfMonth());
+        LocalDate localDate = beginDate.plusDays(7 - beginDate.getDayOfWeek());
+        if (localDate.getMonthOfYear() != beginDate.getMonthOfYear()) {
+            Date date = UtilMethods.getLastDayOfMonth(beginDate.getMonthOfYear(), beginDate.getYear());
+            localDate = new LocalDate(date.getYear(), date.getMonth() + 1, date.getDate());
         }
-        this.endDate = date;
+        this.endDate = localDate;
     }
 
     public LocalDate getBeginDate() {

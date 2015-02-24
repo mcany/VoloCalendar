@@ -9,6 +9,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -68,6 +69,16 @@ public class UtilMethods {
 
 
     public static java.sql.Date getSqlDate(Date date) {
-        return new java.sql.Date(date.getYear(), date.getMonth(), date.getDay());
+        return new java.sql.Date(date.getYear(), date.getMonth(), date.getDate());
+    }
+
+    public static Date getLastDayOfMonth(int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+
+        Date date = calendar.getTime();
+        return date;
     }
 }

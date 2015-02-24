@@ -3,16 +3,15 @@ package volo.voloCalendar.viewModel.admin;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.ser.LocalDateSerializer;
+import org.joda.time.DateTimeConstants;
 import volo.voloCalendar.entity.DayStatistics;
 import volo.voloCalendar.viewModel.forecasting.HourForecast;
 import volo.voloCalendar.viewModel.forecasting.ManualForecasting;
 
 import java.io.Serializable;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import org.joda.time.LocalDate;import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,13 +27,13 @@ public class AdminCalendarWeek implements Serializable {//defines current situat
 
     public AdminCalendarWeek(LocalDate beginDate) {
         this.beginDate = beginDate;
-        LocalDate date = LocalDate.of(beginDate.getYear(), beginDate.getMonthValue(), beginDate.getDayOfMonth());
-        int month = date.getMonthValue();
+        LocalDate date = new LocalDate(beginDate.getYear(), beginDate.getMonthOfYear(), beginDate.getDayOfMonth());
+        int month = date.getMonthOfYear();
         ArrayList<AdminDayStatistics> adminDayStatisticsArrayList = new ArrayList<AdminDayStatistics>();
         do {
             adminDayStatisticsArrayList.add(new AdminDayStatistics(date));
             date = date.plusDays(1);
-        } while (date.getDayOfWeek() != DayOfWeek.MONDAY && month == date.getMonthValue());
+        } while (date.getDayOfWeek() != DateTimeConstants.MONDAY && month == date.getMonthOfYear());
         setAdminDayStatisticsArray(adminDayStatisticsArrayList.toArray(new AdminDayStatistics[adminDayStatisticsArrayList.size()]));
     }
 
@@ -76,7 +75,7 @@ public class AdminCalendarWeek implements Serializable {//defines current situat
     public void fixPlannedHours(ManualForecasting manualForecasting) {
         for (int i = 0; i < this.getAdminDayStatisticsArray().length; i++) {
             for (int j = 0; j < this.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray().length; j++) {
-                HourForecast hourForecast = manualForecasting.getDays()[this.getAdminDayStatisticsArray()[i].getDate().getDayOfWeek().getValue() - 1][j];
+                HourForecast hourForecast = manualForecasting.getDays()[this.getAdminDayStatisticsArray()[i].getDate().getDayOfWeek() - 1][j];
                 this.getAdminDayStatisticsArray()[i].getAdminHourStatisticsArray()[j].setPlannedHours(hourForecast.getCount());
             }
         }
@@ -88,7 +87,7 @@ public class AdminCalendarWeek implements Serializable {//defines current situat
         }
         int dayOfWeekForFirstDay = dayStatisticsList.get(0).getWeekDayIndex();
         for (AdminDayStatistics adminDayStatistics : adminDayStatisticsArray) {
-            int indexOfSameDayOfWeek = adminDayStatistics.getDate().getDayOfWeek().getValue() - dayOfWeekForFirstDay;
+            int indexOfSameDayOfWeek = adminDayStatistics.getDate().getDayOfWeek() - dayOfWeekForFirstDay;
             if (indexOfSameDayOfWeek < 0 || indexOfSameDayOfWeek >= dayStatisticsList.size()) {
                 continue;
             }

@@ -5,8 +5,7 @@ import volo.voloCalendar.entity.User;
 import volo.voloCalendar.viewModel.common.MonthStatistics;
 import volo.voloCalendar.viewModel.driver.DriverCalendarWeek;
 
-import java.time.LocalDate;
-import java.time.Month;
+import org.joda.time.LocalDate;
 
 /**
  * Created by Emin Guliyev on 10/02/2015.
@@ -32,16 +31,16 @@ public class DriverCalendarLogic extends CalendarLogic{
             return null;
         }
         LocalDate date = driverCalendarWeek.getBeginDate();
-        Month month = date.getMonth();
+        int month = date.getMonthOfYear();
         int year = date.getYear();
-        LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek().getValue());
-        while (isForMonthlyOperation ? (month == nextWeekBeginDate.getMonth()) : (year == nextWeekBeginDate.getYear())) {
-            if (month != nextWeekBeginDate.getMonth()) {
-                nextWeekBeginDate = LocalDate.of(nextWeekBeginDate.getYear(), nextWeekBeginDate.getMonthValue(), 1);
-                month = nextWeekBeginDate.getMonth();
+        LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek());
+        while (isForMonthlyOperation ? (month == nextWeekBeginDate.getMonthOfYear()) : (year == nextWeekBeginDate.getYear())) {
+            if (month != nextWeekBeginDate.getMonthOfYear()) {
+                nextWeekBeginDate = new LocalDate(nextWeekBeginDate.getYear(), nextWeekBeginDate.getMonthOfYear(), 1);
+                month = nextWeekBeginDate.getMonthOfYear();
             }
             generateNewDriverCalendarWeek(user, driverCalendarWeek, nextWeekBeginDate);
-            nextWeekBeginDate = nextWeekBeginDate.plusDays(8 - nextWeekBeginDate.getDayOfWeek().getValue());
+            nextWeekBeginDate = nextWeekBeginDate.plusDays(8 - nextWeekBeginDate.getDayOfWeek());
         }
         return driverCalendarWeek;
     }
@@ -56,9 +55,9 @@ public class DriverCalendarLogic extends CalendarLogic{
             return null;
         }
         LocalDate date = driverCalendarWeek.getBeginDate();
-        Month month = date.getMonth();
-        LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek().getValue());
-        if (month == nextWeekBeginDate.getMonth()) {
+        int month = date.getMonthOfYear();
+        LocalDate nextWeekBeginDate = date.plusDays(8 - date.getDayOfWeek());
+        if (month == nextWeekBeginDate.getMonthOfYear()) {
             generateNewDriverCalendarWeek(user, driverCalendarWeek, nextWeekBeginDate);
         }
         return driverCalendarWeek;

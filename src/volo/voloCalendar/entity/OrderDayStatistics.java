@@ -44,7 +44,7 @@ public class OrderDayStatistics {
 
     public OrderDayStatistics(java.util.Date date) {
         this.id = UUID.randomUUID().toString();
-        setDate(new Date(date.getYear(), date.getMonth(), date.getDay()));
+        setDate(new Date(date.getYear(), date.getMonth(), date.getDate()));
         calendar.setTime(date);
         short dayOfWeek = (short) calendar.get(Calendar.DAY_OF_WEEK);
         setWeekDayIndex(dayOfWeek);

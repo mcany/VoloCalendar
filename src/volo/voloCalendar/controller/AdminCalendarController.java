@@ -12,8 +12,7 @@ import volo.voloCalendar.viewModel.common.CalendarViewModel;
 import volo.voloCalendar.viewModel.common.MonthStatistics;
 import volo.voloCalendar.viewModel.driver.DriverDayStatistics;
 
-import java.time.LocalDate;
-
+import org.joda.time.LocalDate;
 /**
  * Created by Emin Guliyev on 07/01/2015.
  */
@@ -29,38 +28,38 @@ public class AdminCalendarController {
 
     @RequestMapping(value = "/calendar", method = RequestMethod.GET, produces = "application/json")
     public CalendarViewModel calendar() {
-        LocalDate threeMonthBefore = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), 1);
+        LocalDate threeMonthBefore = new LocalDate(LocalDate.now().getYear(), LocalDate.now().getMonthOfYear(), 1);
         threeMonthBefore = threeMonthBefore.minusMonths(3);
         return CalendarUtilMethods.getCalendarViewModel(calendarMonthsCount, threeMonthBefore);
     }
 
     @RequestMapping(value = "/month/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public MonthStatistics month(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
-        LocalDate monthBeginDate = LocalDate.of(year, month, day);
+        LocalDate monthBeginDate = new LocalDate(year, month, day);
         return adminCalendarLogic.getMonthStatisticsForAdminUser(monthBeginDate);
     }
 
     @RequestMapping(value = "/week/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public AdminCalendarWeek week(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
-        LocalDate monthBeginDate = LocalDate.of(year, month, day);
+        LocalDate monthBeginDate = new LocalDate(year, month, day);
         return adminCalendarLogic.getAdminCalendarWeek(monthBeginDate);
     }
 
     @RequestMapping(value = "/day/{year}-{month}-{day}", method = RequestMethod.GET, produces = "application/json")
     public DetailedAdminDayStatistics day(@PathVariable int year, @PathVariable int month, @PathVariable int day) {
-        LocalDate date = LocalDate.of(year, month, day);
+        LocalDate date = new LocalDate(year, month, day);
         return adminCalendarLogic.getDetailedAdminDayStatistics(date);
     }
 
     @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.POST, produces = "application/json")
     public DetailedDriverDayStatistics addDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
-        LocalDate date = LocalDate.of(year, month, day);
+        LocalDate date = new LocalDate(year, month, day);
         return adminCalendarLogic.insertDriverDayStatistics(date, userId);
     }
 
     @RequestMapping(value = "/day/{userId}/{year}-{month}-{day}", method = RequestMethod.DELETE, produces = "application/json")
     public DriverDayStatistics deleteDriverDayStatistics(@PathVariable String userId, @PathVariable int year, @PathVariable int month, @PathVariable int day) {
-        LocalDate date = LocalDate.of(year, month, day);
+        LocalDate date = new LocalDate(year, month, day);
         return adminCalendarLogic.deleteDriverDayStatistics(date, userId);
     }
 

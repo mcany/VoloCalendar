@@ -5,8 +5,7 @@ import volo.voloCalendar.viewModel.common.CalendarViewModel;
 import volo.voloCalendar.viewModel.common.CalendarWeekLight;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.Month;
+import org.joda.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -47,28 +46,28 @@ public class CalendarUtilMethods {
     }
 
     public static LocalDate getBeginLocalDateOfCurrentMonth() {
-        return LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
+        return new LocalDate(LocalDate.now().getYear(), LocalDate.now().getMonthOfYear(), 1);
     }
 
     public static LocalDate[] getWeekBeginLocalDatesForMonth(LocalDate monthBeginDate) {
         ArrayList<LocalDate> list = new ArrayList<LocalDate>();
         LocalDate date = monthBeginDate;
-        Month month = date.getMonth();
+        int month = date.getMonthOfYear();
         do {
             list.add(date);
-            date = date.plusDays(8 - date.getDayOfWeek().getValue());
-        } while (date.getMonth() == month);
+            date = date.plusDays(8 - date.getDayOfWeek());
+        } while (date.getMonthOfYear() == month);
         return list.toArray(new LocalDate[list.size()]);
     }
 
     public static ArrayList<Date> getWeekBeginDatesForMonth(LocalDate monthBeginDate) {
         ArrayList<Date> list = new ArrayList<Date>();
         LocalDate localDate = monthBeginDate;
-        Month month = localDate.getMonth();
+        int month = localDate.getMonthOfYear();
         do {
-            list.add(Date.valueOf(localDate));
-            localDate = localDate.plusDays(8 - localDate.getDayOfWeek().getValue());
-        } while (localDate.getMonth() == month);
+            list.add(new Date(localDate.getYear(), localDate.getMonthOfYear(), localDate.getDayOfMonth()));
+            localDate = localDate.plusDays(8 - localDate.getDayOfWeek());
+        } while (localDate.getMonthOfYear() == month);
         return list;
     }
 }

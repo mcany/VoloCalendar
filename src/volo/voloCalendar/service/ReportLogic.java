@@ -1,8 +1,7 @@
 package volo.voloCalendar.service;
 
 import java.io.FileOutputStream;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import org.joda.time.LocalDate;import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,7 +76,7 @@ public class ReportLogic {
             insertCell(table, "Wage", Element.ALIGN_RIGHT, 1, bfBold12);
             table.setHeaderRows(1);
 
-            LocalDate beginDateOfMonth = LocalDate.of(year, month, 1);
+            LocalDate beginDateOfMonth = new LocalDate(year, month, 1);
             ArrayList<User> users = adminCalendarLogic.getActiveDriversForMonth(beginDateOfMonth);
             //just some random data to fill
             for (User user : users) {
