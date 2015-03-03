@@ -3,6 +3,8 @@ package volo.voloCalendar.service;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.*;
+import org.springframework.security.crypto.codec.Base64;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -15,6 +17,7 @@ import volo.voloCalendar.util.UtilMethods;
 import volo.voloCalendar.viewModel.user.UserTable;
 import volo.voloCalendar.viewModel.user.UserTableItems;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +25,7 @@ import java.util.List;
  * Created by Emin Guliyev on 28/01/2015.
  */
 //TODO 8:uncomment next line
-//@Service
+@Service
 public class UserManagementLogic implements UserManagement {
 
     public boolean authenticate(String email, String password) throws HttpClientErrorException {
@@ -48,13 +51,28 @@ public class UserManagementLogic implements UserManagement {
             RequestContextHolder.currentRequestAttributes().setAttribute(UtilMethods.tokenVariableName, "Bearer " + result.getAccess_token(), RequestAttributes.SCOPE_SESSION);
         }
 
-        boolean isAdmin;
+        String tokenPayload = result.getAccess_token().split("\\.")[1];
+        byte[]   bytesEncoded = Base64.decode(tokenPayload.getBytes());
+        String jsonString = new String(bytesEncoded );
+        TokenPayload tokenPayloadObj = null;
         try {
-            //TODO 9: implement it, we need to get user role on authentication, for example by "isAdmin" boolean header as shown
-            String isAdminString = entity.getHeaders().get("isAdmin").get(0);
-            isAdmin = isAdminString.equals("true");
-        } catch (Exception ex) {
-            isAdmin = false;
+            tokenPayloadObj = UtilMethods.convertJsonToObject(TokenPayload.class, jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        boolean isAdmin;
+
+        //TODO 9: DONE implement it, we need to get user role on authentication, for example by "isAdmin" boolean header as shown
+
+        String userType = tokenPayloadObj.getUtype();
+        if ("Operator".equals(userType)){
+            isAdmin = true;
+        }else{
+            if ("Driver".equals(userType)){
+                isAdmin = false;
+            }else{
+                throw new HttpClientErrorException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
+            }
         }
         return isAdmin;
     }
@@ -200,7 +218,7 @@ public class UserManagementLogic implements UserManagement {
     public static void main(String[] args) {
         final AbstractApplicationContext context = new ClassPathXmlApplicationContext("file:D:/projects/VoloCalendar/web/WEB-INF/config/applicationContext.xml");
         UserManagementLogic userManagementLogic = context.getBean(UserManagementLogic.class);
-        userManagementLogic.authenticate("sergei@volo.de", "test1111");
+        userManagementLogic.authenticate("bestellen@volo.de", "test1111");
         User user = userManagementLogic.getUserById("1");
         user.setName("emin");
         userManagementLogic.insertOrUpdateUser(user);

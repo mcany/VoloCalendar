@@ -20,7 +20,7 @@ public class UtilMethods {
     public final static String tokenVariableName = "token";
     //TODO 4: delete these two lines and usages
     public static String temp;
-    public static boolean isTestingRestApi = true;
+    public static boolean isTestingRestApi = false;
 
     public static Object[] getArray(Object obj) {
         Object[] result;
