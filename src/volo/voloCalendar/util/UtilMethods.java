@@ -21,6 +21,7 @@ public class UtilMethods {
     //TODO 4: delete these two lines and usages
     public static String temp;
     public static boolean isTestingRestApi = false;
+    public static String userIdVariableName = "userId";
 
     public static Object[] getArray(Object obj) {
         Object[] result;

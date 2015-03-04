@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import volo.voloCalendar.entity.User;
 import volo.voloCalendar.service.LoginLogic;
 import volo.voloCalendar.service.UserManagement;
@@ -35,9 +37,8 @@ public class LoginController {
     //private static String email;
     @RequestMapping(value = "/current-user", method = RequestMethod.GET, produces = "application/json")
     public HashMap<String, User> currentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        return UtilMethods.getHashMap(userManagementLogic.getUserByEmail(email));
+        String userId = (String) RequestContextHolder.currentRequestAttributes().getAttribute(UtilMethods.userIdVariableName, RequestAttributes.SCOPE_SESSION);
+        return UtilMethods.getHashMap(userManagementLogic.getUserById(userId));
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
@@ -55,7 +56,8 @@ public class LoginController {
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-            return UtilMethods.getHashMap(userManagementLogic.getUserByEmail(user.getEmail()));
+            String userId = (String) RequestContextHolder.currentRequestAttributes().getAttribute(UtilMethods.userIdVariableName, RequestAttributes.SCOPE_SESSION);
+            return UtilMethods.getHashMap(userManagementLogic.getUserById(userId));
         } else {
             return UtilMethods.getHashMap(null);
         }

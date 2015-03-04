@@ -67,6 +67,8 @@
           <element id="file-copy" path="$PROJECT_DIR$/lib/spring-data-commons-core-1.4.1.RELEASE.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/joda-time-2.0.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/lib/jackson-datatype-joda-2.5.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/org-apache-commons-codec.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/lib/commons-codec-1.6.jar" />
         </element>
       </element>
     </root>

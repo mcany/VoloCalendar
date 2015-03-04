@@ -1,9 +1,12 @@
 package volo.voloCalendar.service;
 
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.*;
-import org.springframework.security.crypto.codec.Base64;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,6 +22,7 @@ import volo.voloCalendar.viewModel.user.UserTableItems;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -52,8 +56,7 @@ public class UserManagementLogic implements UserManagement {
         }
 
         String tokenPayload = result.getAccess_token().split("\\.")[1];
-        byte[]   bytesEncoded = Base64.decode(tokenPayload.getBytes());
-        String jsonString = new String(bytesEncoded );
+        String jsonString = base64UrlDecode(tokenPayload);
         TokenPayload tokenPayloadObj = null;
         try {
             tokenPayloadObj = UtilMethods.convertJsonToObject(TokenPayload.class, jsonString);
@@ -74,6 +77,8 @@ public class UserManagementLogic implements UserManagement {
                 throw new HttpClientErrorException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
             }
         }
+        String userId = "" + tokenPayloadObj.getUid();
+        RequestContextHolder.currentRequestAttributes().setAttribute(UtilMethods.userIdVariableName, userId, RequestAttributes.SCOPE_SESSION);
         return isAdmin;
     }
 
@@ -105,9 +110,10 @@ public class UserManagementLogic implements UserManagement {
     }
 
     private void setMailLocationDetails(User user) {
-        int locationId = user.getLocationId();
+        //TODO 14: fix location
+        /*int locationId = user.getLocationId();
         Location location = getLocationById(locationId);
-        user.setMailLocationDetails(location);
+        user.setMailLocationDetails(location);*/
     }
 
     private Location getLocationById(int locationId) {
@@ -128,6 +134,14 @@ public class UserManagementLogic implements UserManagement {
 
     //rest
     public User getUserById(String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> roles = auth.getAuthorities();
+        GrantedAuthority role = (GrantedAuthority)roles.toArray()[0];
+        if ("ROLE_ADMIN".equals(role.getAuthority())){
+            //it wants current admin user
+            String userId = (String) RequestContextHolder.currentRequestAttributes().getAttribute(UtilMethods.userIdVariableName, RequestAttributes.SCOPE_SESSION);
+            return new User(userId, auth.getName(), "", "Operator");
+        }
         Driver driver = getDriverById(id);
         User user = driver.convertToUser();
         setMailLocationDetails(user);
@@ -213,6 +227,14 @@ public class UserManagementLogic implements UserManagement {
                 httpEntity, DriverHolder.class);
         User insertedDriver = entity.getBody().getDriver().convertToUser();
         return insertedDriver;
+    }
+
+    public static String base64UrlDecode(String input) {
+        String result = null;
+        Base64 decoder = new Base64(true);
+        byte[] decodedBytes = decoder.decode(input);
+        result = new String(decodedBytes);
+        return result;
     }
 
     public static void main(String[] args) {
